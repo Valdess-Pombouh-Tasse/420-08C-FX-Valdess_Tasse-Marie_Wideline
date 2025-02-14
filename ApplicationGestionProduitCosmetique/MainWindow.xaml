@@ -5,8 +5,28 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ApplicationGestionProduitCosmetique"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
+            Title="Connexion" Height="300" Width="500">
+    <Window.Background>
+        <ImageBrush ImageSource="/Resources/Images/img1.jpg" Stretch="Uniform" />
+    </Window.Background>
+    <StackPanel Margin="40">
+        <TextBlock x:Name="tbTitre" FontWeight="Bold" Foreground="DarkBlue" HorizontalAlignment="center">Création d'un contact</TextBlock>
+        <StackPanel Orientation="Horizontal" Margin="0,5">
+            <Label Content="Nom d'utilisateur" Width="110" Background="RosyBrown"></Label>
+            <TextBox x:Name="txtNom" Width="250"></TextBox>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" Margin="0,5">
+            <Label Content="Courriel" Width="110" Background="RosyBrown"></Label>
+            <TextBox x:Name="txtCourriel" Width="250"></TextBox>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" Margin="0,5">
+            <Label Content="Mot de passe" Width="110" Background="RosyBrown"></Label>
+            <PasswordBox x:Name="PasswordBox" Width="250"/>
+        </StackPanel>
+        <StackPanel Margin="5" Orientation="Horizontal" HorizontalAlignment="Center">
+            <Button x:Name="btnConnecter" Content="Se connecter" Width="100" Margin="5"></Button>
+            <Button x:Name="btnConnect" Content="Créer un compte" Foreground="Blue" Cursor="Hand" Width="100" Margin="5"></Button>
+        </StackPanel>
 
-    </Grid>
+    </StackPanel>
 </Window>
