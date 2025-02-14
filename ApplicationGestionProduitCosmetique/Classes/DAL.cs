@@ -13,8 +13,7 @@ namespace ApplicationGestionProduitCosmetique.Classes
     {
             static IConfiguration _config;
             public const string APPSETTINGS_FILE = "appsettings.json";
-            public static string CONNECTION_STRING = "DefaultConnection";
-
+        public static string CONNECTION_STRING = "DefaultConnection";
 
             /// <summary>
             /// Permet de créer une connection
@@ -26,7 +25,6 @@ namespace ApplicationGestionProduitCosmetique.Classes
                 return new MySqlConnection(connectionString);
             }
 
-
             /// <summary>
             /// Constructeur static permettant de charger les configurations de l'application
             /// </summary>
@@ -34,6 +32,5 @@ namespace ApplicationGestionProduitCosmetique.Classes
             {
                 _config = new ConfigurationBuilder().AddJsonFile(APPSETTINGS_FILE, false, true).Build();
             }
-
         }
     }
