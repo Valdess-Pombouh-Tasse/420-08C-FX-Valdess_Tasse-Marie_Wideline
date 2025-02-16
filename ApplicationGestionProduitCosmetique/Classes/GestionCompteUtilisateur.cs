@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace ApplicationGestionProduitCosmetique.Classes
 {
-    public static class DAL
+    public static class GestionCompteUtilisateur
     {
         static IConfiguration _config;
         public const string APPSETTINGS_FILE = "appsettings.json";
@@ -28,13 +28,14 @@ namespace ApplicationGestionProduitCosmetique.Classes
         /// <summary>
         /// Constructeur static permettant de charger les configurations de l'application
         /// </summary>
-        static DAL()
+        static GestionCompteUtilisateur()
         {
             _config = new ConfigurationBuilder().AddJsonFile(APPSETTINGS_FILE, false, true).Build();
         }
 
-        public void AjouterVendeur()
+        public void AjouterVendeur(Vendeur  vendeur)
         {
+
 
         }
     }

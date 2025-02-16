@@ -8,20 +8,38 @@ namespace ApplicationGestionProduitCosmetique.Classes
 {
     public class Vendeur
     {
-		private string _nom;
+       
+        public const int NB_CARAC_MIN = 3;
+        public const int NB_CARAC_MAX = 15;
+
+        private string _nom;
 		private string _prenom;
 		private int _id;
+		private string _code;
+		private DateTime _dateInscription;
 
 		public string Nom
 		{
 			get { return _nom; }
-			set { _nom = value; }
+			set {
+				if (string.IsNullOrWhiteSpace(value))
+					throw new ArgumentException(nameof(Nom), $"Le nom ne peut pas etre nul ou vide");
+                if (!(value.Length >= NB_CARAC_MIN) || !(value.Length <= NB_CARAC_MAX))
+                    throw new ArgumentOutOfRangeException(nameof(Nom), $"Le nom doit contenir entre {NB_CARAC_MIN} et {NB_CARAC_MAX} caractères");
+                _nom = value.Trim();
+			}
 		}
 
 		public string Prenom
 		{
 			get { return _prenom; }
-			set { _prenom = value; }
+			set {
+                if (string.IsNullOrWhiteSpace(value))
+                    throw new ArgumentException(nameof(Nom), $"Le nom ne peut pas etre nul ou vide");
+                if (!(value.Length >= NB_CARAC_MIN) || !(value.Length <= NB_CARAC_MAX))
+                    throw new ArgumentOutOfRangeException(nameof(Nom), $"Le prenom doit contenir entre {NB_CARAC_MIN} et {NB_CARAC_MAX} caractères");
+                _prenom = value.Trim();
+			}
 		}
 
 		public int ID
@@ -29,8 +47,6 @@ namespace ApplicationGestionProduitCosmetique.Classes
 			get { return _id; }
 			set { _id = value; }
 		}
-
-		private DateTime _dateInscription;
 
 		public DateTime DateInscription
 		{
