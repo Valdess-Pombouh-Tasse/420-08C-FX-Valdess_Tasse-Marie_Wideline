@@ -21,29 +21,6 @@ namespace ApplicationGestionProduitCosmetique
         public MainWindow()
         {
             InitializeComponent();
-            TestConnexion();
-        }
-
-        private void TestConnexion()
-        {
-            MySqlConnection connexion = null;
-            try
-            {
-                connexion = DAL.CreerConnection();
-                connexion.Open();
-                MessageBox.Show("Connexion réussie à la base de données !");
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Erreur : {ex.Message}");
-            }
-            finally
-            {
-                if (connexion != null && connexion.State == System.Data.ConnectionState.Open)
-                {
-                    connexion.Close();
-                }
-            }
         }
     }
 }
