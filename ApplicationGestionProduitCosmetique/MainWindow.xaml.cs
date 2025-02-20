@@ -1,4 +1,5 @@
-﻿using ApplicationGestionProduitCosmetique.Models;
+﻿using ApplicationGestionProduitCosmetique.Classes;
+using ApplicationGestionProduitCosmetique.Models;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -25,7 +26,6 @@ namespace ApplicationGestionProduitCosmetique
 
             // Création d'un objet Vendeur
             Vendeur nouveauVendeur = new Vendeur(12,"Dupont","Arnélia",DateTime.Now);
-       
 
             // Appel de la méthode AjouterVendeur
             try

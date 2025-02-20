@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using ApplicationGestionProduitCosmetique.Models;
+using Microsoft.Extensions.Configuration;
 using MySqlConnector;
 using System;
 using System.Collections.Generic;

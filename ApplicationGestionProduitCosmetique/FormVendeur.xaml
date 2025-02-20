@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ApplicationGestionProduitCosmetique"
         mc:Ignorable="d"
-        Title="FormVendeur" Height="450" Width="800">
+        Title="FormVendeur" Height="450" Width="800" Loaded="Window_Loaded">
     <StackPanel>
         <TextBlock x:Name="tbTitre" Text="Information d'un vendeur" FontWeight="Bold"  HorizontalAlignment="Center" Margin="0,20" FontSize="18"></TextBlock>
         <StackPanel Orientation="Horizontal" Margin="0,5">
