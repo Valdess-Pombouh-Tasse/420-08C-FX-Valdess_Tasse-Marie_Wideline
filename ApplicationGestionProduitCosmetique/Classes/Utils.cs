@@ -15,13 +15,6 @@ namespace ApplicationGestionProduitCosmetique.Classes
             ErreurVide
         }
 
-        public enum ValidationPassword
-        {
-            Faible,
-            Moyen,
-            Fort
-        }
-
         public enum validationCourriel
         {
             Conforme,

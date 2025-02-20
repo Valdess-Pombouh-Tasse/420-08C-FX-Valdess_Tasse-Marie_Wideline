@@ -44,6 +44,8 @@ namespace ApplicationGestionProduitCosmetique.Classes
         public static void AjouterVendeur(Vendeur vendeur)
         {
             MySqlConnection cn = CreerConnection();
+        //public void AjouterVendeur(Vendeur  vendeur)
+        //{
 
             try
             {
@@ -73,5 +75,6 @@ namespace ApplicationGestionProduitCosmetique.Classes
                     cn.Close();
             }
         }
+        //}
     }
 }
