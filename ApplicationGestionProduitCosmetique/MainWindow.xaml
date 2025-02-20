@@ -5,19 +5,33 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ApplicationGestionProduitCosmetique"
         mc:Ignorable="d"
-            Title="Connexion" Height="300" Width="500">
-   
-    <StackPanel Margin="40,40,40,40">
-        <TextBlock x:Name="tbTitre" FontWeight="Bold" Foreground="DarkBlue" HorizontalAlignment="center">VEIL OF TONES</TextBlock>
-        <StackPanel Orientation="Horizontal" Margin="0,5">
-            <Label Content="Nom d'utilisateur" Width="110" Background="RosyBrown"></Label>
-            <TextBox x:Name="txtNom" Width="250"></TextBox>
-        </StackPanel>
-        
-        <StackPanel Margin="5" Orientation="Horizontal" HorizontalAlignment="Center">
-            <Button x:Name="btnConnecter" Content="Se connecter" Width="100" Margin="5" Click="btnConnecter_Click"></Button>
-            <Button x:Name="btnConnect" Content="Créer un compte" Foreground="Blue" Cursor="Hand" Width="100" Margin="5"></Button>
-        </StackPanel>
+        Title="Accueil" Height="500" Width="800" Background="#f5f5f5">
 
-    </StackPanel>
+    <Grid>
+
+        <TextBlock Text="VEIL OF TONES" FontSize="32" FontWeight="Bold" Foreground="#333"
+                   HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,20,0,0" Grid.Row="0"/>
+
+        <!-- Message de bienvenue -->
+        <TextBlock Text="Bienvenue sur veil of tones, votre destination beauté !" FontSize="16" Foreground="#555"
+                   HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,10,0,0" Grid.Row="1"/>
+
+        <TextBlock Text="Découvrez une large gamme de produits cosmétiques adaptés à vos besoins. 
+                        Inscrivez-vous pour personnaliser votre expérience et accéder à nos offres exclusives." 
+                   FontSize="14" Foreground="#777"
+                   HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,10,0,0" TextWrapping="Wrap" Grid.Row="2"/>
+
+        <MediaElement Name="videoIntro" Width="600" Height="300" Stretch="Uniform"
+                      Source="Resources/videos/video.png" LoadedBehavior="Play" UnloadedBehavior="Stop"
+                      HorizontalAlignment="Center" VerticalAlignment="Top" Grid.Row="3"/>
+
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,0,0,40" Grid.Row="4">
+            <Button Content="S'inscrire" Width="120" Height="40" Margin="10" Background="#FF4081"
+                    Foreground="White" FontWeight="Bold" />
+            <Button Content="Produit et service" Width="120" Height="40" Margin="10" Background="#2196F3"
+                    Foreground="White" FontWeight="Bold" />
+            <Button Content="Carriere" Width="120" Height="40" Margin="10" Background="#2196F3"
+                    Foreground="White" FontWeight="Bold"/>
+        </StackPanel>
+    </Grid>
 </Window>
