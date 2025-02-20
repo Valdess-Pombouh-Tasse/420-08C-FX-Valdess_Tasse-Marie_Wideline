@@ -22,22 +22,9 @@ namespace ApplicationGestionProduitCosmetique
         public MainWindow()
         {
             InitializeComponent();
-
-
-            // Création d'un objet Vendeur
-            Vendeur nouveauVendeur = new Vendeur(12,"Dupont","Arnélia",DateTime.Now);
-
-            // Appel de la méthode AjouterVendeur
-            try
-            {
-                GestionCompteUtilisateur.AjouterVendeur(nouveauVendeur);
-                MessageBox.Show("Vendeur ajouté avec succès !");
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Une erreur est survenue : {ex.Message}", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
         }
+
+
 
         private bool ValidationFormulaire()
         {
