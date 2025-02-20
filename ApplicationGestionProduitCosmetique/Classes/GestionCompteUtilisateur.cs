@@ -33,10 +33,10 @@ namespace ApplicationGestionProduitCosmetique.Classes
             _config = new ConfigurationBuilder().AddJsonFile(APPSETTINGS_FILE, false, true).Build();
         }
 
-        public void AjouterVendeur(Vendeur  vendeur)
-        {
+        //public void AjouterVendeur(Vendeur  vendeur)
+        //{
 
 
-        }
+        //}
     }
 }

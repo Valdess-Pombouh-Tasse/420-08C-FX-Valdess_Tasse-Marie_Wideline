@@ -29,10 +29,10 @@ namespace ApplicationGestionProduitCosmetique
 
             if (string.IsNullOrWhiteSpace(txtNom.Text))
                 sb.AppendLine("Le nom ne peut pas être vide");
-            if (string.IsNullOrWhiteSpace(txtCourriel.Text) || txtCourriel.Text != Client.VALID_COURRIEL)
-                sb.AppendLine("Le courriel ne peut pas être vide");
-            if (string.IsNullOrWhiteSpace(txtPassword.Password) || txtPassword.Password.Length < Client.PASSWORD_MIN_LENGTH || txtPassword.Password != Client.VALID_PASSWORD)
-                sb.AppendLine("Le mot de passe ne peut pas être vide");
+            if (string.IsNullOrWhiteSpace(txtCourriel.Text) || !Client.EstCourrielValide(txtCourriel.Text))
+                sb.AppendLine("Le courriel ne peut pas être vide et doit respecter la forme initiale@gmail.com.");
+            if (string.IsNullOrWhiteSpace(txtPassword.Password) || !Client.EstMotDePasseValide(txtPassword.Password))
+                sb.AppendLine($"Le mot de passe ne peut pas être vide et doit avoir au moins {Client.PASSWORD_MIN_LENGTH}");
 
             if (sb.Length > 0)
             {
@@ -43,7 +43,23 @@ namespace ApplicationGestionProduitCosmetique
         }
         private void btnConnecter_Click(object sender, RoutedEventArgs e)
         {
+            try
+            {
+                if (ValidationFormulaire())
+                {
 
+                    string nom = txtNom.Text;
+                    string Courriel = txtCourriel.Text;
+                    string MotDePasse = txtPassword.Password;
+
+                    MessageBox.Show("Compte créé avec succès", "Création du compte client");
+                    DialogResult = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Erreur de création du client");
+            }
         }
     }
 }
