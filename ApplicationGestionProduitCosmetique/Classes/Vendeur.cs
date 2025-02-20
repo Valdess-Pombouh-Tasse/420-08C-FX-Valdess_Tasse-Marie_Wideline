@@ -15,7 +15,6 @@ namespace ApplicationGestionProduitCosmetique.Classes
         private string _nom;
 		private string _prenom;
 		private int _id;
-		private string _code;
 		private DateTime _dateInscription;
 
 		public string Nom
@@ -35,14 +34,14 @@ namespace ApplicationGestionProduitCosmetique.Classes
 			get { return _prenom; }
 			set {
                 if (string.IsNullOrWhiteSpace(value))
-                    throw new ArgumentException(nameof(Nom), $"Le nom ne peut pas etre nul ou vide");
+                    throw new ArgumentException(nameof(Nom), $"Le prenom ne peut pas etre nul ou vide");
                 if (!(value.Length >= NB_CARAC_MIN) || !(value.Length <= NB_CARAC_MAX))
                     throw new ArgumentOutOfRangeException(nameof(Nom), $"Le prenom doit contenir entre {NB_CARAC_MIN} et {NB_CARAC_MAX} caractères");
                 _prenom = value.Trim();
 			}
 		}
 
-		public int ID
+		public int Id
 		{
 			get { return _id; }
 			set { _id = value; }
@@ -54,17 +53,17 @@ namespace ApplicationGestionProduitCosmetique.Classes
 			set { _dateInscription = value; }
 		}
 
-        public Vendeur(string nom, string prenom, int iD, DateTime dateInscription)
+        public Vendeur(int iD,string nom, string prenom,DateTime dateInscription)
         {
+            Id = iD;
             Nom = nom;
             Prenom = prenom;
-            ID = iD;
             DateInscription = dateInscription;
         }
 
         public override string ToString()
         {
-			return $"{ID}{Nom}{Prenom}{DateInscription}";
+			return $"{Id}{Nom}{Prenom}{DateInscription}";
         }
     }
 }

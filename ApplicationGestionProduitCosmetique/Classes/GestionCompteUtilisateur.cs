@@ -3,8 +3,10 @@ using MySqlConnector;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Data;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace ApplicationGestionProduitCosmetique.Classes
@@ -33,10 +35,42 @@ namespace ApplicationGestionProduitCosmetique.Classes
             _config = new ConfigurationBuilder().AddJsonFile(APPSETTINGS_FILE, false, true).Build();
         }
 
-        public void AjouterVendeur(Vendeur  vendeur)
+        /// <summary>
+        /// Permet d'ajouter un vendeur
+        /// </summary>
+        /// <param name="vendeur"></param>
+        /// <exception cref="ArgumentNullException"></exception>
+        public static void AjouterVendeur(Vendeur vendeur)
         {
+            MySqlConnection cn = CreerConnection();
 
+            try
+            {
+                cn.Open();
+                // Ajout des informations du vendeur
+                string requeteVendeur = $"INSERT INTO vendeur ( Id ,Nom, Prenom,DateInscription) " +
+                 $"VALUES(@id,@nom,@prenom @date)";
 
+                MySqlCommand cmdFacture = new MySqlCommand(requeteVendeur, cn);
+                cmdFacture.Parameters.AddWithValue("@id", vendeur.Id);
+                cmdFacture.Parameters.AddWithValue("@nom", vendeur.Nom);
+                cmdFacture.Parameters.AddWithValue("@prenom", vendeur.Prenom);
+                cmdFacture.Parameters.AddWithValue("@date", vendeur.DateInscription);
+               
+                cmdFacture.ExecuteNonQuery();
+
+                // Fermeture de la connection
+                cn.Close();
+
+            }
+            catch (Exception ex)
+            {
+            }
+            finally
+            {
+                if (cn is not null && cn.State == ConnectionState.Open)
+                    cn.Close();
+            }
         }
     }
 }
