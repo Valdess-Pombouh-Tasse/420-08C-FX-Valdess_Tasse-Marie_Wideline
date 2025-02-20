@@ -12,6 +12,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using static ApplicationGestionProduitCosmetique.Models.Enum;
 
 namespace ApplicationGestionProduitCosmetique
 {
@@ -27,10 +28,24 @@ namespace ApplicationGestionProduitCosmetique
             get { return _vendeur; }
             set { _vendeur = value; }
         }
+        /// <summary>
+        /// L'état du formulaire
+        /// </summary>
+        private EtatFormulaire _etat;
 
-        public FormVendeur(Vendeur vendeur)
+        /// <summary>
+        /// Obtient ou modifie l'état du formulaire
+        /// </summary>
+        public EtatFormulaire Etat
+        {
+            get { return _etat; }
+            set { _etat = value; }
+        }
+
+        public FormVendeur(EtatFormulaire etat = EtatFormulaire.Ajouter)
         {
             InitializeComponent();
+            Etat = etat;
         }
 
         public void AfficherVendeur()
@@ -42,7 +57,6 @@ namespace ApplicationGestionProduitCosmetique
                 txtPrenom.Text = Vendeur.Prenom;
                 dpDate.Text = Vendeur.DateInscription.ToString();
 ;            }
-
         }
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {

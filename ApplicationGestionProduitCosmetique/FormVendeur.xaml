@@ -5,24 +5,27 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ApplicationGestionProduitCosmetique"
         mc:Ignorable="d"
-        Title="FormVendeur" Height="450" Width="800" Loaded="Window_Loaded">
+        Title="FormVendeur" Height="600" Width="800" Loaded="Window_Loaded">
+    <Window.Background>
+        <ImageBrush ImageSource="/Resources/Images/img9.jpg" Stretch="Uniform" />
+    </Window.Background>
     <StackPanel>
         <TextBlock x:Name="tbTitre" Text="Information d'un vendeur" FontWeight="Bold"  HorizontalAlignment="Center" Margin="0,20" FontSize="18"></TextBlock>
         <StackPanel Orientation="Horizontal" Margin="0,5">
-            <Label Content="Id" Width="80" FontSize="14"></Label>
+            <Label Content="Id" Width="80" FontSize="16" FontWeight="Bold"></Label>
             <TextBox x:Name="txtId" Width="40"></TextBox>
         </StackPanel>
         <StackPanel Orientation="Horizontal" Margin="0,5">
-            <Label Content="Nom" Width="80" FontSize="14"></Label>
+            <Label Content="Nom" Width="80" FontSize="16" FontWeight="Bold"></Label>
             <TextBox x:Name="txtNom" Width="200"></TextBox>
         </StackPanel>
         <StackPanel Orientation="Horizontal" Margin="0,5">
-            <Label Content="Prénom" Width="80" FontSize="14"></Label>
+            <Label Content="Prénom" Width="80" FontSize="16" FontWeight="Bold"></Label>
             <TextBox x:Name="txtPrenom" Width="200"></TextBox>
         </StackPanel>
         <StackPanel Orientation="Horizontal" Margin="0,5">
-            <Label Width="80">Date</Label>
-            <DatePicker Name="dpDate" Width="150"/>
+            <Label Width="80" FontSize="16" FontWeight="Bold">Date</Label>
+            <DatePicker Name="dpDate" Width="200"/>
         </StackPanel>
     </StackPanel>
 </Window>
