@@ -68,13 +68,15 @@ namespace ApplicationGestionProduitCosmetique.Classes
             }
             catch (Exception ex)
             {
+                throw new Exception("Erreur lors de l'ajout du vendeur", ex);
             }
             finally
             {
                 if (cn is not null && cn.State == ConnectionState.Open)
                     cn.Close();
             }
+
         }
-        //}
+        
     }
 }
