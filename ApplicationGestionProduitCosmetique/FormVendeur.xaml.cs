@@ -52,15 +52,55 @@ namespace ApplicationGestionProduitCosmetique
         {
             if (Vendeur != null)
             {
-                txtId.Text = Vendeur.Id.ToString();
                 txtNom.Text = Vendeur.Nom;
                 txtPrenom.Text = Vendeur.Prenom;
                 dpDate.Text = Vendeur.DateInscription.ToString();
-;            }
+                ;
+            }
         }
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             AfficherVendeur();
+        }
+
+        private void btnAjouter_Click(object sender, RoutedEventArgs e)
+        {
+
+            try
+            {
+                // Vérification des champs
+                if (string.IsNullOrWhiteSpace(txtNom.Text) ||
+                    string.IsNullOrWhiteSpace(txtPrenom.Text) ||
+                    dpDate.SelectedDate == null)
+                {
+                    MessageBox.Show("Veuillez remplir tous les champs.", "Erreur", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
+
+                // Création du vendeur en utilisant le constructeur
+                _vendeur = new Vendeur(
+                    txtNom.Text,
+                    txtPrenom.Text,
+                    dpDate.SelectedDate.Value
+                );
+
+                DialogResult = true;
+                Close();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Une erreur est survenue : " + ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private void btnModifier_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void btnSupprimer_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

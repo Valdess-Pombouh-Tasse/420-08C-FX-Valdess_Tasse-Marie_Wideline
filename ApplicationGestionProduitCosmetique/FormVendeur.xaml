@@ -9,23 +9,33 @@
     <Window.Background>
         <ImageBrush ImageSource="/Resources/Images/img9.jpg" Stretch="Uniform" />
     </Window.Background>
-    <StackPanel>
-        <TextBlock x:Name="tbTitre" Text="Information d'un vendeur" FontWeight="Bold"  HorizontalAlignment="Center" Margin="0,20" FontSize="18"></TextBlock>
-        <StackPanel Orientation="Horizontal" Margin="0,5">
-            <Label Content="Id" Width="80" FontSize="16" FontWeight="Bold"></Label>
-            <TextBox x:Name="txtId" Width="40"></TextBox>
+    <Grid>
+        <Rectangle Fill="White" Opacity="0.85" RadiusX="20" RadiusY="20"
+                   Width="350" Height="320"
+                   HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        <StackPanel Width="350" Height="320"
+                    HorizontalAlignment="Center" VerticalAlignment="Center"
+                    Margin="20">
+            <TextBlock x:Name="tbTitre" Text="Information d'un vendeur" 
+                       FontWeight="Bold" FontSize="18"
+                       HorizontalAlignment="Center" Margin="0,10"/>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="5">
+                <Label Content="Nom" Width="80" FontSize="16" FontWeight="Bold"/>
+                <TextBox x:Name="txtNom" Width="200"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="5">
+                <Label Content="Prénom" Width="80" FontSize="16" FontWeight="Bold"/>
+                <TextBox x:Name="txtPrenom" Width="200"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="5">
+                <Label Content="Date" Width="80" FontSize="16" FontWeight="Bold"/>
+                <DatePicker Name="dpDate" Width="200" VerticalContentAlignment="Center"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="30">
+                <Button x:Name="btnAjouter"  Content="Ajouter"  Width="100" Height="25" Click="btnAjouter_Click"/>
+                <Button x:Name="btnModifier"  Content="Modifier"  Width="100" Height="25" Margin="10,0,0,0" Click="btnModifier_Click"/>
+                <Button x:Name="btnSupprimer"   Content="Supprimer"  Width="100" Height="25" Margin="10,0,0,0" Click="btnSupprimer_Click"/>
+            </StackPanel>
         </StackPanel>
-        <StackPanel Orientation="Horizontal" Margin="0,5">
-            <Label Content="Nom" Width="80" FontSize="16" FontWeight="Bold"></Label>
-            <TextBox x:Name="txtNom" Width="200"></TextBox>
-        </StackPanel>
-        <StackPanel Orientation="Horizontal" Margin="0,5">
-            <Label Content="Prénom" Width="80" FontSize="16" FontWeight="Bold"></Label>
-            <TextBox x:Name="txtPrenom" Width="200"></TextBox>
-        </StackPanel>
-        <StackPanel Orientation="Horizontal" Margin="0,5">
-            <Label Width="80" FontSize="16" FontWeight="Bold">Date</Label>
-            <DatePicker Name="dpDate" Width="200"/>
-        </StackPanel>
-    </StackPanel>
+    </Grid>
 </Window>

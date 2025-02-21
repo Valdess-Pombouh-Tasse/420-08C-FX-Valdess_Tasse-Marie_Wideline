@@ -44,18 +44,16 @@ namespace ApplicationGestionProduitCosmetique.Classes
         public static void AjouterVendeur(Vendeur vendeur)
         {
             MySqlConnection cn = CreerConnection();
-        //public void AjouterVendeur(Vendeur  vendeur)
-        //{
 
             try
             {
                 cn.Open();
                 // Ajout des informations du vendeur
-                string requeteVendeur = $"INSERT INTO vendeur ( Id ,Nom, Prenom,DateInscription) " +
-                 $"VALUES(@id,@nom,@prenom @date)";
+                string requeteVendeur = $"INSERT INTO vendeurs (Nom, Prenom,DateInscription) " +
+                 $"VALUES(@nom,@prenom,@date)";
 
                 MySqlCommand cmdFacture = new MySqlCommand(requeteVendeur, cn);
-                cmdFacture.Parameters.AddWithValue("@id", vendeur.Id);
+                //cmdFacture.Parameters.AddWithValue("@id", vendeur.Id);
                 cmdFacture.Parameters.AddWithValue("@nom", vendeur.Nom);
                 cmdFacture.Parameters.AddWithValue("@prenom", vendeur.Prenom);
                 cmdFacture.Parameters.AddWithValue("@date", vendeur.DateInscription);
@@ -77,6 +75,27 @@ namespace ApplicationGestionProduitCosmetique.Classes
             }
 
         }
-        
+        public static bool VendeurExiste(int idVendeur)
+        {
+            using (MySqlConnection cn = CreerConnection())
+            {
+                try
+                {
+                    cn.Open();
+                    string requete = "SELECT COUNT(*) FROM vendeurs WHERE IdVendeur = @id";
+                    using (MySqlCommand cmd = new MySqlCommand(requete, cn))
+                    {
+                        cmd.Parameters.AddWithValue("@id", idVendeur);
+                        int count = Convert.ToInt32(cmd.ExecuteScalar());
+                        return count > 0; // Retourne vrai si le vendeur existe déjà
+                    }
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception("Erreur lors de la vérification du vendeur : " + ex.Message, ex);
+                }
+            }
+        }
+
     }
 }
