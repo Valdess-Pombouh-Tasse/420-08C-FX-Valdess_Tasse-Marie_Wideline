@@ -55,9 +55,9 @@ namespace ApplicationGestionProduitCosmetique.Models
             set { _dateInscription = value; }
         }
 
-        public Vendeur(int iD, string nom, string prenom, DateTime dateInscription)
+        public Vendeur(/*int iD,*/ string nom, string prenom, DateTime dateInscription)
         {
-            Id = iD;
+            //Id = iD;
             Nom = nom;
             Prenom = prenom;
             DateInscription = dateInscription;
@@ -65,7 +65,7 @@ namespace ApplicationGestionProduitCosmetique.Models
 
         public override string ToString()
         {
-            return $"{Id}{Nom}{Prenom}{DateInscription}";
+            return $"{Nom}{Prenom}{DateInscription}";
         }
     }
 }

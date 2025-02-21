@@ -19,8 +19,8 @@
                       VerticalAlignment="Center" Margin="20"/>
 
             <StackPanel Orientation="Horizontal" DockPanel.Dock="Right"  Margin="10">
-                <Button Content="Produit et service" Width="120" Margin="8" Foreground="White" FontWeight="Bold" Background="#2196F3"/>
-                <Button Content="Carrière" Width="100" Margin="8" Foreground="White" FontWeight="Bold" Background="#2196F3"/>
+                <Button Content="Produits et services" Width="120" Margin="8" Foreground="White" FontWeight="Bold" Background="#2196F3"/>
+                <Button Name="btnCarrieres" Content="Carrières" Width="100" Margin="8" Foreground="White" FontWeight="Bold" Background="#2196F3" Click="btnCarrieres_Click" />
                 <Button Content="Inscription" Width="100" Margin="8" Foreground="White" FontWeight="Bold" Background="#FF4081"/>
             </StackPanel>
         </DockPanel>
