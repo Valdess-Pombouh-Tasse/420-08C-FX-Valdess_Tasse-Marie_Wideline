@@ -31,10 +31,11 @@
                 <Label Content="Date" Width="80" FontSize="16" FontWeight="Bold"/>
                 <DatePicker Name="dpDate" Width="200" VerticalContentAlignment="Center"/>
             </StackPanel>
-            <Button Name="btnValider" Content="Valider" Width="150" Height="40"
-                    Foreground="White" FontWeight="Bold"
-                    Background="#2196F3" Click="btnValider_Click_1"
-                    HorizontalAlignment="Center" Margin="15"/>
+            <StackPanel Orientation="Horizontal" Margin="30">
+                <Button x:Name="btnAjouter"  Content="Ajouter"  Width="100" Height="25" Click="btnAjouter_Click"/>
+                <Button x:Name="btnModifier"  Content="Modifier"  Width="100" Height="25" Margin="10,0,0,0" Click="btnModifier_Click"/>
+                <Button x:Name="btnSupprimer"   Content="Supprimer"  Width="100" Height="25" Margin="10,0,0,0" Click="btnSupprimer_Click"/>
+            </StackPanel>
         </StackPanel>
     </Grid>
 </Window>

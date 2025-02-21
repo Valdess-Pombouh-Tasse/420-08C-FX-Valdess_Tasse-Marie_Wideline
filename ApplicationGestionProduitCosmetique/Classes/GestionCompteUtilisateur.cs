@@ -50,7 +50,7 @@ namespace ApplicationGestionProduitCosmetique.Classes
                 cn.Open();
                 // Ajout des informations du vendeur
                 string requeteVendeur = $"INSERT INTO vendeurs (Nom, Prenom,DateInscription) " +
-                 $"VALUES(@nom,@prenom @date)";
+                 $"VALUES(@nom,@prenom,@date)";
 
                 MySqlCommand cmdFacture = new MySqlCommand(requeteVendeur, cn);
                 //cmdFacture.Parameters.AddWithValue("@id", vendeur.Id);

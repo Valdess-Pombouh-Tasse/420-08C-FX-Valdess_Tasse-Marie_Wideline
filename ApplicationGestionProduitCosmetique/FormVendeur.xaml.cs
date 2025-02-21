@@ -63,7 +63,7 @@ namespace ApplicationGestionProduitCosmetique
             AfficherVendeur();
         }
 
-        private void btnValider_Click_1(object sender, RoutedEventArgs e)
+        private void btnAjouter_Click(object sender, RoutedEventArgs e)
         {
 
             try
@@ -91,6 +91,16 @@ namespace ApplicationGestionProduitCosmetique
             {
                 MessageBox.Show("Une erreur est survenue : " + ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
             }
+        }
+
+        private void btnModifier_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void btnSupprimer_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }
