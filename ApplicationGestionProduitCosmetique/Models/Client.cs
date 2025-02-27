@@ -18,11 +18,6 @@ namespace ApplicationGestionProduitCosmetique.Models
         private string? _nom;
 
         /// <summary>
-        /// Courriel de l'utilisateur
-        /// </summary>
-        private string _courriel = "";
-
-        /// <summary>
         /// Mot de passe de l'utilisateur
         /// </summary>
         private string _motDePasse = "";
@@ -42,23 +37,6 @@ namespace ApplicationGestionProduitCosmetique.Models
             }
         }
 
-        /// <summary>
-        /// Courriel de l'utilisateur
-        /// </summary>
-        public string Courriel
-        {
-            get { return _courriel; }
-            set
-            {
-                if (string.IsNullOrWhiteSpace(value))
-                    throw new ArgumentException(nameof(Courriel), "Le courriel ne peut pas être vide");
-
-                if (!EstCourrielValide(value))
-                    throw new ArgumentException(nameof(Courriel), "Le courriel n'est pas valide");
-
-                _courriel = value.Trim();
-            }
-        }
 
         /// <summary>
         /// Mot de passe de l'utilisateur
@@ -119,10 +97,9 @@ namespace ApplicationGestionProduitCosmetique.Models
             }
         }
 
-        public Client(string? nom, string courriel, string motDePasse)
+        public Client(string? nom, string motDePasse)
         {
             Nom = nom;
-            Courriel = courriel;
             MotDePasse = motDePasse;
         }
     }

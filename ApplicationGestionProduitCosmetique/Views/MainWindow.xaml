@@ -1,0 +1,72 @@
+﻿<Window x:Class="ApplicationGestionProduitCosmetique.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ApplicationGestionProduitCosmetique"
+        mc:Ignorable="d"
+        Title="Accueil" Height="600" Width="900" Background="Pink">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Barre de navigation -->
+        <DockPanel Grid.Row="0" Background="#FFDDDDDD" Height="70">
+            <TextBlock Text="Cosmetic Shop" FontSize="30" FontWeight="ExtraBold"
+                       Foreground="Indigo" VerticalAlignment="Center"
+                        Margin="20"/>
+        </DockPanel>
+
+        <!-- Contenu principal -->
+        <Grid Grid.Row="1" Margin="20">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <!-- Contenu central avec carte -->
+            <Border Grid.Row="0" Padding="20" Background="White"
+                    CornerRadius="15" Margin="20">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                    <StackPanel Width="350">
+                        <TextBlock FontSize="24" FontWeight="Bold"  Text="Bienvenue sur Cosmetic Shop"
+                                   Margin="0,0,0,15" Foreground="#333"/>
+                        <TextBlock TextWrapping="Wrap"
+                                   Text="Votre boutique dédiée aux produits cosmétiques adaptés à chaque type de peau. Découvrez nos gammes variées et prenez soin de vous avec des produits de qualité."
+                                   Foreground="#666"/>
+                    </StackPanel>
+
+                    <MediaElement Name="videoPlayer" Width="400" Height="300" Source="pack://siteoforigin:,,,/Resources/Videos/video3.mp4"
+                                  LoadedBehavior="Play" UnloadedBehavior="Stop" Stretch="UniformToFill" Margin="20,0,0,0" Opacity="0">
+                        <MediaElement.Triggers>
+                            <EventTrigger RoutedEvent="MediaElement.Loaded">
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetProperty="Opacity"
+                                                         From="0" To="1" Duration="0:0:1"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </EventTrigger>
+                        </MediaElement.Triggers>
+                    </MediaElement>
+                </StackPanel>
+            </Border>
+
+            <!-- Boutons en dessous -->
+            <StackPanel Grid.Row="1" Orientation="Horizontal" 
+                        Margin="10" HorizontalAlignment="Center">
+               
+                <Button Name="btnConnexion" Content="Se connecter" Width="120" Margin="8"
+                        Foreground="White" FontWeight="Bold" Background="#2196F3"
+                        Padding="10" Click="btnConnexion_Click"/>
+
+                <Button Name="btnCreation" Content="Créer compte" Width="120" Margin="8"
+                        Foreground="White" FontWeight="Bold" Background="Red"
+                        Padding="10" Click="btnCreation_Click"/>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</Window>
