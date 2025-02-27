@@ -8,7 +8,8 @@ namespace ApplicationGestionProduitCosmetique.Models
 {
     public class Vendeur : Utilisateur
     {
-
-       
+        public Vendeur(string? nomUtilisateur, string? codeUtilisateur, string? motDePasse) : base(nomUtilisateur, codeUtilisateur, motDePasse)
+        {
+        }
     }
 }

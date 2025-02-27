@@ -9,6 +9,8 @@ namespace ApplicationGestionProduitCosmetique.Models
 {
     public class Client : Utilisateur
     {
-      
+        public Client(string? nomUtilisateur, string? codeUtilisateur, string? motDePasse) : base(nomUtilisateur, codeUtilisateur, motDePasse)
+        {
+        }
     }
 }
