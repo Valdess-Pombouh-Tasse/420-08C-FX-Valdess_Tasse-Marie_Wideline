@@ -1,5 +1,6 @@
 ﻿using ApplicationGestionProduitCosmetique.Classes;
 using ApplicationGestionProduitCosmetique.Models;
+using ApplicationGestionProduitCosmetique.Views;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -24,17 +25,6 @@ namespace ApplicationGestionProduitCosmetique
             InitializeComponent();
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            FormConnexion frmConnexion = new FormConnexion();
-            bool? resultat = frmConnexion.ShowDialog();
-
-            if (resultat == true)
-            {
-                MessageBox.Show("Contact ajouté avec succes!");
-            }
-
-        }
         private void btnCarrieres_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -68,6 +58,24 @@ namespace ApplicationGestionProduitCosmetique
             {
                 MessageBox.Show("Une erreur est survenue : " + ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
             }
+        }
+
+        private void btnConnexion_Click(object sender, RoutedEventArgs e)
+        {
+            FormConnexion frmConnexion = new FormConnexion();
+            bool? resultat = frmConnexion.ShowDialog();
+
+            if (resultat == true)
+            {
+                MessageBox.Show("Contact ajouté avec succes!");
+            }
+        }
+
+        private void btnCreation_Click(object sender, RoutedEventArgs e)
+        {
+            FormCreationcompte formCreationcompte = new FormCreationcompte();
+            formCreationcompte.ShowDialog();
+
         }
     }
 }
