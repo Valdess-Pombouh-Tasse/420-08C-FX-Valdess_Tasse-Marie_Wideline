@@ -7,30 +7,67 @@
         mc:Ignorable="d"
         Title="FormConnexion" Height="550" Width="800">
 
-    <Window.Background>
-        <ImageBrush ImageSource="/Resources/Images/img9.jpg" Stretch="Uniform" />
-    </Window.Background>
     <Grid>
-        <Rectangle Fill="White" Opacity="0.85" RadiusX="20" RadiusY="20"
-               Width="450" Height="320"
-               HorizontalAlignment="Center" VerticalAlignment="Center"/>
-        <StackPanel Width="450" Height="320"
-                HorizontalAlignment="Center" VerticalAlignment="Center"
-                Margin="20">
-            <TextBlock x:Name="tbTitre" Text="Information d'un client" 
-                   FontWeight="Bold" FontSize="18"
-                   HorizontalAlignment="Center" Margin="0,10"/>
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="8">
-                <Label Content="Nom" Width="150" FontSize="16" FontWeight="Bold"/>
-                <TextBox x:Name="txtNom" Width="200"/>
-            </StackPanel>
-            <StackPanel Orientation="Horizontal"  HorizontalAlignment="Center" Margin="8">
-                <Label Content="Mot de passe" Width="150" FontSize="16" FontWeight="Bold"></Label>
-                <PasswordBox x:Name="txtPassword" Width="200"/>
-            </StackPanel>
-            <StackPanel Margin="5" HorizontalAlignment="Center">
-                <Button x:Name="btnConnecter" Content="Se connecter" Width="100" Margin="10" Background="Green" Click="btnConnecter_Click"></Button>
-            </StackPanel>
-        </StackPanel>
+        <TabControl>
+            <!-- Onglet Client -->
+            <TabItem Header="Client">
+                <Grid>
+                    <Rectangle Fill="White" Opacity="0.85" RadiusX="20" RadiusY="20"
+                           Width="450" Height="320"
+                           HorizontalAlignment="Center" VerticalAlignment="Center"/>
+
+                    <StackPanel Width="450" Height="320"
+                            HorizontalAlignment="Center" VerticalAlignment="Center"
+                            Margin="20">
+                        <TextBlock x:Name="tbTitre" Text="Information d'un client" 
+                               FontWeight="Bold" FontSize="18"
+                               HorizontalAlignment="Center" Margin="0,10"/>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="8">
+                            <Label Content="Nom" Width="150" FontSize="16" FontWeight="Bold"/>
+                            <TextBox x:Name="txtNom" Width="200"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="8">
+                            <Label Content="Mot de passe" Width="150" FontSize="16" FontWeight="Bold"/>
+                            <PasswordBox x:Name="txtPassword" Width="200"/>
+                        </StackPanel>
+                        <StackPanel Margin="5" HorizontalAlignment="Center">
+                            <Button x:Name="btnConnecter" Content="Se connecter" Width="100" Margin="10" Background="Green"/>
+                        </StackPanel>
+                    </StackPanel>
+                </Grid>
+            </TabItem>
+
+            <!-- Onglet Vendeur -->
+            <TabItem Header="Vendeur">
+                <Grid>
+                    <Rectangle Fill="White" Opacity="0.85" RadiusX="20" RadiusY="20"
+                           Width="450" Height="320"
+                           HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    <StackPanel Width="450" Height="320"
+            HorizontalAlignment="Center" VerticalAlignment="Center"
+            Margin="20">
+                        <TextBlock x:Name="tbTitreVendeur" Text="Information d'un vendeur" 
+               FontWeight="Bold" FontSize="18"
+               HorizontalAlignment="Center" Margin="0,10"/>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="8">
+                            <Label Content="Nom" Width="150" FontSize="16" FontWeight="Bold"/>
+                            <TextBox x:Name="txtNomVendeur" Width="200"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="8">
+                            <Label Content="Code " Width="150" FontSize="16" FontWeight="Bold"/>
+                            <TextBox x:Name="txtCode" Width="200"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="8">
+                            <Label Content="Mot de passe" Width="150" FontSize="16" FontWeight="Bold"/>
+                            <PasswordBox x:Name="txtPasswordVendeur" Width="200"/>
+                        </StackPanel>
+                        <StackPanel Margin="5" HorizontalAlignment="Center">
+                            <Button x:Name="btnConnecterVendeur" Content="Se connecter" Width="100" Margin="10" Background="Green"/>
+                        </StackPanel>
+                    </StackPanel>
+                </Grid>
+            </TabItem>
+        </TabControl>
     </Grid>
 </Window>
+
