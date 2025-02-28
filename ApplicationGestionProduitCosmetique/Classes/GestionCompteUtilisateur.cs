@@ -37,11 +37,11 @@ namespace ApplicationGestionProduitCosmetique.Classes
         }
 
         /// <summary>
-        /// Permet d'ajouter un vendeur
+        /// Permet d'ajouter un ajouter un 
         /// </summary>
         /// <param name="vendeur"></param>
         /// <exception cref="ArgumentNullException"></exception>
-        public static void AjouterVendeur(Vendeur vendeur)
+        public static void AjouterUtilisateur(Utilisateur utilisateur)
         {
             MySqlConnection cn = CreerConnection();
 
@@ -49,14 +49,13 @@ namespace ApplicationGestionProduitCosmetique.Classes
             {
                 cn.Open();
                 // Ajout des informations du vendeur
-                string requeteVendeur = $"INSERT INTO vendeurs (Nom, Prenom,DateInscription) " +
-                 $"VALUES(@nom,@prenom,@date)";
+                string requeteUtilisateur = $"INSERT INTO vendeurs (CodeUtilisateur,Nom,Role) " +
+                 $"VALUES(@code,@nom,@role)";
 
-                MySqlCommand cmdFacture = new MySqlCommand(requeteVendeur, cn);
-                //cmdFacture.Parameters.AddWithValue("@id", vendeur.Id);
-                cmdFacture.Parameters.AddWithValue("@nom", vendeur.Nom);
-                cmdFacture.Parameters.AddWithValue("@prenom", vendeur.Prenom);
-                cmdFacture.Parameters.AddWithValue("@date", vendeur.DateInscription);
+                MySqlCommand cmdFacture = new MySqlCommand(requeteUtilisateur, cn);
+                cmdFacture.Parameters.AddWithValue("@code", utilisateur.CodeUtilisateur);
+                cmdFacture.Parameters.AddWithValue("@nom", utilisateur.Nom);
+                cmdFacture.Parameters.AddWithValue("@role", utilisateur.Role);
                
                 cmdFacture.ExecuteNonQuery();
 
@@ -75,27 +74,74 @@ namespace ApplicationGestionProduitCosmetique.Classes
             }
 
         }
-        public static bool VendeurExiste(int idVendeur)
+        public static bool UtilisateurExiste(int codeUtilisateur)
         {
             using (MySqlConnection cn = CreerConnection())
             {
                 try
                 {
                     cn.Open();
-                    string requete = "SELECT COUNT(*) FROM vendeurs WHERE IdVendeur = @id";
+                    string requete = "SELECT COUNT(*) FROM utilisateurs WHERE IdUtilisateur = @id";
                     using (MySqlCommand cmd = new MySqlCommand(requete, cn))
                     {
-                        cmd.Parameters.AddWithValue("@id", idVendeur);
+                        cmd.Parameters.AddWithValue("@id", codeUtilisateur);
                         int count = Convert.ToInt32(cmd.ExecuteScalar());
-                        return count > 0; // Retourne vrai si le vendeur existe déjà
+                        return count > 0;
                     }
                 }
                 catch (Exception ex)
                 {
-                    throw new Exception("Erreur lors de la vérification du vendeur : " + ex.Message, ex);
+                    throw new Exception("Erreur lors de la vérification de l'utilisateur : " + ex.Message, ex);
                 }
             }
         }
 
+        /// <summary>
+        /// Méthode de connexion d'un utilisateur (client, vendeur ou manager).
+        /// </summary>
+        public static bool ConnexionUtilisateur(string codeUtilisateur, string motDePasse, out string role)
+        {
+            role = string.Empty;
+
+            using (MySqlConnection cn = CreerConnection())
+            {
+                cn.Open();
+
+                string requete = "SELECT MotDePasse, Role FROM utilisateurs WHERE CodeUtilisateur = @code";
+                using (MySqlCommand cmd = new MySqlCommand(requete, cn))
+                {
+                    cmd.Parameters.AddWithValue("@code", codeUtilisateur);
+
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            string motDePasseHashEnBase = reader.GetString("MotDePasse");
+                            role = reader.GetString("Role");
+
+                            string hashSaisi = HasherMotDePasse(motDePasse);
+
+                            if (hashSaisi == motDePasseHashEnBase)
+                            {
+                                return true;
+                            }
+                        }
+                    }
+                }
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// Hashage sécurisé du mot de passe.
+        /// </summary>
+        private static string HasherMotDePasse(string motDePasse)
+        {
+            using (var sha256 = System.Security.Cryptography.SHA256.Create())
+            {
+                byte[] bytes = sha256.ComputeHash(System.Text.Encoding.UTF8.GetBytes(motDePasse));
+                return Convert.ToBase64String(bytes);
+            }
+        }
     }
 }

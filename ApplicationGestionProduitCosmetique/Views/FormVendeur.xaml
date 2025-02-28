@@ -9,33 +9,25 @@
     <Window.Background>
         <ImageBrush ImageSource="/Resources/Images/img9.jpg" Stretch="Uniform" />
     </Window.Background>
-    <Grid>
-        <Rectangle Fill="White" Opacity="0.85" RadiusX="20" RadiusY="20"
-                   Width="350" Height="320"
-                   HorizontalAlignment="Center" VerticalAlignment="Center"/>
-        <StackPanel Width="350" Height="320"
-                    HorizontalAlignment="Center" VerticalAlignment="Center"
-                    Margin="20">
-            <TextBlock x:Name="tbTitre" Text="Information d'un vendeur" 
-                       FontWeight="Bold" FontSize="18"
-                       HorizontalAlignment="Center" Margin="0,10"/>
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="5">
-                <Label Content="Nom" Width="80" FontSize="16" FontWeight="Bold"/>
-                <TextBox x:Name="txtNom" Width="200"/>
+    
+    <StackPanel Margin="10">
+        <GroupBox Header="Liste des courses">
+            <StackPanel Margin="10">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock  Text="NOM" FontWeight="Bold"  HorizontalAlignment="Left" Margin="0,0,265,0" />
+                    <TextBlock  Text="COMPTE" FontWeight="Bold"  HorizontalAlignment="Left" Margin="0,0,130,0"/>
+                    <TextBlock  Text="CODE" FontWeight="Bold"  HorizontalAlignment="Left" Margin="0,0,50,0" />
+                </StackPanel>
+                <StackPanel>
+                    <ListBox x:Name="lstUtilisateurs"   Width="740" Height="200" VerticalAlignment="top" Margin="0,0,10,0" HorizontalAlignment="Left" FontFamily="Courier New"></ListBox>
+                </StackPanel>
             </StackPanel>
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="5">
-                <Label Content="Prénom" Width="80" FontSize="16" FontWeight="Bold"/>
-                <TextBox x:Name="txtPrenom" Width="200"/>
-            </StackPanel>
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="5">
-                <Label Content="Date" Width="80" FontSize="16" FontWeight="Bold"/>
-                <DatePicker Name="dpDate" Width="200" VerticalContentAlignment="Center"/>
-            </StackPanel>
-            <StackPanel Orientation="Horizontal" Margin="30">
-                <Button x:Name="btnAjouter"  Content="Ajouter"  Width="100" Height="25" Click="btnAjouter_Click"/>
-                <Button x:Name="btnModifier"  Content="Modifier"  Width="100" Height="25" Margin="10,0,0,0" Click="btnModifier_Click"/>
-                <Button x:Name="btnSupprimer"   Content="Supprimer"  Width="100" Height="25" Margin="10,0,0,0" Click="btnSupprimer_Click"/>
-            </StackPanel>
+        </GroupBox>
+        <StackPanel Orientation="Horizontal" Margin="0,10">
+            <Button x:Name="btnAjouterCourse"  Content="Ajouter"  Width="100" Height="25"/>
+            <Button x:Name="btnModifierCourse"  Content="Modifier"  Width="100" Height="25" Margin="10,0,0,0"/>
+            <Button x:Name="btnSupprimerCourse"   Content="Supprimer"  Width="100" Height="25" Margin="10,0,0,0"/>
         </StackPanel>
-    </Grid>
+
+    </StackPanel>
 </Window>
