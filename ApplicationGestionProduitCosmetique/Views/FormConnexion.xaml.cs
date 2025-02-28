@@ -1,4 +1,5 @@
 ﻿using ApplicationGestionProduitCosmetique.Models;
+using ApplicationGestionProduitCosmetique.Views;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -49,16 +50,27 @@ namespace ApplicationGestionProduitCosmetique
                 if (ValidationFormulaire())
                 {
 
-                    string nom = txtNom.Text;
-                    string MotDePasse = txtPassword.Password;
+                    string nomUtilisateur = txtNom.Text;
+                    string motDePasse = txtPassword.Password;
+                    Utilisateurs utilisateur = new Client(nomUtilisateur, motDePasse);
 
-                    MessageBox.Show("Compte créé avec succès", "Création du compte client");
-                    DialogResult = true;
+                    if (utilisateur.SeConnecter(nomUtilisateur, motDePasse))
+                    {
+                        MessageBox.Show("Connexion réussie", "Connexion");
+                        FormApplication frmApplication = new FormApplication();
+                        frmApplication.Show();
+                        this.DialogResult = true;
+                    }
+                    else
+                    {
+                        MessageBox.Show("Nom ou mot de passe non valide", "Connexion");
+                        DialogResult = true;
+                    }
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "Erreur de création du client");
+                MessageBox.Show("Erreur : " + ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 

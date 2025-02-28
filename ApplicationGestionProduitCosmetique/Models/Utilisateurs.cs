@@ -16,7 +16,7 @@ namespace ApplicationGestionProduitCosmetique.Models
         /// <summary>
         /// Nom de l'utilisateur
         /// </summary>
-        private string? _nom;
+        private string? _nomUtilisateur;
 
         /// <summary>
         /// Mot de passe de l'utilisateur
@@ -26,15 +26,15 @@ namespace ApplicationGestionProduitCosmetique.Models
         /// <summary>
         /// Nom de l'utilisateur
         /// </summary>
-        public string? Nom
+        public string? NomUtilisateur
         {
-            get { return _nom; }
+            get { return _nomUtilisateur; }
             set
             {
                 if (string.IsNullOrWhiteSpace(value))
-                    throw new ArgumentException(nameof(Nom), "Le nom ne peut pas être vide");
+                    throw new ArgumentException(nameof(NomUtilisateur), "Le nom ne peut pas être vide");
 
-                _nom = value.Trim();
+                _nomUtilisateur = value.Trim();
             }
         }
 
@@ -81,36 +81,25 @@ namespace ApplicationGestionProduitCosmetique.Models
             return contientMajuscule && contientSpecial;
         }
 
-        /// <summary>
-        /// Vérifie si le courriel est valide
-        /// </summary>
-        /// <param name="courriel"></param>
-        /// <returns></returns>
-        public static bool EstCourrielValide(string courriel)
-        {
-            try
-            {
-                var adresseMail = new MailAddress(courriel);
-                return adresseMail.Address == courriel;
-            }
-            catch
-            {
-                return false;
-            }
-        }
 
-        protected Utilisateurs(string? nom, string motDePasse)
+        protected Utilisateurs(string? nomUtilisateur, string motDePasse)
         {
-            Nom = nom;
+            NomUtilisateur = nomUtilisateur;
             MotDePasse = motDePasse;
         }
 
-        public virtual void SeConnecter(string nom, string motDePasse)
+        /// <summary>
+        /// permet à l'utilisateur de se connecter
+        /// </summary>
+        /// <param name="nomUtilisateur"></param>
+        /// <param name="motDePasse"></param>
+        public virtual bool SeConnecter(string nomUtilisateur, string motDePasse)
         {
-
+            return nomUtilisateur == NomUtilisateur && motDePasse == MotDePasse;
+  
         }
 
-        public virtual void CreerConnecte(string nom, string motDePasse)
+        public virtual void CreerConnecte(string nomUtilisateur, string motDePasse)
         {
 
         }

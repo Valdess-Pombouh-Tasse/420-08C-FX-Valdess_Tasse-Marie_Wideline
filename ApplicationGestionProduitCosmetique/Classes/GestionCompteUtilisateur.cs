@@ -54,8 +54,8 @@ namespace ApplicationGestionProduitCosmetique.Classes
 
                 MySqlCommand cmdFacture = new MySqlCommand(requeteUtilisateur, cn);
                 cmdFacture.Parameters.AddWithValue("@code", utilisateur.CodeUtilisateur);
-                cmdFacture.Parameters.AddWithValue("@nom", utilisateur.Nom);
-                cmdFacture.Parameters.AddWithValue("@role", utilisateur.Role);
+                cmdFacture.Parameters.AddWithValue("@nom", utilisateur.NomUtilisateur);
+                //cmdFacture.Parameters.AddWithValue("@role", utilisateur.Role);
                
                 cmdFacture.ExecuteNonQuery();
 
