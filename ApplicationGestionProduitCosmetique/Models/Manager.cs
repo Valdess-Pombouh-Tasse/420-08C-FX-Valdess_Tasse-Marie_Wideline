@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ApplicationGestionProduitCosmetique.enums;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,7 +9,7 @@ namespace ApplicationGestionProduitCosmetique.Models
 {
     public class Manager : Utilisateur
     {
-        public Manager(string? nomUtilisateur, string? codeUtilisateur, string? motDePasse) : base(nomUtilisateur, codeUtilisateur, motDePasse)
+        public Manager(string? nomUtilisateur, string codeUtilisateur, RoleUtilisateur roleUtilisateur) : base(nomUtilisateur, codeUtilisateur, RoleUtilisateur.Manager)
         {
         }
     }

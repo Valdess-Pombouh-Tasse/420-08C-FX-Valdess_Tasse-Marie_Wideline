@@ -1,4 +1,5 @@
-﻿using ApplicationGestionProduitCosmetique.Models;
+﻿using ApplicationGestionProduitCosmetique.enums;
+using ApplicationGestionProduitCosmetique.Models;
 using Microsoft.Extensions.Configuration;
 using MySqlConnector;
 using System;
@@ -144,6 +145,80 @@ namespace ApplicationGestionProduitCosmetique.Classes
             }
         }
 
+        public static void ModifierUtilisateur(Utilisateur utilisateur)
+        {
+            // Création de la connexion
+            MySqlConnection cn = CreerConnection();
+
+            try
+            {
+                // Ouverture de la connexion
+                cn.Open();
+
+                // Requête de mise à jour
+                string requete = "UPDATE utilisateurs SET Nom = @nom, Role = @role WHERE CodeUtilisateur = @code";
+                MySqlCommand cmd = new MySqlCommand(requete, cn);
+
+                // Ajout des paramètres
+                cmd.Parameters.AddWithValue("@nom", utilisateur.NomUtilisateur);
+                cmd.Parameters.AddWithValue("@role", utilisateur.Role.ToString());
+                cmd.Parameters.AddWithValue("@code", utilisateur.CodeUtilisateur);
+
+                // Exécution de la commande
+                int rowsAffected = cmd.ExecuteNonQuery();
+
+                // Vérification si la mise à jour a affecté des lignes
+                if (rowsAffected == 0)
+                {
+                    throw new Exception("Aucun utilisateur trouvé avec le CodeUtilisateur spécifié.");
+                }
+            }
+            catch (Exception ex)
+            {
+                // Gestion des exceptions
+                throw new Exception("Erreur lors de la modification de l'utilisateur", ex);
+            }
+            finally
+            {
+                // Fermeture de la connexion si elle est ouverte
+                if (cn != null && cn.State == ConnectionState.Open)
+                {
+                    cn.Close();
+                }
+            }
+        }
+        public static void SupprimerUtilisateur(string codeUtilisateur)
+        {
+            MySqlConnection cn = CreerConnection();
+
+            try
+            {
+                cn.Open();
+
+                string requete = "DELETE FROM utilisateurs WHERE CodeUtilisateur = @code";
+                MySqlCommand cmd = new MySqlCommand(requete, cn);
+
+                cmd.Parameters.AddWithValue("@code", codeUtilisateur);
+
+                int ligne = cmd.ExecuteNonQuery();
+
+                if (ligne == 0)
+                {
+                    throw new Exception("Aucun utilisateur trouvé avec le CodeUtilisateur spécifié.");
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Erreur lors de la suppression de l'utilisateur", ex);
+            }
+            finally
+            {
+                if (cn != null && cn.State == ConnectionState.Open)
+                {
+                    cn.Close();
+                }
+            }
+        }
         /// <summary>
         /// Méthode de connexion d'un utilisateur (client, vendeur ou manager).
         /// </summary>

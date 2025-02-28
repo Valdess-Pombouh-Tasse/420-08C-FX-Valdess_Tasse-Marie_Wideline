@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ApplicationGestionProduitCosmetique.enums;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,12 +7,10 @@ using System.Threading.Tasks;
 
 namespace ApplicationGestionProduitCosmetique.Models
 {
-    public class Vendeur : Utilisateurs
+    public class Vendeur : Utilisateur
     {
-        public string Code { get; set; }
-        public Vendeur(string? nomUtilisateur, string motDePasse, string code) : base(nomUtilisateur, motDePasse)
+        public Vendeur(string? nomUtilisateur, string codeUtilisateur, RoleUtilisateur roleUtilisateur) : base(nomUtilisateur, codeUtilisateur, RoleUtilisateur.Vendeur)
         {
-            Code = code;
         }
     }
 }

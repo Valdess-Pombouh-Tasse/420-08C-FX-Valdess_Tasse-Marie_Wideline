@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ApplicationGestionProduitCosmetique.enums;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Mail;
@@ -43,10 +44,14 @@ namespace ApplicationGestionProduitCosmetique.Models
         public string CodeUtilisateur
         {
             get { return _codeUtilisateur; }
-            set { _codeUtilisateur = value; }
+            set
+            {
+                if (string.IsNullOrWhiteSpace(value))
+                    throw new ArgumentException(nameof(CodeUtilisateur), "Le code utilisateur ne peut pas être vide");
+
+                _codeUtilisateur = value.Trim();
+            }
         }
-
-
 
         /// <summary>
         /// Mot de passe de l'utilisateur
@@ -65,6 +70,7 @@ namespace ApplicationGestionProduitCosmetique.Models
                 _motDePasse = value.Trim();
             }
         }
+        public RoleUtilisateur Role { get; set; }
 
         /// <summary>
         /// Vérifie si le mot de passe est valide
@@ -83,7 +89,7 @@ namespace ApplicationGestionProduitCosmetique.Models
             {
                 if (char.IsUpper(c))
                     contientMajuscule = true;
-                if (!char.IsLetterOrDigit(c)) // Vérifie si c'est un caractère spécial
+                if (!char.IsLetterOrDigit(c))
                     contientSpecial = true;
             }
 
@@ -91,10 +97,11 @@ namespace ApplicationGestionProduitCosmetique.Models
         }
 
 
-        protected Utilisateur(string? nomUtilisateur, string motDePasse)
+        protected Utilisateur(string? nomUtilisateur, string codeUtilisateur, RoleUtilisateur  roleUtilisateur )
         {
             NomUtilisateur = nomUtilisateur;
-            MotDePasse = motDePasse;
+            CodeUtilisateur = codeUtilisateur;
+            Role = roleUtilisateur;
         }
 
         /// <summary>
@@ -105,7 +112,6 @@ namespace ApplicationGestionProduitCosmetique.Models
         public virtual bool SeConnecter(string nomUtilisateur, string motDePasse)
         {
             return nomUtilisateur == NomUtilisateur && motDePasse == MotDePasse;
-  
         }
 
         public virtual void CreerConnecte(string nomUtilisateur, string motDePasse)
