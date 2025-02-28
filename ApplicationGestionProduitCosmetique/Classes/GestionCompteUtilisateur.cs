@@ -1,4 +1,5 @@
-﻿using ApplicationGestionProduitCosmetique.Models;
+﻿using ApplicationGestionProduitCosmetique.enums;
+using ApplicationGestionProduitCosmetique.Models;
 using Microsoft.Extensions.Configuration;
 using MySqlConnector;
 using System;
@@ -36,10 +37,58 @@ namespace ApplicationGestionProduitCosmetique.Classes
             _config = new ConfigurationBuilder().AddJsonFile(APPSETTINGS_FILE, false, true).Build();
         }
 
+        public static List<Utilisateur> ChargerUtilisateurs()
+        {
+            List<Utilisateur> utilisateurs = new List<Utilisateur>();
+
+            MySqlConnection cn = CreerConnection();
+
+            cn.Open();
+
+            string requete = "SELECT CodeUtilisateur, NomUtilisateur, Role FROM utilisateurs";
+
+            MySqlCommand cmd = new MySqlCommand(requete, cn);
+            MySqlDataReader dr = cmd.ExecuteReader();
+
+            while (dr.Read())
+            {
+                string codeUtilisateur = dr.GetString(0);  
+                string nomUtilisateur = dr.GetString(1);   
+                string role = dr.GetString(2);   
+
+                Utilisateur utilisateur;
+
+                if (role == "Client")
+                {
+                    utilisateur = new Client(nomUtilisateur, codeUtilisateur, role);
+                }
+                else if (role == "Vendeur")
+                {
+                    utilisateur = new Vendeur(nomUtilisateur, codeUtilisateur, role);
+                }
+                else if (role == "Manager")
+                {
+                    utilisateur = new Manager(nomUtilisateur, codeUtilisateur, role);
+                }
+                else
+                {
+                    throw new InvalidOperationException("Type utilisateur inconnu : " + role);
+                }
+
+                utilisateurs.Add(utilisateur);
+            }
+
+            dr.Close();
+            cn.Close();
+
+            return utilisateurs;
+        }
+
+
         /// <summary>
         /// Permet d'ajouter un ajouter un 
         /// </summary>
-        /// <param name="vendeur"></param>
+        /// <param name="utilisateur"></param>
         /// <exception cref="ArgumentNullException"></exception>
         public static void AjouterUtilisateur(Utilisateur utilisateur)
         {
@@ -96,82 +145,80 @@ namespace ApplicationGestionProduitCosmetique.Classes
             }
         }
 
-        ///// <summary>
-        ///// Méthode de connexion d'un utilisateur (client, vendeur ou manager).
-        ///// </summary>
-        //public static bool ConnexionUtilisateur(string codeUtilisateur, string motDePasse, out string role)
-        //{
-        //    role = string.Empty;
+        public static void ModifierUtilisateur(Utilisateur utilisateur)
+        {
+            // Création de la connexion
+            MySqlConnection cn = CreerConnection();
 
-        //    using (MySqlConnection cn = CreerConnection())
-        //    {
-        //        cn.Open();
+            try
+            {
+                // Ouverture de la connexion
+                cn.Open();
 
-        //        string requete = "SELECT MotDePasse, Role FROM utilisateurs WHERE CodeUtilisateur = @code";
-        //        using (MySqlCommand cmd = new MySqlCommand(requete, cn))
-        //        {
-        //            cmd.Parameters.AddWithValue("@code", codeUtilisateur);
+                // Requête de mise à jour
+                string requete = "UPDATE utilisateurs SET Nom = @nom, Role = @role WHERE CodeUtilisateur = @code";
+                MySqlCommand cmd = new MySqlCommand(requete, cn);
 
-        //            using (var reader = cmd.ExecuteReader())
-        //            {
-        //                if (reader.Read())
-        //                {
-        //                    string motDePasseHashEnBase = reader.GetString("MotDePasse");
-        //                    role = reader.GetString("Role");
+                // Ajout des paramètres
+                cmd.Parameters.AddWithValue("@nom", utilisateur.NomUtilisateur);
+                cmd.Parameters.AddWithValue("@role", utilisateur.Role.ToString());
+                cmd.Parameters.AddWithValue("@code", utilisateur.CodeUtilisateur);
 
-        //                    string hashSaisi = HasherMotDePasse(motDePasse);
+                // Exécution de la commande
+                int rowsAffected = cmd.ExecuteNonQuery();
 
-        //                    if (hashSaisi == motDePasseHashEnBase)
-        //                    {
-        //                        return true;
-        //                    }
-        //                }
-        //            }
-        //        }
-        //    }
-        //    return false;
-        //}
+                // Vérification si la mise à jour a affecté des lignes
+                if (rowsAffected == 0)
+                {
+                    throw new Exception("Aucun utilisateur trouvé avec le CodeUtilisateur spécifié.");
+                }
+            }
+            catch (Exception ex)
+            {
+                // Gestion des exceptions
+                throw new Exception("Erreur lors de la modification de l'utilisateur", ex);
+            }
+            finally
+            {
+                // Fermeture de la connexion si elle est ouverte
+                if (cn != null && cn.State == ConnectionState.Open)
+                {
+                    cn.Close();
+                }
+            }
+        }
+        public static void SupprimerUtilisateur(string codeUtilisateur)
+        {
+            MySqlConnection cn = CreerConnection();
 
+            try
+            {
+                cn.Open();
 
+                string requete = "DELETE FROM utilisateurs WHERE CodeUtilisateur = @code";
+                MySqlCommand cmd = new MySqlCommand(requete, cn);
 
-        //public static bool ConnexionUtilisateur(string nomdeUtilisateur, string motDePasse, out string role, out string messageErreur)
-        //{
-        //    role = string.Empty;
-        //    messageErreur = "Nom d'utilisateur ou mot de passe incorrect.";
+                cmd.Parameters.AddWithValue("@code", codeUtilisateur);
 
-        //    try
-        //    {
-        //        using (MySqlConnection cn = CreerConnection())
-        //        {
-        //            cn.Open();
+                int ligne = cmd.ExecuteNonQuery();
 
-        //            // Vérifier si l'utilisateur existe
-        //            string requete = "SELECT NomUtilisateur, MotDePasse, Role FROM utilisateurs WHERE MotDePasse = @motDePasse";
-        //            using (MySqlCommand cmd = new MySqlCommand(requete, cn))
-        //            {
-        //                cmd.Parameters.Add("@motDePasse", MySqlDbType.VarChar).Value = motDePasse;
-
-        //                using (var reader = cmd.ExecuteReader())
-        //                {
-        //                    if (reader.Read()) // L'utilisateur existe
-        //                    {
-        //                        string nomUtilisateurEnBase = reader["NomUtilisateur"] as string ?? string.Empty;
-        //                        string motDePasseEnBase = reader["MotDePasse"] as string ?? string.Empty;
-        //                        role = reader["Role"] as string ?? string.Empty;
-
-        //                    }
-        //                }
-        //            }
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        messageErreur = "Erreur de connexion : " + ex.Message;
-        //    }
-
-        //    return false;
-        //}
-
+                if (ligne == 0)
+                {
+                    throw new Exception("Aucun utilisateur trouvé avec le CodeUtilisateur spécifié.");
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Erreur lors de la suppression de l'utilisateur", ex);
+            }
+            finally
+            {
+                if (cn != null && cn.State == ConnectionState.Open)
+                {
+                    cn.Close();
+                }
+            }
+        }
         /// <summary>
         /// Méthode de connexion d'un utilisateur (client, vendeur ou manager).
         /// </summary>

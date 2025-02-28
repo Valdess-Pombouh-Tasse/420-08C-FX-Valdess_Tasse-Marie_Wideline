@@ -8,7 +8,11 @@
         Title="FormConnexion" Height="550" Width="800">
 
     <Grid>
-        <TabControl>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="37*"/>
+            <ColumnDefinition Width="123*"/>
+        </Grid.ColumnDefinitions>
+        <TabControl Grid.ColumnSpan="2">
             <!-- Onglet Client -->
             <TabItem Header="Client">
                 <Grid>

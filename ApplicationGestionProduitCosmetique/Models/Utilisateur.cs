@@ -1,6 +1,8 @@
-﻿using System;
+﻿using ApplicationGestionProduitCosmetique.enums;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Mail;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -8,15 +10,23 @@ namespace ApplicationGestionProduitCosmetique.Models
 {
     public abstract class Utilisateur
     {
-        public const int NB_CARAC_MIN = 3;
-        public const int NB_CARAC_MAX = 15;
+        
+        //Constantes
         public const int PASSWORD_MIN_LENGTH = 6;
 
+        /// <summary>
+        /// Nom de l'utilisateur
+        /// </summary>
         private string? _nomUtilisateur;
-        private string? _codeUtilisateur;
-        private string? _motDePasse;
-      
 
+        /// <summary>
+        /// Mot de passe de l'utilisateur
+        /// </summary>
+        private string _motDePasse = "";
+
+        /// <summary>
+        /// Nom de l'utilisateur
+        /// </summary>
         public string? NomUtilisateur
         {
             get { return _nomUtilisateur; }
@@ -25,13 +35,13 @@ namespace ApplicationGestionProduitCosmetique.Models
                 if (string.IsNullOrWhiteSpace(value))
                     throw new ArgumentException(nameof(NomUtilisateur), "Le nom ne peut pas être vide");
 
-                if (value.Length < NB_CARAC_MIN || value.Length > NB_CARAC_MAX)
-                    throw new ArgumentOutOfRangeException(nameof(NomUtilisateur), $"Le nom doit contenir entre {NB_CARAC_MIN} et {NB_CARAC_MAX} caractères");
-
                 _nomUtilisateur = value.Trim();
             }
         }
-        public string? CodeUtilisateur
+
+        private string _codeUtilisateur;
+
+        public string CodeUtilisateur
         {
             get { return _codeUtilisateur; }
             set
@@ -43,7 +53,10 @@ namespace ApplicationGestionProduitCosmetique.Models
             }
         }
 
-        public string? MotDePasse
+        /// <summary>
+        /// Mot de passe de l'utilisateur
+        /// </summary>
+        public string MotDePasse
         {
             get { return _motDePasse; }
             set
@@ -53,6 +66,31 @@ namespace ApplicationGestionProduitCosmetique.Models
 
                 
             }
+        }
+        public RoleUtilisateur Role { get; set; }
+
+        /// <summary>
+        /// Vérifie si le mot de passe est valide
+        /// </summary>
+        /// <param name="motDePasse"></param>
+        /// <returns></returns>
+        public static bool EstMotDePasseValide(string motDePasse)
+        {
+            if (motDePasse.Length < PASSWORD_MIN_LENGTH)
+                return false;
+
+            bool contientMajuscule = false;
+            bool contientSpecial = false;
+
+            foreach (char c in motDePasse)
+            {
+                if (char.IsUpper(c))
+                    contientMajuscule = true;
+                if (!char.IsLetterOrDigit(c))
+                    contientSpecial = true;
+            }
+
+            return contientMajuscule && contientSpecial;
         }
 
         protected Utilisateur(string? nomUtilisateur, string? motDePasse)
@@ -75,4 +113,3 @@ namespace ApplicationGestionProduitCosmetique.Models
         //}
     }
 }
-
