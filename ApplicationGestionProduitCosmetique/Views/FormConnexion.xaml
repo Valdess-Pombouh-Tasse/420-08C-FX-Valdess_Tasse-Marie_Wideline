@@ -31,7 +31,7 @@
                             <PasswordBox x:Name="txtPassword" Width="200"/>
                         </StackPanel>
                         <StackPanel Margin="5" HorizontalAlignment="Center">
-                            <Button x:Name="btnConnecter" Content="Se connecter" Width="100" Margin="10" Background="Green"/>
+                            <Button x:Name="btnConnecter" Content="Se connecter" Width="100" Margin="10" Background="Green" Click="btnConnecter_Click"/>
                         </StackPanel>
                     </StackPanel>
                 </Grid>

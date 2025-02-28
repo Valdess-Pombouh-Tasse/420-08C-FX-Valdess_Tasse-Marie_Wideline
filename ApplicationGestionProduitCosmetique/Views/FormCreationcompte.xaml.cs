@@ -23,5 +23,10 @@ namespace ApplicationGestionProduitCosmetique.Views
         {
             InitializeComponent();
         }
+
+        private void btnCreecompte_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

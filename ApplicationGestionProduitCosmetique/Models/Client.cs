@@ -7,100 +7,10 @@ using System.Threading.Tasks;
 
 namespace ApplicationGestionProduitCosmetique.Models
 {
-    public class Client
+    public class Client : Utilisateurs
     {
-        //Constantes
-        public const int PASSWORD_MIN_LENGTH = 6;
-       
-        /// <summary>
-        /// Nom de l'utilisateur
-        /// </summary>
-        private string? _nom;
-
-        /// <summary>
-        /// Mot de passe de l'utilisateur
-        /// </summary>
-        private string _motDePasse = "";
-
-        /// <summary>
-        /// Nom de l'utilisateur
-        /// </summary>
-        public string? Nom
+        public Client(string? nom, string motDePasse) : base(nom, motDePasse)
         {
-            get { return _nom; }
-            set
-            {
-                if (string.IsNullOrWhiteSpace(value))
-                    throw new ArgumentException(nameof(Nom), "Le nom ne peut pas être vide");
-
-                _nom = value.Trim();
-            }
-        }
-
-
-        /// <summary>
-        /// Mot de passe de l'utilisateur
-        /// </summary>
-        public string MotDePasse
-        {
-            get { return _motDePasse; }
-            set {
-                    if (string.IsNullOrWhiteSpace(value))
-                         throw new ArgumentException(nameof(MotDePasse), "Le mot de passe ne peut pas être vide");
-
-                    if (!EstMotDePasseValide(value))
-                    throw new ArgumentException(nameof(MotDePasse), "Le mot de passe doit contenir au moins 8 caractères");
-
-                  _motDePasse = value.Trim(); 
-            }
-        }
-
-        /// <summary>
-        /// Vérifie si le mot de passe est valide
-        /// </summary>
-        /// <param name="motDePasse"></param>
-        /// <returns></returns>
-        public static bool EstMotDePasseValide(string motDePasse)
-        {
-            if (motDePasse.Length < PASSWORD_MIN_LENGTH)
-                return false;
-
-            bool contientMajuscule = false;
-            bool contientSpecial = false;
-
-            foreach (char c in motDePasse)
-            {
-                if (char.IsUpper(c))
-                    contientMajuscule = true;
-                if (!char.IsLetterOrDigit(c)) // Vérifie si c'est un caractère spécial
-                    contientSpecial = true;
-            }
-
-            return contientMajuscule && contientSpecial;
-        }
-
-        /// <summary>
-        /// Vérifie si le courriel est valide
-        /// </summary>
-        /// <param name="courriel"></param>
-        /// <returns></returns>
-        public static bool EstCourrielValide(string courriel)
-        {
-            try
-            {
-                var adresseMail = new MailAddress(courriel);
-                return adresseMail.Address == courriel;
-            }
-            catch
-            {
-                return false;
-            }
-        }
-
-        public Client(string? nom, string motDePasse)
-        {
-            Nom = nom;
-            MotDePasse = motDePasse;
         }
     }
 }

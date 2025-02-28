@@ -61,5 +61,6 @@ namespace ApplicationGestionProduitCosmetique
                 MessageBox.Show(ex.Message, "Erreur de création du client");
             }
         }
+
     }
 }
