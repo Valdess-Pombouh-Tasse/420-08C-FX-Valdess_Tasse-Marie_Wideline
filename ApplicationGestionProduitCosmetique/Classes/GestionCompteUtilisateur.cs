@@ -56,7 +56,7 @@ namespace ApplicationGestionProduitCosmetique.Classes
                 cmdFacture.Parameters.AddWithValue("@code", utilisateur.CodeUtilisateur);
                 cmdFacture.Parameters.AddWithValue("@nom", utilisateur.NomUtilisateur);
                 //cmdFacture.Parameters.AddWithValue("@role", utilisateur.Role);
-               
+
                 cmdFacture.ExecuteNonQuery();
 
                 // Fermeture de la connection
@@ -96,32 +96,159 @@ namespace ApplicationGestionProduitCosmetique.Classes
             }
         }
 
+        ///// <summary>
+        ///// Méthode de connexion d'un utilisateur (client, vendeur ou manager).
+        ///// </summary>
+        //public static bool ConnexionUtilisateur(string codeUtilisateur, string motDePasse, out string role)
+        //{
+        //    role = string.Empty;
+
+        //    using (MySqlConnection cn = CreerConnection())
+        //    {
+        //        cn.Open();
+
+        //        string requete = "SELECT MotDePasse, Role FROM utilisateurs WHERE CodeUtilisateur = @code";
+        //        using (MySqlCommand cmd = new MySqlCommand(requete, cn))
+        //        {
+        //            cmd.Parameters.AddWithValue("@code", codeUtilisateur);
+
+        //            using (var reader = cmd.ExecuteReader())
+        //            {
+        //                if (reader.Read())
+        //                {
+        //                    string motDePasseHashEnBase = reader.GetString("MotDePasse");
+        //                    role = reader.GetString("Role");
+
+        //                    string hashSaisi = HasherMotDePasse(motDePasse);
+
+        //                    if (hashSaisi == motDePasseHashEnBase)
+        //                    {
+        //                        return true;
+        //                    }
+        //                }
+        //            }
+        //        }
+        //    }
+        //    return false;
+        //}
+
+
+
+        //public static bool ConnexionUtilisateur(string nomdeUtilisateur, string motDePasse, out string role, out string messageErreur)
+        //{
+        //    role = string.Empty;
+        //    messageErreur = "Nom d'utilisateur ou mot de passe incorrect.";
+
+        //    try
+        //    {
+        //        using (MySqlConnection cn = CreerConnection())
+        //        {
+        //            cn.Open();
+
+        //            // Vérifier si l'utilisateur existe
+        //            string requete = "SELECT NomUtilisateur, MotDePasse, Role FROM utilisateurs WHERE MotDePasse = @motDePasse";
+        //            using (MySqlCommand cmd = new MySqlCommand(requete, cn))
+        //            {
+        //                cmd.Parameters.Add("@motDePasse", MySqlDbType.VarChar).Value = motDePasse;
+
+        //                using (var reader = cmd.ExecuteReader())
+        //                {
+        //                    if (reader.Read()) // L'utilisateur existe
+        //                    {
+        //                        string nomUtilisateurEnBase = reader["NomUtilisateur"] as string ?? string.Empty;
+        //                        string motDePasseEnBase = reader["MotDePasse"] as string ?? string.Empty;
+        //                        role = reader["Role"] as string ?? string.Empty;
+
+        //                    }
+        //                }
+        //            }
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        messageErreur = "Erreur de connexion : " + ex.Message;
+        //    }
+
+        //    return false;
+        //}
+
         /// <summary>
         /// Méthode de connexion d'un utilisateur (client, vendeur ou manager).
         /// </summary>
-        public static bool ConnexionUtilisateur(string codeUtilisateur, string motDePasse, out string role)
+        /// <param name="nomUtilisateur"></param>
+        /// <param name="motDePasse"></param>
+        /// <param name="role"></param>
+        /// <param name="messageErreur"></param>
+        /// <returns></returns>
+        public static bool ConnexionUtilisateur(string nomUtilisateur, string motDePasse, out string role, out string messageErreur)
         {
             role = string.Empty;
+            messageErreur = "Nom d'utilisateur ou mot de passe incorrect.";
+
+            try
+            {
+                using (MySqlConnection cn = CreerConnection())
+                {
+                    cn.Open();
+
+                    string requete = "SELECT NomUtilisateur, MotDePasse, Role FROM utilisateurs WHERE NomUtilisateur = @nom";
+                    using (MySqlCommand cmd = new MySqlCommand(requete, cn))
+                    {
+                        cmd.Parameters.AddWithValue("@nom", nomUtilisateur);
+
+                        using (var reader = cmd.ExecuteReader())
+                        {
+                            // Vérifie si un utilisateur avec ce nom existe
+                            if (reader.Read()) 
+                            {
+                                string motDePasseEnBase = reader["MotDePasse"] as string ?? string.Empty;
+                                role = reader["Role"] as string ?? string.Empty;
+
+                                // Vérification du mot de passe
+                                if (motDePasse == motDePasseEnBase)
+                                {
+                                    return true; 
+                                }
+                               
+                            }
+                       
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                messageErreur = "Erreur de connexion : " + ex.Message;
+            }
+
+            return false;
+        }
+
+
+        public static bool ConnexionVendeur(string nomUtilisateur, string motDePasse, string codeVendeur, out string role, out string messageErreur)
+        {
+            role = string.Empty;
+            messageErreur = "Nom d'utilisateur ou mot de passe incorrect.";
 
             using (MySqlConnection cn = CreerConnection())
             {
                 cn.Open();
 
-                string requete = "SELECT MotDePasse, Role FROM utilisateurs WHERE CodeUtilisateur = @code";
+                string requete = "SELECT MotDePasse, Role, Code FROM utilisateurs WHERE NomUtilisateur = @nom AND Role = 'Vendeur'";
                 using (MySqlCommand cmd = new MySqlCommand(requete, cn))
                 {
-                    cmd.Parameters.AddWithValue("@code", codeUtilisateur);
+                    cmd.Parameters.AddWithValue("@nom", nomUtilisateur);
 
                     using (var reader = cmd.ExecuteReader())
                     {
-                        if (reader.Read())
+                        if (reader.Read()) // Vérifie si un vendeur a été trouvé
                         {
-                            string motDePasseHashEnBase = reader.GetString("MotDePasse");
+                            string motDePasseEnBase = reader.GetString("MotDePasse");
+                            string codeVendeurEnBase = reader.GetString("Code"); // Récupération du code vendeur en base
                             role = reader.GetString("Role");
 
-                            string hashSaisi = HasherMotDePasse(motDePasse);
-
-                            if (hashSaisi == motDePasseHashEnBase)
+                            // Vérification du mot de passe et du code vendeur
+                            if (motDePasse == motDePasseEnBase && codeVendeur == codeVendeurEnBase)
                             {
                                 return true;
                             }
@@ -131,6 +258,7 @@ namespace ApplicationGestionProduitCosmetique.Classes
             }
             return false;
         }
+
 
         /// <summary>
         /// Hashage sécurisé du mot de passe.

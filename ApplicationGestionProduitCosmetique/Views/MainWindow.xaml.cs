@@ -63,12 +63,7 @@ namespace ApplicationGestionProduitCosmetique
         private void btnConnexion_Click(object sender, RoutedEventArgs e)
         {
             FormConnexion frmConnexion = new FormConnexion();
-            bool? resultat = frmConnexion.ShowDialog();
-
-            if (resultat == true)
-            {
-                MessageBox.Show("Contact ajouté avec succes!");
-            }
+            frmConnexion.ShowDialog();
         }
 
         private void btnCreation_Click(object sender, RoutedEventArgs e)

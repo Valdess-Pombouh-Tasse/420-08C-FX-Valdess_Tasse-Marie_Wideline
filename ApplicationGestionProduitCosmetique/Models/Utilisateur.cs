@@ -51,30 +51,28 @@ namespace ApplicationGestionProduitCosmetique.Models
                 if (string.IsNullOrWhiteSpace(value))
                     throw new ArgumentException(nameof(MotDePasse), "Le mot de passe ne peut pas être vide");
 
-                if (!EstMotDePasseValide(value))
-                    throw new ArgumentException(nameof(MotDePasse), "Le mot de passe doit contenir au moins une majuscule, un caractère spécial et avoir une longueur d'au moins 6 caractères");
-
-                _motDePasse = value.Trim();
+                
             }
         }
 
-        protected Utilisateur(string? nomUtilisateur, string? codeUtilisateur, string? motDePasse)
+        protected Utilisateur(string? nomUtilisateur, string? motDePasse)
         {
             NomUtilisateur = nomUtilisateur;
-            CodeUtilisateur = codeUtilisateur;
+           // CodeUtilisateur = codeUtilisateur;
             MotDePasse = motDePasse;
         }
 
-        public virtual bool EstMotDePasseValide(string motDePasse)
-        {
-            if (motDePasse.Length < PASSWORD_MIN_LENGTH)
-                return false;
+       
+        //public virtual bool EstMotDePasseValide(string motDePasse)
+        //{
+        //    if (motDePasse.Length >= PASSWORD_MIN_LENGTH)
+        //        return false;
 
-            bool contientMajuscule = motDePasse.Any(char.IsUpper);
-            bool contientSpecial = motDePasse.Any(c => !char.IsLetterOrDigit(c));
+        //    bool contientMajuscule = motDePasse.Any(char.IsUpper);
+        //    bool contientSpecial = motDePasse.Any(c => !char.IsLetterOrDigit(c));
 
-            return contientMajuscule && contientSpecial;
-        }
+        //    return contientMajuscule && contientSpecial;
+        //}
     }
 }
 
