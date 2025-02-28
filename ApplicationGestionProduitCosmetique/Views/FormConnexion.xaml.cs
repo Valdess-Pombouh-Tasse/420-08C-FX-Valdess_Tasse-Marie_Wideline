@@ -1,4 +1,5 @@
 ﻿using ApplicationGestionProduitCosmetique.Classes;
+using ApplicationGestionProduitCosmetique.enums;
 using ApplicationGestionProduitCosmetique.Models;
 using ApplicationGestionProduitCosmetique.Views;
 using System;
@@ -27,6 +28,11 @@ namespace ApplicationGestionProduitCosmetique
             InitializeComponent();
         }
 
+        /// <summary>
+        /// Méthode de validation du formulaire
+        /// </summary>
+        /// <returns></returns>
+        /// * @author Valdess
         private bool ValidationFormulaire()
         {
             StringBuilder sb = new StringBuilder();
@@ -44,56 +50,26 @@ namespace ApplicationGestionProduitCosmetique
             return true;
         }
 
+        /// <summary>
+        /// Méthode appelée lors du clic sur le bouton "Se connecter"
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        ///  @author : Valdess
         //private void btnConnecter_Click(object sender, RoutedEventArgs e)
         //{
-        //    //try
-        //    //{
-        //    //    if (ValidationFormulaire())
-        //    //    {
-
-        //    //        string nomUtilisateur = txtNom.Text;
-        //    //        string motDePasse = txtPassword.Password;
-        //    //        Utilisateurs utilisateur = new Client(nomUtilisateur, motDePasse);
-
-        //    //        if (utilisateur.SeConnecter(nomUtilisateur, motDePasse))
-        //    //        {
-        //    //            MessageBox.Show("Connexion réussie", "Connexion");
-        //    //            FormApplication frmApplication = new FormApplication();
-        //    //            frmApplication.Show();
-        //    //            this.DialogResult = true;
-        //    //        }
-        //    //        else
-        //    //        {
-        //    //            MessageBox.Show("Nom ou mot de passe non valide", "Connexion");
-        //    //            DialogResult = true;
-        //    //        }
-        //    //    }
-        //    //}
-        //    //catch (Exception ex)
-        //    //{
-        //    //    MessageBox.Show("Erreur : " + ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
-        //    //}
-
+        //    // Validation des champs
+        //    string nom = txtNom.Text.Trim();
+        //    string motDePasse = txtPassword.Password.Trim();
         //    try
         //    {
-        //        if (ValidationFormulaire())
+        //        // Vérification de la connexion
+        //        if (GestionCompteUtilisateur.ConnexionUtilisateur(nom, motDePasse))
         //        {
-        //            string nom = txtNom.Text.Trim();
-        //            string motDePasse = txtPassword.Password.Trim();
-
-        //            if (GestionCompteUtilisateur.ConnexionUtilisateur(nom, motDePasse, out string role, out string messageErreur))
-        //            {
-        //                // Connexion réussie → Ouvrir la FormApplication
-        //                MessageBox.Show("Connexion réussie !", "Succès");
-        //                FormApplication formApp = new FormApplication();
-        //                formApp.Show();
-        //                this.Close();
-        //            }
-        //            else
-        //            {
-        //                // Afficher l'erreur spécifique (nom incorrect ou mot de passe incorrect)
-        //                MessageBox.Show(messageErreur, "Erreur de connexion");
-        //            }
+        //            MessageBox.Show("Connexion réussie !", "Succès");
+        //            FormApplication formApp = new FormApplication();
+        //            formApp.Show();
+        //            this.Close();
         //        }
         //    }
         //    catch (Exception ex)
@@ -101,28 +77,17 @@ namespace ApplicationGestionProduitCosmetique
         //        MessageBox.Show("Une erreur est survenue : " + ex.Message, "Erreur");
         //    }
         //}
-
         private void btnConnecter_Click(object sender, RoutedEventArgs e)
         {
+            string nom = txtNom.Text.Trim();
+            string motDePasse = txtPassword.Password.Trim();
+
             try
             {
-                // Validation des champs
-                string nom = txtNom.Text.Trim();
-                string motDePasse = txtPassword.Password.Trim();
-
-                if (string.IsNullOrWhiteSpace(nom))
-                    throw new Exception("Veuillez entrer un nom d'utilisateur.");
-
-                if (string.IsNullOrWhiteSpace(motDePasse))
-                    throw new Exception("Veuillez entrer un mot de passe.");
-
-                if (!Client.EstMotDePasseValide(motDePasse))
-                    throw new Exception("Le mot de passe doit contenir au moins une majuscule, un caractère spécial et 6 caractères.");
-
-                // Vérification de la connexion
-                if (GestionCompteUtilisateur.ConnexionUtilisateur(nom, motDePasse, out string role, out string messageErreur))
+                if (GestionCompteUtilisateur.ConnexionUtilisateur(nom, motDePasse, out RoleUtilisateur role, out string messageErreur))
                 {
-                    MessageBox.Show("Connexion réussie !", "Succès");
+                    MessageBox.Show($"Connexion réussie ! Rôle : {role}", "Succès");
+
                     FormApplication formApp = new FormApplication();
                     formApp.Show();
                     this.Close();
@@ -138,6 +103,12 @@ namespace ApplicationGestionProduitCosmetique
             }
         }
 
+        /// <summary>
+        /// Méthode appelée lors du clic sur le bouton "Se connecter en tant que vendeur"
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        /// * @author : Valdess
         private void btnConnecterVendeur_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -146,7 +117,7 @@ namespace ApplicationGestionProduitCosmetique
                 {
                     string nom = txtNom.Text.Trim();
                     string motDePasse = txtPassword.Password.Trim();
-                    string codeUtilisateur = txtCode.Text.Trim();
+                    string codeUtilisateur = txtCode.Text.Trim(); // Manquait dans l'appel
 
                     if (GestionCompteUtilisateur.ConnexionVendeur(nom, motDePasse, codeUtilisateur, out string role, out string messageErreur))
                     {
@@ -168,5 +139,6 @@ namespace ApplicationGestionProduitCosmetique
                 MessageBox.Show("Une erreur est survenue : " + ex.Message, "Erreur");
             }
         }
+
     }
 }
