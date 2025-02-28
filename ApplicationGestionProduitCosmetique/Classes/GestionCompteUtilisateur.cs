@@ -36,10 +36,58 @@ namespace ApplicationGestionProduitCosmetique.Classes
             _config = new ConfigurationBuilder().AddJsonFile(APPSETTINGS_FILE, false, true).Build();
         }
 
+        public static List<Utilisateur> ChargerUtilisateurs()
+        {
+            List<Utilisateur> utilisateurs = new List<Utilisateur>();
+
+            MySqlConnection cn = CreerConnection();
+
+            cn.Open();
+
+            string requete = "SELECT CodeUtilisateur, NomUtilisateur, Role FROM utilisateurs";
+
+            MySqlCommand cmd = new MySqlCommand(requete, cn);
+            MySqlDataReader dr = cmd.ExecuteReader();
+
+            while (dr.Read())
+            {
+                string codeUtilisateur = dr.GetString(0);  
+                string nomUtilisateur = dr.GetString(1);   
+                string role = dr.GetString(2);   
+
+                Utilisateur utilisateur;
+
+                if (role == "Client")
+                {
+                    utilisateur = new Client(nomUtilisateur, codeUtilisateur, role);
+                }
+                else if (role == "Vendeur")
+                {
+                    utilisateur = new Vendeur(nomUtilisateur, codeUtilisateur, role);
+                }
+                else if (role == "Manager")
+                {
+                    utilisateur = new Manager(nomUtilisateur, codeUtilisateur, role);
+                }
+                else
+                {
+                    throw new InvalidOperationException("Type utilisateur inconnu : " + role);
+                }
+
+                utilisateurs.Add(utilisateur);
+            }
+
+            dr.Close();
+            cn.Close();
+
+            return utilisateurs;
+        }
+
+
         /// <summary>
         /// Permet d'ajouter un ajouter un 
         /// </summary>
-        /// <param name="vendeur"></param>
+        /// <param name="utilisateur"></param>
         /// <exception cref="ArgumentNullException"></exception>
         public static void AjouterUtilisateur(Utilisateur utilisateur)
         {
