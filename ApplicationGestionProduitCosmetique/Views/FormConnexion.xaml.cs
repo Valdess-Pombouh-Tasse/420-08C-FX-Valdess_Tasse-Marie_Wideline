@@ -122,7 +122,7 @@ namespace ApplicationGestionProduitCosmetique
                     if (GestionCompteUtilisateur.ConnexionVendeur(nom, motDePasse, codeUtilisateur, out string role, out string messageErreur))
                     {
                         // Connexion réussie → Ouvrir la FormApplication
-                        MessageBox.Show("Connexion réussie !", "Succès");
+                        MessageBox.Show("Connexion réussie", "Succès");
                         FormApplication formApp = new FormApplication();
                         formApp.Show();
                         this.Close();
