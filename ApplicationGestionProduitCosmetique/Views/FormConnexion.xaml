@@ -8,12 +8,8 @@
                 HorizontalAlignment="Center" VerticalAlignment="Center" 
                 Margin="0,20,0,0" Padding="20" BorderBrush="#D3D3D3" BorderThickness="1">
             <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-
-                <!-- Titre -->
                 <TextBlock Text="Connexion Utilisateur" FontSize="24" FontWeight="Bold"
                            HorizontalAlignment="Center" Margin="0,0,0,20"/>
-
-                <!-- ComboBox Choix Type -->
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,20">
                     <TextBlock Text="Type d'utilisateur:" VerticalAlignment="Center" Margin="0,0,10,0"/>
                     <ComboBox x:Name="cmbTypeUtilisateur" Width="150">
@@ -21,26 +17,19 @@
                         <ComboBoxItem Content="Manager"/>
                     </ComboBox>
                 </StackPanel>
-
-                <!-- Nom -->
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,5">
                     <Label Content="Nom:" Width="120" VerticalAlignment="Center"/>
                     <TextBox x:Name="txtNom" Width="200"/>
                 </StackPanel>
 
-                <!-- Code (optionnel pour manager) -->
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,5">
                     <Label Content="Code:" Width="120" VerticalAlignment="Center"/>
                     <TextBox x:Name="txtCode" Width="200"/>
                 </StackPanel>
-
-                <!-- Mot de passe -->
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,5">
                     <Label Content="Mot de passe:" Width="120" VerticalAlignment="Center"/>
                     <PasswordBox x:Name="txtPassword" Width="200"/>
                 </StackPanel>
-
-                <!-- Bouton Connexion -->
                 <Button Content="Se connecter" Width="150" Background="Green" Foreground="White"
                         HorizontalAlignment="Center" Margin="20,10,20,0" Click="btnConnecter_Click"/>
 
