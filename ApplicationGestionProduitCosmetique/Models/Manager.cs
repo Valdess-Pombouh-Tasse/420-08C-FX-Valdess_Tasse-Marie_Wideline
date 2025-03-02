@@ -9,7 +9,7 @@ namespace ApplicationGestionProduitCosmetique.Models
 {
     public class Manager : Utilisateur
     {
-        public Manager(string nomUtilisateur, string nomDePasse, string codeUtilisateur) : base(nomUtilisateur, nomDePasse, codeUtilisateur)
+        public Manager(string nomUtilisateur, string codeUtilisateur, RoleUtilisateur role) : base(nomUtilisateur, codeUtilisateur, role)
         {
         }
     }

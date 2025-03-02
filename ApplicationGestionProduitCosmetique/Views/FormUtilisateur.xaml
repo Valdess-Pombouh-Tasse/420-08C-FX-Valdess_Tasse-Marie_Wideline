@@ -11,16 +11,16 @@
             <StackPanel Margin="10">
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="NOM" FontWeight="Bold" HorizontalAlignment="Left" Width="200" />
-                    <TextBlock Text="COMPTE" FontWeight="Bold" HorizontalAlignment="Left" Width="200" />
-                    <TextBlock Text="CODE" FontWeight="Bold" HorizontalAlignment="Left" Width="100" />
+                    <TextBlock Text="CODE" FontWeight="Bold" HorizontalAlignment="Left" Width="200" />
+                    <TextBlock Text="Role" FontWeight="Bold" HorizontalAlignment="Left" Width="100" />
                 </StackPanel>
                 <ListBox x:Name="lstUtilisateurs" Width="740" Height="200" FontFamily="Courier New">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Text="{Binding NomUtilisateur}" Width="200" />
-                                <TextBlock Text="{Binding Role}" Width="200" />
                                 <TextBlock Text="{Binding CodeUtilisateur}" Width="100" />
+                                <TextBlock Text="{Binding Role}" Width="200" />
                             </StackPanel>
                         </DataTemplate>
                     </ListBox.ItemTemplate>

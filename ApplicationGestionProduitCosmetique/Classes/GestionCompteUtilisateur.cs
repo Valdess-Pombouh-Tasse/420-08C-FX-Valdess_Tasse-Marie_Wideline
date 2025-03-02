@@ -62,33 +62,31 @@ namespace ApplicationGestionProduitCosmetique.Classes
             {
                 string codeUtilisateur = dr.GetString(0);
                 string nomUtilisateur = dr.GetString(1);
-                string role = dr.GetString(2);
+                string roleString = dr.GetString(2);
+
+                RoleUtilisateur roleEnum = (RoleUtilisateur)Enum.Parse(typeof(RoleUtilisateur), roleString);
 
                 Utilisateur utilisateur;
 
-                if (role == "Client")
+                if (roleEnum == RoleUtilisateur.Client)
                 {
-                    utilisateur = new Client(nomUtilisateur, codeUtilisateur, role);
+                    utilisateur = new Client(nomUtilisateur, codeUtilisateur, roleEnum);
                 }
-                else if (role == "Vendeur")
+                else if (roleEnum == RoleUtilisateur.Vendeur)
                 {
-                    utilisateur = new Vendeur(nomUtilisateur, codeUtilisateur, role);
+                    utilisateur = new Vendeur(nomUtilisateur, codeUtilisateur, roleEnum);
                 }
-                else if (role == "Manager")
+                else if (roleEnum == RoleUtilisateur.Manager)
                 {
-                    utilisateur = new Manager(nomUtilisateur, codeUtilisateur, role);
+                    utilisateur = new Manager(nomUtilisateur, codeUtilisateur, roleEnum);
                 }
                 else
                 {
-                    throw new InvalidOperationException("Type utilisateur inconnu : " + role);
+                    throw new InvalidOperationException("Type utilisateur inconnu : " + roleString);
                 }
 
                 utilisateurs.Add(utilisateur);
             }
-
-            dr.Close();
-            cn.Close();
-
             return utilisateurs;
         }
 
@@ -257,186 +255,178 @@ namespace ApplicationGestionProduitCosmetique.Classes
         /// <param name="role"></param>
         /// <param name="messageErreur"></param>
         /// <returns></returns>
-        //public static bool ConnexionUtilisateur(string nomUtilisateur, string motDePasse, out string role, out string messageErreur)
-        //{
-        //    role = string.Empty;
-        //    messageErreur = "Nom d'utilisateur ou mot de passe incorrect.";
-
-        //    try
-        //    {
-        //        using (MySqlConnection cn = CreerConnection())
+        //        public static bool ConnexionUtilisateur(string nomUtilisateur, string motDePasse, out RoleUtilisateur role, out string messageErreur)
         //        {
-        //            cn.Open();
+        //            role = RoleUtilisateur.Client; // Valeur par défaut
+        //            messageErreur = "Nom d'utilisateur ou mot de passe incorrect.";
 
-        //            string requete = "SELECT CodeUTilisateur, NomUtilisateur, MotDePasse, Role FROM utilisateurs WHERE NomUtilisateur = @nom AND MotDePasse = @motDePasse";
-        //            using (MySqlCommand cmd = new MySqlCommand(requete, cn))
+        //            try
         //            {
-        //                cmd.Parameters.AddWithValue("@nom", nomUtilisateur);
-        //                cmd.Parameters.AddWithValue("@motDePasse", motDePasse);
-
-        //                using (var reader = cmd.ExecuteReader())
+        //                using (MySqlConnection cn = CreerConnection())
         //                {
-        //                    // Vérifie si un utilisateur avec ce nom existe
-        //                    if (reader.Read()) 
+        //                    cn.Open();
+
+        //                    string requete = "SELECT Role FROM utilisateurs WHERE NomUtilisateur = @nom AND MotDePasse = @motDePasse";
+        //                    using (MySqlCommand cmd = new MySqlCommand(requete, cn))
         //                    {
-        //                        string motDePasseEnBase = reader["MotDePasse"] as string ?? string.Empty;
-        //                        string nomUtilisateurEnBase = reader["NomUtilisateur"] as string ?? string.Empty;
-        //                        role = reader["Role"] as string ?? string.Empty;
+        //                        cmd.Parameters.AddWithValue("@nom", nomUtilisateur);
+        //                        cmd.Parameters.AddWithValue("@motDePasse", motDePasse);
 
-        //                        // Vérification du mot de passe
-        //                        if (motDePasse == motDePasseEnBase && nomUtilisateur==nomUtilisateurEnBase)
+        //                        object result = cmd.ExecuteScalar();
+
+        //                        if (result != null)
         //                        {
-        //                            return true; 
+        //                            string roleString = result.ToString();
+
+        //                            // Vérifier si la valeur du rôle existe dans l'énumération
+        //                            if (Enum.TryParse(roleString, true, out RoleUtilisateur roleEnum))
+        //                            {
+        //                                role = roleEnum;
+        //                                return true;
+        //                            }
+        //                            else
+        //                            {
+        //                                messageErreur = "Rôle inconnu.";
+        //                            }
         //                        }
-
         //                    }
-
         //                }
         //            }
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        messageErreur = "Erreur de connexion : " + ex.Message;
-        //    }
-
-        //    return false;
-        //}
-
-        //public static bool ConnexionUtilisateur(string nomUtilisateur, string motDePasse)
-        //{
-        //    MySqlConnection cn = CreerConnection();
-        //    try
-
-        //    {
-        //        cn.Open();
-
-        //        string requete = $"SELECT * FROM utilisateurs WHERE NomUtilisateur = nom AND MotDePasse = motDePasse";
-        //        MySqlCommand cmd = new MySqlCommand(requete, cn);
-        //        MySqlDataReader dr = cmd.ExecuteReader();
-        //        while (dr.Read())
-        //        {
-        //            if (nomUtilisateur == dr.GetString(3) && motDePasse == dr.GetString(4))
+        //            catch (Exception ex)
         //            {
-        //                Client client = new Client(dr.GetString(1), dr.GetString(2), dr.GetString(3));
-        //                return true;
+        //                messageErreur = "Erreur de connexion : " + ex.Message;
         //            }
+
+        //            return false;
         //        }
 
-        //    }
 
-        //    catch (Exception ex)
-        //    {
-        //        throw new Exception("Erreur lors de la connexion de l'utilisateur", ex);
-        //    }
-        //    finally
-        //    {
-        //        if (cn != null && cn.State == ConnectionState.Open)
+        //        /// <summary>
+        //        /// Méthode de connexion d'un vendeur.
+        //        /// </summary>
+        //        /// <param name="nomUtilisateur"></param>
+        //        /// <param name="motDePasse"></param>
+        //        /// <param name="codeUtilisateur"></param>
+        //        /// <param name="role"></param>
+        //        /// <param name="messageErreur"></param>
+        //        /// <returns></returns>
+        //        public static bool ConnexionVendeur(string nomUtilisateur, string motDePasse, string codeUtilisateur, out RoleUtilisateur role, out string messageErreur)
         //        {
-        //            cn.Close();
-        //        }
-        //    }
-        //    return false;
-        //}
+        //            role = RoleUtilisateur.Client;
+        //            messageErreur = "Nom d'utilisateur, mot de passe ou code utilisateur incorrect.";
 
-        public static bool ConnexionUtilisateur(string nomUtilisateur, string motDePasse, out RoleUtilisateur role, out string messageErreur)
+        //            try
+        //            {
+        //                using (MySqlConnection cn = CreerConnection())
+        //                {
+        //                    cn.Open();
+
+        //                    string requete = @"
+        //                SELECT *
+        //                FROM utilisateurs 
+        //                WHERE NomUtilisateur = @nom 
+        //                AND CodeUtilisateur = @codeUtilisateur AND MotDePasse = @motDePasse"
+        //;               
+
+        //                    using (MySqlCommand cmd = new MySqlCommand(requete, cn))
+        //                    {
+        //                        cmd.Parameters.AddWithValue("@nom", nomUtilisateur);
+        //                        cmd.Parameters.AddWithValue("@codeUtilisateur", codeUtilisateur);
+        //                        cmd.Parameters.AddWithValue("@motDePasse", motDePasse);
+
+        //                        using (var reader = cmd.ExecuteReader())
+        //                        {
+        //                            if (reader.Read()) // Un utilisateur trouvé
+        //                            {
+        //                                string motDePasseEnBase = reader["MotDePasse"]?.ToString() ?? string.Empty;
+        //                                string roleString = reader["Role"]?.ToString() ?? string.Empty;
+
+        //                                if (motDePasse == motDePasseEnBase)
+        //                                {
+        //                                    // Validation du rôle (on peut le renforcer si nécessaire)
+        //                                    if (Enum.TryParse(roleString, true, out RoleUtilisateur roleEnum))
+        //                                    {
+        //                                        role = roleEnum;
+        //                                        return true;
+        //                                    }
+        //                                    else
+        //                                    {
+        //                                        messageErreur = "Rôle inconnu ou invalide.";
+        //                                    }
+        //                                }
+        //                                else
+        //                                {
+        //                                    messageErreur = "Mot de passe incorrect.";
+        //                                }
+        //                            }
+        //                            else
+        //                            {
+        //                                messageErreur = "Aucun utilisateur trouvé avec ce nom et ce code.";
+        //                            }
+        //                        }
+        //                    }
+        //                }
+        //            }
+        //            catch (Exception ex)
+        //            {
+        //                messageErreur = "Erreur de connexion : " + ex.Message;
+        //            }
+
+        //            return false;
+        //        }
+
+        public static bool ConnexionUtilisateur(string nom, string motDePasse, string codeUtilisateur, out RoleUtilisateur role, out string messageErreur)
         {
-            role = RoleUtilisateur.Client; // Valeur par défaut
-            messageErreur = "Nom d'utilisateur ou mot de passe incorrect.";
+            messageErreur = "";
+            role = RoleUtilisateur.Client;
 
             try
             {
-                using (MySqlConnection cn = new MySqlConnection())
+                using (MySqlConnection connection = CreerConnection())
+
                 {
-                    cn.Open();
+                    connection.Open();
 
-                    string requete = "SELECT Role FROM utilisateurs WHERE Nom = @nom AND MotDePasse = @motDePasse";
-                    using (MySqlCommand cmd = new MySqlCommand(requete, cn))
+                    string query = "SELECT Role FROM Utilisateurs WHERE NomUtilisateur = @Nom AND CodeUtilisateur = @Code AND MotDePasse = @MotDePasse";
+                    using (MySqlCommand command = new MySqlCommand(query, connection))
                     {
-                        cmd.Parameters.AddWithValue("@nom", nomUtilisateur);
-                        cmd.Parameters.AddWithValue("@motDePasse", motDePasse);
+                        command.Parameters.AddWithValue("@Nom", nom);
+                        command.Parameters.AddWithValue("@Code", codeUtilisateur);
+                        command.Parameters.AddWithValue("@MotDePasse", motDePasse);
 
-                        object result = cmd.ExecuteScalar();
-
+                        string result = command.ExecuteScalar() as string;
                         if (result != null)
                         {
-                            string roleString = result.ToString();
-
-                            // Vérifier si la valeur du rôle existe dans l'énumération
-                            if (Enum.TryParse(roleString, true, out RoleUtilisateur roleEnum))
+                            string roleUser = result.ToString();
+                            switch (roleUser.ToLower())
                             {
-                                role = roleEnum;
-                                return true;
+                                case "vendeur":
+                                    role = RoleUtilisateur.Vendeur;
+                                    break;
+                                case "manager":
+                                    role = RoleUtilisateur.Manager;
+                                    break;
+                                default:
+                                    role = RoleUtilisateur.Client;
+                                    break;
                             }
-                            else
-                            {
-                                messageErreur = "Rôle inconnu.";
-                            }
+             
+                            return true;
                         }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                messageErreur = "Erreur de connexion : " + ex.Message;
-            }
-
-            return false;
-        }
-
-
-        /// <summary>
-        /// Méthode de connexion d'un vendeur.
-        /// </summary>
-        /// <param name="nomUtilisateur"></param>
-        /// <param name="motDePasse"></param>
-        /// <param name="codeUtilisateur"></param>
-        /// <param name="role"></param>
-        /// <param name="messageErreur"></param>
-        /// <returns></returns>
-        public static bool ConnexionVendeur(string nomUtilisateur, string motDePasse, string codeUtilisateur, out string role, out string messageErreur)
-        {
-            role = string.Empty;
-            messageErreur = "Nom d'utilisateur ou mot de passe incorrect.";
-
-            try
-            {
-                using (MySqlConnection cn = CreerConnection())
-                {
-                    cn.Open();
-
-                    string requete = "SELECT MotDePasse, Role FROM utilisateurs WHERE NomUtilisateur = @nom AND CodeUtilisateur = @codeUtilisateur";
-
-                    using (MySqlCommand cmd = new MySqlCommand(requete, cn))
-                    {
-                        cmd.Parameters.AddWithValue("@nom", nomUtilisateur);
-                        cmd.Parameters.AddWithValue("@codeUtilisateur", codeUtilisateur);
-
-                        using (var reader = cmd.ExecuteReader())
+                        else
                         {
-                            if (reader.Read()) // Si un utilisateur est trouvé
-                            {
-                                string motDePasseEnBase = reader["MotDePasse"] as string ?? string.Empty;
-                                role = reader["Role"] as string ?? string.Empty;
-
-                                // Vérification du mot de passe
-                                if (motDePasse == motDePasseEnBase)
-                                {
-                                    return true;
-                                }
-                            }
+                            messageErreur = "Nom, code ou mot de passe incorrect.";
+                            return false;
                         }
                     }
                 }
             }
             catch (Exception ex)
             {
-                messageErreur = "Erreur de connexion : " + ex.Message;
+                messageErreur = "Erreur de connexion à la base : " + ex.Message;
+                return false;
             }
-
-            return false;
         }
-
 
 
         /// <summary>
@@ -452,3 +442,4 @@ namespace ApplicationGestionProduitCosmetique.Classes
         }
     }
 }
+
