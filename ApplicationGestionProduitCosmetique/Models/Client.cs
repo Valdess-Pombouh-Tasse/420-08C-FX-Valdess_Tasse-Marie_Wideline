@@ -10,20 +10,21 @@ namespace ApplicationGestionProduitCosmetique.Models
 {
     public class Client : Utilisateur
     {
-        public Client(string nomUtilisateur, string nomDePasse, string codeUtilisateur) : base(nomUtilisateur, nomDePasse, codeUtilisateur)
+        public Client(string nomUtilisateur, string codeUtilisateur, RoleUtilisateur role ) : base(nomUtilisateur, codeUtilisateur, role)
         {
         }
 
-        public static bool EstMotDePasseValide(string motDePasse)
-        {
-            if (motDePasse.Length < PASSWORD_MIN_LENGTH)
-                return false;
+        //public static bool EstMotDePasseValide(string motDePasse)
+        //{
+        //    if (motDePasse.Length < PASSWORD_MIN_LENGTH)
+        //        return false;
 
-            bool contientMajuscule = motDePasse.Any(char.IsUpper);
-            bool contientSpecial = motDePasse.Any(c => !char.IsLetterOrDigit(c));
+        //    bool contientMajuscule = motDePasse.Any(char.IsUpper);
+        //    bool contientSpecial = motDePasse.Any(c => !char.IsLetterOrDigit(c));
 
-            return contientMajuscule && contientSpecial;
-        }
+        //    return contientMajuscule && contientSpecial;
+        //}
+
 
     }
 }

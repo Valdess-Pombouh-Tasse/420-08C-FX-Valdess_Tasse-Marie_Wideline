@@ -1,6 +1,7 @@
 ﻿using ApplicationGestionProduitCosmetique.enums;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Net.Mail;
 using System.Text;
@@ -75,11 +76,12 @@ namespace ApplicationGestionProduitCosmetique.Models
             }
         }
 
-        protected Utilisateur(string nomUtilisateur, string nomDePasse, string codeUtilisateur)
+        protected Utilisateur(string nomUtilisateur, string codeUtilisateur, RoleUtilisateur role)
         {
             NomUtilisateur = nomUtilisateur;
-            MotDePasse = nomDePasse;
             CodeUtilisateur = codeUtilisateur;
+            Role = role;
+
         }
 
         ///// <summary>
@@ -106,6 +108,9 @@ namespace ApplicationGestionProduitCosmetique.Models
         //    return contientMajuscule && contientSpecial;
         //}
 
-      
+        public override string ToString()
+        {
+            return $"{NomUtilisateur,-20} {CodeUtilisateur,-10} {Role,-10}";
+        }
     }
 }

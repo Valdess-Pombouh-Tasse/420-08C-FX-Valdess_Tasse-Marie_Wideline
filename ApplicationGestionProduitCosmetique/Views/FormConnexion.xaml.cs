@@ -39,7 +39,7 @@ namespace ApplicationGestionProduitCosmetique
 
             if (string.IsNullOrWhiteSpace(txtNom.Text))
                 sb.AppendLine("Le nom ne peut pas être vide");
-            if (string.IsNullOrWhiteSpace(txtPassword.Password) )
+            if (string.IsNullOrWhiteSpace(txtPassword.Password))
                 sb.AppendLine($"Le mot de passe ne peut pas être vide et doit avoir au moins {Client.PASSWORD_MIN_LENGTH}");
 
             if (sb.Length > 0)
@@ -79,18 +79,28 @@ namespace ApplicationGestionProduitCosmetique
         //}
         private void btnConnecter_Click(object sender, RoutedEventArgs e)
         {
-            string nom = txtNom.Text.Trim();
-            string motDePasse = txtPassword.Password.Trim();
-
             try
             {
-                if (GestionCompteUtilisateur.ConnexionUtilisateur(nom, motDePasse, out RoleUtilisateur role, out string messageErreur))
+                string nom = txtNom.Text.Trim();
+                string motDePasse = txtPassword.Password.Trim();
+                string codeUtilisateur = txtCode.Text.Trim();
+
+                if (GestionCompteUtilisateur.ConnexionUtilisateur(nom, motDePasse, codeUtilisateur, out RoleUtilisateur role, out string messageErreur))
                 {
                     MessageBox.Show($"Connexion réussie ! Rôle : {role}", "Succès");
 
-                    FormApplication formApp = new FormApplication();
-                    formApp.Show();
-                    this.Close();
+                    if (role == RoleUtilisateur.Vendeur)
+                    {
+                        FormApplication formApp = new FormApplication();
+                        formApp.Show();
+                    }
+                    else if (role == RoleUtilisateur.Manager)
+                    {
+                        FormUtilisateur formUtilisateur = new FormUtilisateur();
+                        formUtilisateur.Show();
+                    }
+
+                    this.Close(); // Ferme la fenêtre de connexion
                 }
                 else
                 {
@@ -102,43 +112,7 @@ namespace ApplicationGestionProduitCosmetique
                 MessageBox.Show("Une erreur est survenue : " + ex.Message, "Erreur");
             }
         }
-
-        /// <summary>
-        /// Méthode appelée lors du clic sur le bouton "Se connecter en tant que vendeur"
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        /// * @author : Valdess
-        private void btnConnecterVendeur_Click(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                if (ValidationFormulaire())
-                {
-                    string nom = txtNom.Text.Trim();
-                    string motDePasse = txtPassword.Password.Trim();
-                    string codeUtilisateur = txtCode.Text.Trim(); // Manquait dans l'appel
-
-                    if (GestionCompteUtilisateur.ConnexionVendeur(nom, motDePasse, codeUtilisateur, out string role, out string messageErreur))
-                    {
-                        // Connexion réussie → Ouvrir la FormApplication
-                        MessageBox.Show("Connexion réussie", "Succès");
-                        FormApplication formApp = new FormApplication();
-                        formApp.Show();
-                        this.Close();
-                    }
-                    else
-                    {
-                        // Afficher l'erreur spécifique (nom incorrect ou mot de passe incorrect)
-                        MessageBox.Show(messageErreur, "Erreur de connexion");
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Une erreur est survenue : " + ex.Message, "Erreur");
-            }
-        }
-
     }
+
+    
 }
