@@ -72,11 +72,10 @@ namespace ApplicationGestionProduitCosmetique
         private void btnAjouter_Click(object sender, RoutedEventArgs e)
         {
             FormAjoutModifSupp formAjout = new FormAjoutModifSupp();
-            formAjout.ShowDialog(); 
+            formAjout.ShowDialog();
         }
 
-
-
+      
         private void btnModifier_Click(object sender, RoutedEventArgs e)
         {
 
