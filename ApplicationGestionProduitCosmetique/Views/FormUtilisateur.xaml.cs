@@ -1,6 +1,7 @@
 ﻿using ApplicationGestionProduitCosmetique.Classes;
 using ApplicationGestionProduitCosmetique.enums;
 using ApplicationGestionProduitCosmetique.Models;
+using ApplicationGestionProduitCosmetique.Views;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -59,26 +60,31 @@ namespace ApplicationGestionProduitCosmetique
         }
 
 
-        private void btnAjouter_Click(object sender, RoutedEventArgs e)
-        {
-
-           
-        }
-
-        private void btnModifier_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void btnSupprimer_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
+        
+      
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             Utilisateurs = GestionCompteUtilisateur.ChargerUtilisateurs();
             AfficherUtilisateur();
         }
+
+        private void btnAjouter_Click(object sender, RoutedEventArgs e)
+        {
+            FormAjoutModifSupp formAjout = new FormAjoutModifSupp();
+            formAjout.ShowDialog(); 
+        }
+
+
+
+        private void btnModifier_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+        private void btnSupprimer_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
     }
 }

@@ -104,8 +104,8 @@ namespace ApplicationGestionProduitCosmetique.Classes
             try
             {
                 cn.Open();
-                // Ajout des informations du vendeur
-                string requeteUtilisateur = $"INSERT INTO vendeurs (CodeUtilisateur,Nom,Role) " +
+                // Ajout des informations de l'utilisateur
+                string requeteUtilisateur = $"INSERT INTO utilisateurs (CodeUtilisateur,NomUtilisateur,Role) " +
                  $"VALUES(@code,@nom,@role)";
 
                 MySqlCommand cmdFacture = new MySqlCommand(requeteUtilisateur, cn);
