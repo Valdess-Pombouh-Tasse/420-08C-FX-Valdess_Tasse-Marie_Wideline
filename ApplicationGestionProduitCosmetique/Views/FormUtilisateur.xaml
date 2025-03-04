@@ -18,8 +18,8 @@
                     <ListBox.ItemTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="{Binding NomUtilisateur}" Width="200" />
                                 <TextBlock Text="{Binding CodeUtilisateur}" Width="100" />
+                                <TextBlock Text="{Binding NomUtilisateur}" Width="200" />
                                 <TextBlock Text="{Binding Role}" Width="200" />
                             </StackPanel>
                         </DataTemplate>

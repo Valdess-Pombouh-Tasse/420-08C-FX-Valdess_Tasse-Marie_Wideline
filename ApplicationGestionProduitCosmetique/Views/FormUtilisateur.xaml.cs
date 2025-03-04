@@ -59,10 +59,6 @@ namespace ApplicationGestionProduitCosmetique
             }
         }
 
-
-        
-      
-
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             Utilisateurs = GestionCompteUtilisateur.ChargerUtilisateurs();
@@ -71,18 +67,113 @@ namespace ApplicationGestionProduitCosmetique
 
         private void btnAjouter_Click(object sender, RoutedEventArgs e)
         {
-            FormAjoutModifSupp formAjout = new FormAjoutModifSupp();
-            formAjout.ShowDialog();
+            try
+            {
+                FormAjoutModifSupp formAjout = new FormAjoutModifSupp
+                {
+                    Etat = EtatFormulaire.Ajouter,
+                    TypeUtilisateur = RoleUtilisateur.Vendeur
+                };
+
+                bool? resultat = formAjout.ShowDialog();
+
+                if (resultat == true)
+                {
+                    Utilisateur nouvelUtilisateur = formAjout.Utilisateur;
+                    bool utilisateurExisteDeja = false;
+
+                    foreach (Utilisateur utilisateur in Utilisateurs)
+                    {
+                        if (utilisateur.CodeUtilisateur == nouvelUtilisateur.CodeUtilisateur)
+                        {
+                            utilisateurExisteDeja = true;
+                            break;
+                        }
+                    }
+
+                    if (!utilisateurExisteDeja)
+                    {
+                        GestionCompteUtilisateur.AjouterUtilisateur(nouvelUtilisateur);
+                        AfficherUtilisateur();
+                        MessageBox.Show("L'utilisateur a été ajouté avec succès !", "Confirmation", MessageBoxButton.OK, MessageBoxImage.Information);
+                    }
+                    else
+                    {
+                        MessageBox.Show("Un utilisateur avec ce code existe déjà.", "Erreur", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    }
+                }
+            }
+            catch (InvalidOperationException ie)
+            {
+                MessageBox.Show(ie.Message, "Ajout d'un utilisateur", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Une erreur est survenue : " + ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
       
         private void btnModifier_Click(object sender, RoutedEventArgs e)
         {
 
+            if (lstUtilisateurs.SelectedItem != null)
+            {
+                Utilisateur utilisateurSelect = lstUtilisateurs.SelectedItem as Utilisateur;
+                FormAjoutModifSupp formModif = new FormAjoutModifSupp();
+                bool? resultat = formModif.ShowDialog();
+
+                if (resultat == true)
+                {
+                    Utilisateur utilisateurModifie = formModif.Utilisateur;
+
+                    try
+                    {
+                        GestionCompteUtilisateur.ModifierUtilisateur(utilisateurModifie);
+                        AfficherUtilisateur();
+
+                        MessageBox.Show("L'utilisateur a été modifié avec succès !", "Modification réussie", MessageBoxButton.OK, MessageBoxImage.Information);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Erreur lors de la modification : " + ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
+                }
+            }
+            else
+            {
+                MessageBox.Show("Veuillez sélectionner un utilisateur à modifier.", "Aucune sélection", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
         }
         private void btnSupprimer_Click(object sender, RoutedEventArgs e)
         {
+            if (lstUtilisateurs.SelectedItem is Utilisateur utilisateurSelectionne)
+            {
+                MessageBoxResult result = MessageBox.Show(
+                    $"Êtes-vous sûr de vouloir supprimer l'utilisateur : {utilisateurSelectionne.NomUtilisateur} ?",
+                    "Confirmation de suppression",
+                    MessageBoxButton.YesNo,
+                    MessageBoxImage.Question);
 
+                if (result == MessageBoxResult.Yes)
+                {
+                    try
+                    {
+                        GestionCompteUtilisateur.SupprimerUtilisateur(utilisateurSelectionne.CodeUtilisateur);
+                        AfficherUtilisateur();
+
+                        MessageBox.Show("L'utilisateur a été supprimé avec succès.", "Succès", MessageBoxButton.OK, MessageBoxImage.Information);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"Erreur lors de la suppression : {ex.Message}", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
+                }
+            }
+            else
+            {
+                MessageBox.Show("Veuillez sélectionner un utilisateur à supprimer.", "Information", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
         }
 
     }

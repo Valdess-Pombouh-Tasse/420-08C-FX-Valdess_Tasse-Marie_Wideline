@@ -40,7 +40,7 @@ namespace ApplicationGestionProduitCosmetique.Classes
         }
 
         /// <summary>
-        /// Permet de charger les utilisateurs
+        /// Permet de charger les utilisateurs (avec le mot de passe)
         /// </summary>
         /// <returns></returns>
         /// <exception cref="InvalidOperationException"></exception>
@@ -53,16 +53,18 @@ namespace ApplicationGestionProduitCosmetique.Classes
 
             cn.Open();
 
-            string requete = "SELECT CodeUtilisateur, NomUtilisateur, Role FROM utilisateurs";
+            // On récupère toutes les colonnes nécessaires
+            string requete = "SELECT CodeUtilisateur, NomUtilisateur, MotDePasse, Role FROM utilisateurs";
 
             MySqlCommand cmd = new MySqlCommand(requete, cn);
             MySqlDataReader dr = cmd.ExecuteReader();
 
             while (dr.Read())
             {
-                string codeUtilisateur = dr.GetString(0);
-                string nomUtilisateur = dr.GetString(1);
-                string roleString = dr.GetString(2);
+                string codeUtilisateur = dr.GetString(1);
+                string nomUtilisateur = dr.GetString(2);
+                string motDePasse = dr.GetString(3);
+                string roleString = dr.GetString(4);
 
                 RoleUtilisateur roleEnum = (RoleUtilisateur)Enum.Parse(typeof(RoleUtilisateur), roleString);
 
@@ -70,15 +72,15 @@ namespace ApplicationGestionProduitCosmetique.Classes
 
                 if (roleEnum == RoleUtilisateur.Client)
                 {
-                    utilisateur = new Client(nomUtilisateur, codeUtilisateur, roleEnum);
+                    utilisateur = new Client(codeUtilisateur, nomUtilisateur, motDePasse, roleEnum);
                 }
                 else if (roleEnum == RoleUtilisateur.Vendeur)
                 {
-                    utilisateur = new Vendeur(nomUtilisateur, codeUtilisateur, roleEnum);
+                    utilisateur = new Vendeur(codeUtilisateur, nomUtilisateur, motDePasse, roleEnum);
                 }
                 else if (roleEnum == RoleUtilisateur.Manager)
                 {
-                    utilisateur = new Manager(nomUtilisateur, codeUtilisateur, roleEnum);
+                    utilisateur = new Manager(codeUtilisateur, nomUtilisateur, motDePasse, roleEnum);
                 }
                 else
                 {
@@ -87,6 +89,10 @@ namespace ApplicationGestionProduitCosmetique.Classes
 
                 utilisateurs.Add(utilisateur);
             }
+
+            dr.Close();
+            cn.Close(); 
+
             return utilisateurs;
         }
 
@@ -105,13 +111,14 @@ namespace ApplicationGestionProduitCosmetique.Classes
             {
                 cn.Open();
                 // Ajout des informations de l'utilisateur
-                string requeteUtilisateur = $"INSERT INTO utilisateurs (CodeUtilisateur,NomUtilisateur,Role) " +
-                 $"VALUES(@code,@nom,@role)";
+                string requeteUtilisateur = $"INSERT INTO utilisateurs (CodeUtilisateur,NomUtilisateur,MotDePasse,Role) " +
+                 $"VALUES(@code,@nom,@motDePasse,@role)";
 
                 MySqlCommand cmdFacture = new MySqlCommand(requeteUtilisateur, cn);
                 cmdFacture.Parameters.AddWithValue("@code", utilisateur.CodeUtilisateur);
                 cmdFacture.Parameters.AddWithValue("@nom", utilisateur.NomUtilisateur);
-                //cmdFacture.Parameters.AddWithValue("@role", utilisateur.Role);
+                cmdFacture.Parameters.AddWithValue("@motDePasse", utilisateur.MotDePasse);
+                cmdFacture.Parameters.AddWithValue("@role", utilisateur.Role.ToString());
 
                 cmdFacture.ExecuteNonQuery();
 
@@ -177,21 +184,24 @@ namespace ApplicationGestionProduitCosmetique.Classes
                 cn.Open();
 
                 // Requête de mise à jour
-                string requete = "UPDATE utilisateurs SET Nom = @nom, Role = @role WHERE CodeUtilisateur = @code";
+                string requete = "UPDATE utilisateurs SET NomUtilisateur = @nom, Role = @role, MotDePasse = @motDePasse WHERE CodeUtilisateur = @code";
                 MySqlCommand cmd = new MySqlCommand(requete, cn);
 
                 // Ajout des paramètres
-                cmd.Parameters.AddWithValue("@nom", utilisateur.NomUtilisateur);
-                cmd.Parameters.AddWithValue("@role", utilisateur.Role.ToString());
                 cmd.Parameters.AddWithValue("@code", utilisateur.CodeUtilisateur);
+                cmd.Parameters.AddWithValue("@nom", utilisateur.NomUtilisateur);
+                cmd.Parameters.AddWithValue("@motDePasse", utilisateur.MotDePasse);
+                cmd.Parameters.AddWithValue("@role", utilisateur.Role.ToString());
+               
+                
 
                 // Exécution de la commande
-                int rowsAffected = cmd.ExecuteNonQuery();
+                int ligneAffectee = cmd.ExecuteNonQuery();
 
                 // Vérification si la mise à jour a affecté des lignes
-                if (rowsAffected == 0)
+                if (ligneAffectee == 0)
                 {
-                    throw new Exception("Aucun utilisateur trouvé avec le CodeUtilisateur spécifié.");
+                    throw new Exception($"Aucun utilisateur trouvé avec le CodeUtilisateur spécifié.{utilisateur.CodeUtilisateur}");
                 }
             }
             catch (Exception ex)

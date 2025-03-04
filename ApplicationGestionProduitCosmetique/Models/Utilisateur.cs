@@ -72,17 +72,19 @@ namespace ApplicationGestionProduitCosmetique.Models
                     throw new ArgumentException(nameof(MotDePasse), "Le mot de passe ne peut pas être vide");
                 //if (!EstMotDePasseValide(value))
                 //    throw new ArgumentException(nameof(MotDePasse), $"Le mot de passe doit contenir au moins {PASSWORD_MIN_LENGTH} caractères, une majuscule et un caractère spécial");
-
+                _motDePasse = value.Trim();
             }
         }
 
-        protected Utilisateur(string nomUtilisateur, string codeUtilisateur, RoleUtilisateur role)
+        protected Utilisateur(string codeUtilisateur,string nomUtilisateur,string motDePasse, RoleUtilisateur role)
         {
-            NomUtilisateur = nomUtilisateur;
             CodeUtilisateur = codeUtilisateur;
+            NomUtilisateur = nomUtilisateur;
+            MotDePasse = motDePasse;
             Role = role;
-
         }
+
+
 
         ///// <summary>
         ///// Vérifie si le mot de passe est valide
@@ -110,7 +112,7 @@ namespace ApplicationGestionProduitCosmetique.Models
 
         public override string ToString()
         {
-            return $"{NomUtilisateur,-20} {CodeUtilisateur,-10} {Role,-10}";
+            return $"{NomUtilisateur,-20}{CodeUtilisateur,-10}{Role,-10}";
         }
     }
 }

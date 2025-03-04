@@ -1,4 +1,5 @@
-﻿using ApplicationGestionProduitCosmetique.enums;
+﻿using ApplicationGestionProduitCosmetique.Classes;
+using ApplicationGestionProduitCosmetique.enums;
 using ApplicationGestionProduitCosmetique.Models;
 using System;
 using System.Collections.Generic;
@@ -21,70 +22,100 @@ namespace ApplicationGestionProduitCosmetique.Views
     /// </summary>
     public partial class FormAjoutModifSupp : Window
     {
-        private EtatFormulaire _etat;
+        public EtatFormulaire Etat { get; set; }
 
-        public EtatFormulaire Etat
-        {
-            get { return _etat; }
-            set { _etat = value; }
-        }
+        public RoleUtilisateur TypeUtilisateur { get; set; }
 
-        private Vendeur _vendeur;
-
-        public Vendeur Vendeur
-        {
-            get { return _vendeur; }
-            set { _vendeur = value; }
-        }
-
-        private Client _client;
-
-        public Client Client
-        {
-            get { return _client; }
-            set { _client = value; }
-        }
-
-
-
+        public Utilisateur Utilisateur { get; set; }
 
         public FormAjoutModifSupp()
         {
             InitializeComponent();
         }
+        /// <summary>
+        /// Permet de valider les saisies dans le formulaire utilisateur
+        /// </summary>
+        /// <returns>Vrai si le formulaire est valide</returns>
+        private bool ValiderFormulaireUtilisateur()
+        {
+            string messageErreur = "";
 
+            // Validation du code utilisateur
+            if (string.IsNullOrWhiteSpace(txtCode.Text) || txtCode.Text.Trim().Length < 3)
+            {
+                messageErreur += "- Le code utilisateur est obligatoire et doit contenir au moins 3 caractères.\n";
+            }
+
+            // Validation du nom
+            if (string.IsNullOrWhiteSpace(txtNom.Text) || txtNom.Text.Trim().Length < 3)
+            {
+                messageErreur += "- Le nom est obligatoire et doit contenir au moins 3 caractères.\n";
+            }
+
+            // Validation du mot de passe
+            if (string.IsNullOrWhiteSpace(txtMotPasse.Text) || txtMotPasse.Text.Trim().Length < Utilisateur.PASSWORD_MIN_LENGTH)
+            {
+                messageErreur += "- Le mot de passe est obligatoire et doit contenir au moins 6 caractères et un caractère spécial.\n";
+            }
+
+            // Validation de la sélection d'un rôle
+            if (cboRole.SelectedIndex == -1)
+            {
+                messageErreur += "- Vous devez sélectionner un rôle.\n";
+            }
+
+            if (messageErreur != "")
+            {
+                MessageBox.Show(messageErreur, "Enregistrement des modifications", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
+
+            return messageErreur == "";
+        }
         private void btnModifier_Click(object sender, RoutedEventArgs e)
         {
-            if (Etat != EtatFormulaire.Supprimer)
-            {
 
-                    if (Etat == EtatFormulaire.Ajouter)
+            if (ValiderFormulaireUtilisateur())
+            {
+                if (Etat == EtatFormulaire.Ajouter)
+                {
+                    if (TypeUtilisateur == RoleUtilisateur.Client)
                     {
-                        //Créer un nouveau Vendeur
-                        Vendeur = new Vendeur(txtCode.Text, txtNom.Text, (RoleUtilisateur)Enum.Parse(typeof(RoleUtilisateur), cboRole.SelectedIndex.ToString()));
+                        Utilisateur = new Client(
+                            txtCode.Text,
+                            txtNom.Text,
+                            txtMotPasse.Text,
+                            (RoleUtilisateur)cboRole.SelectedIndex
+                        );
                     }
                     else
                     {
-                        Vendeur.CodeUtilisateur = txtCode.Text;
-                        Vendeur.NomUtilisateur = txtNom.Text;
-                        Vendeur.MotDePasse = txtMotPasse.Text;
-                        Vendeur.Role = (RoleUtilisateur)cboRole.SelectedIndex;
-
+                        Utilisateur = new Vendeur(
+                            txtCode.Text,
+                            txtNom.Text,
+                            txtMotPasse.Text,
+                            (RoleUtilisateur)cboRole.SelectedIndex
+                        );
                     }
-                    DialogResult = true;
-            }
-            else
-            {
-                MessageBoxResult result = MessageBox.Show("Desirez vous supprimez le coureur", "Suppression coureur", MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No);
-
-                if (result == MessageBoxResult.Yes)
-                {
-                    DialogResult = true;
                 }
+
                 else
                 {
-                    DialogResult = false;
+                    if (Utilisateur is Client client)
+                    {
+                        client.CodeUtilisateur = txtCode.Text;
+                        client.NomUtilisateur = txtNom.Text;
+                        client.MotDePasse = txtMotPasse.Text;
+                        client.Role = (RoleUtilisateur)cboRole.SelectedIndex;
+                    }
+                    else if (Utilisateur is Vendeur vendeur)
+                    {
+                        vendeur.CodeUtilisateur = txtCode.Text;
+                        vendeur.NomUtilisateur = txtNom.Text;
+                        vendeur.MotDePasse = txtMotPasse.Text;
+                        vendeur.Role = (RoleUtilisateur)cboRole.SelectedIndex;
+                    }
                 }
+                DialogResult = true;
             }
         }
 
@@ -98,6 +129,39 @@ namespace ApplicationGestionProduitCosmetique.Views
             DialogResult = false;
         }
 
-       
+        /// <summary>
+        /// Permet d'afficher les types d'utilisateur
+        /// </summary>
+        private void InitialiserRoleUtilisateur()
+        {
+            string[] vectRoleUtilisateur = EnumUtilitaire.GetAllDescriptions<RoleUtilisateur>();
+
+            for (int i = 0; i < vectRoleUtilisateur.Length; i++)
+            {
+                cboRole.Items.Add(vectRoleUtilisateur[i]);
+            }
+        }
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            InitialiserRoleUtilisateur();
+            btnModifier.Content = Etat;
+            tbTitre.Text = $"{Etat} un {TypeUtilisateur}";
+
+            if (Etat != EtatFormulaire.Ajouter && Utilisateur != null)
+            {
+                txtCode.Text = Utilisateur.CodeUtilisateur;
+                txtNom.Text = Utilisateur.NomUtilisateur;
+                txtMotPasse.Text = Utilisateur.MotDePasse;
+                cboRole.SelectedItem = EnumUtilitaire.GetDescription(Utilisateur.Role);
+
+                if (Etat == EtatFormulaire.Supprimer)
+                {
+                    txtCode.IsEnabled = false;
+                    txtNom.IsEnabled = false;
+                    txtMotPasse.IsEnabled = false;
+                    cboRole.IsEnabled = false;
+                }
+            }
+        }
     }
 }
