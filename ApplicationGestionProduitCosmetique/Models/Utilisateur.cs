@@ -112,7 +112,7 @@ namespace ApplicationGestionProduitCosmetique.Models
 
         public override string ToString()
         {
-            return $"{NomUtilisateur,-20}{CodeUtilisateur,-10}{Role,-10}";
+            return $"{NomUtilisateur.PadLeft(20)}{CodeUtilisateur.PadRight(10)}{Role,-10}";
         }
     }
 }

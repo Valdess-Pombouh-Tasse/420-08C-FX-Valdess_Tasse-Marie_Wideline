@@ -53,7 +53,7 @@ namespace ApplicationGestionProduitCosmetique.Views
             }
 
             // Validation du mot de passe
-            if (string.IsNullOrWhiteSpace(txtMotPasse.Text) || txtMotPasse.Text.Trim().Length < Utilisateur.PASSWORD_MIN_LENGTH)
+            if (string.IsNullOrWhiteSpace(txtPassword.Password) || txtPassword.Password.Trim().Length < Utilisateur.PASSWORD_MIN_LENGTH)
             {
                 messageErreur += "- Le mot de passe est obligatoire et doit contenir au moins 6 caractères et un caractère spécial.\n";
             }
@@ -83,7 +83,7 @@ namespace ApplicationGestionProduitCosmetique.Views
                         Utilisateur = new Client(
                             txtCode.Text,
                             txtNom.Text,
-                            txtMotPasse.Text,
+                           txtPassword.Password,
                             (RoleUtilisateur)cboRole.SelectedIndex
                         );
                     }
@@ -92,7 +92,7 @@ namespace ApplicationGestionProduitCosmetique.Views
                         Utilisateur = new Vendeur(
                             txtCode.Text,
                             txtNom.Text,
-                            txtMotPasse.Text,
+                            txtPassword.Password,
                             (RoleUtilisateur)cboRole.SelectedIndex
                         );
                     }
@@ -104,14 +104,14 @@ namespace ApplicationGestionProduitCosmetique.Views
                     {
                         client.CodeUtilisateur = txtCode.Text;
                         client.NomUtilisateur = txtNom.Text;
-                        client.MotDePasse = txtMotPasse.Text;
+                        client.MotDePasse = txtPassword.Password;
                         client.Role = (RoleUtilisateur)cboRole.SelectedIndex;
                     }
                     else if (Utilisateur is Vendeur vendeur)
                     {
                         vendeur.CodeUtilisateur = txtCode.Text;
                         vendeur.NomUtilisateur = txtNom.Text;
-                        vendeur.MotDePasse = txtMotPasse.Text;
+                        vendeur.MotDePasse = txtPassword.Password;
                         vendeur.Role = (RoleUtilisateur)cboRole.SelectedIndex;
                     }
                 }
@@ -151,14 +151,14 @@ namespace ApplicationGestionProduitCosmetique.Views
             {
                 txtCode.Text = Utilisateur.CodeUtilisateur;
                 txtNom.Text = Utilisateur.NomUtilisateur;
-                txtMotPasse.Text = Utilisateur.MotDePasse;
+                txtPassword.Password = Utilisateur.MotDePasse;
                 cboRole.SelectedItem = EnumUtilitaire.GetDescription(Utilisateur.Role);
 
                 if (Etat == EtatFormulaire.Supprimer)
                 {
                     txtCode.IsEnabled = false;
                     txtNom.IsEnabled = false;
-                    txtMotPasse.IsEnabled = false;
+                    txtPassword.IsEnabled = false;
                     cboRole.IsEnabled = false;
                 }
             }

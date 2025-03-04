@@ -18,7 +18,7 @@
         </StackPanel>
         <StackPanel Orientation="Horizontal" Margin="0,5">
             <Label Content="Mot de Passe" Width="100" FontSize="14"></Label>
-            <TextBox x:Name="txtMotPasse" Width="200"></TextBox>
+            <PasswordBox x:Name="txtPassword" Width="200"/>
         </StackPanel>
         <StackPanel Orientation="Horizontal" Margin="0,5">
             <Label Content="Role" Width="100" FontSize="14"></Label>

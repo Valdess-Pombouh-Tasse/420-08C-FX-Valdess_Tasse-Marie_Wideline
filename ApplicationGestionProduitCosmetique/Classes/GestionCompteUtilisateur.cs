@@ -54,7 +54,7 @@ namespace ApplicationGestionProduitCosmetique.Classes
             cn.Open();
 
             // On récupère toutes les colonnes nécessaires
-            string requete = "SELECT CodeUtilisateur, NomUtilisateur, MotDePasse, Role FROM utilisateurs";
+            string requete = "SELECT ID, CodeUtilisateur, NomUtilisateur, MotDePasse, Role FROM utilisateurs";
 
             MySqlCommand cmd = new MySqlCommand(requete, cn);
             MySqlDataReader dr = cmd.ExecuteReader();
@@ -66,7 +66,10 @@ namespace ApplicationGestionProduitCosmetique.Classes
                 string motDePasse = dr.GetString(3);
                 string roleString = dr.GetString(4);
 
-                RoleUtilisateur roleEnum = (RoleUtilisateur)Enum.Parse(typeof(RoleUtilisateur), roleString);
+                if (!Enum.TryParse(roleString, true, out RoleUtilisateur roleEnum))
+                {
+                    throw new InvalidOperationException($"Type utilisateur inconnu : {roleString}");
+                }         
 
                 Utilisateur utilisateur;
 
