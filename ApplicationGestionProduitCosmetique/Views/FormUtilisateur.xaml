@@ -1,36 +1,59 @@
 ﻿<Window x:Class="ApplicationGestionProduitCosmetique.FormUtilisateur"
-                xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="FormUtilisateur" Height="600" Width="800" Loaded="Window_Loaded">
+        Title="Gestion des Utilisateurs"
+        Height="600" Width="800"
+        WindowStartupLocation="CenterScreen"
+        Loaded="Window_Loaded">
+
     <Window.Background>
-        <ImageBrush ImageSource="/Resources/Images/img9.jpg" Stretch="Uniform" />
+        <ImageBrush ImageSource="/Resources/Images/img9.jpg" Stretch="UniformToFill" />
     </Window.Background>
 
-    <StackPanel Margin="10">
-        <GroupBox Header="Liste des utilisateurs">
-            <StackPanel Margin="10">
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="NOM" FontWeight="Bold" HorizontalAlignment="Left" Width="200" />
-                    <TextBlock Text="CODE" FontWeight="Bold" HorizontalAlignment="Left" Width="200" />
-                    <TextBlock Text="Role" FontWeight="Bold" HorizontalAlignment="Left" Width="100" />
-                </StackPanel>
-                <ListBox x:Name="lstUtilisateurs" Width="740" Height="200" FontFamily="Courier New">
+    <StackPanel Margin="20">
+        <TextBlock Text="Gestion des Utilisateurs" 
+                   FontSize="24" 
+                   FontWeight="Bold" 
+                   Foreground="White"
+                   HorizontalAlignment="Center"
+                   Margin="0,0,0,20" />
+        
+        <Border Background="#AAFFFFFF" Padding="15" CornerRadius="10">
+            <StackPanel>
+                <TextBlock Text="Liste des Utilisateurs"
+                           FontSize="16"
+                           FontWeight="Bold"
+                           Margin="0,0,0,10"/>
+
+                <ListBox x:Name="lstUtilisateurs"
+                         Height="250"
+                         BorderThickness="0"
+                         Background="#F5F5F5"
+                         HorizontalContentAlignment="Stretch"
+                         VerticalContentAlignment="Center"
+                         SelectionMode="Single">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="{Binding CodeUtilisateur}" Width="100" />
-                                <TextBlock Text="{Binding NomUtilisateur}" Width="200" />
-                                <TextBlock Text="{Binding Role}" Width="200" />
-                            </StackPanel>
+                            <Border Background="White" Padding="10" Margin="0,5" CornerRadius="5" BorderBrush="#DDD" BorderThickness="1">
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
+                                    <TextBlock Text="{Binding NomUtilisateur}" FontWeight="Bold" Width="200"/>
+                                    <TextBlock Text="{Binding CodeUtilisateur}" Width="200"/>
+                                    <TextBlock Text="{Binding Role}" Width="200" HorizontalAlignment="Right"/>
+                                </StackPanel>
+                            </Border>
                         </DataTemplate>
                     </ListBox.ItemTemplate>
                 </ListBox>
             </StackPanel>
-        </GroupBox>
-        <StackPanel Orientation="Horizontal" Margin="0,10">
-            <Button x:Name="btnAjouter" Content="Ajouter" Width="100" Height="25" Click="btnAjouter_Click" />
-            <Button x:Name="btnModifier" Content="Modifier" Width="100" Height="25" Margin="10,0,0,0" Click="btnModifier_Click" />
-            <Button x:Name="btnSupprimer" Content="Supprimer" Width="100" Height="25" Margin="10,0,0,0" Click="btnSupprimer_Click" />
+        </Border>
+
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,20">
+            <Button x:Name="btnAjouter" Content="Ajouter" Width="100" Height="35" Margin="5"
+                    Click="btnAjouter_Click" />
+            <Button x:Name="btnModifier" Content="Modifier" Width="100" Height="35" Margin="5"
+                    Click="btnModifier_Click"/>
+            <Button x:Name="btnSupprimer" Content="Supprimer" Width="100" Height="35" Margin="5"
+                    Click="btnSupprimer_Click"/>
         </StackPanel>
     </StackPanel>
 </Window>

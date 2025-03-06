@@ -44,7 +44,7 @@ namespace ApplicationGestionProduitCosmetique.Models
                     throw new ArgumentException(nameof(NomUtilisateur), "Le nom ne peut pas être vide");
 
                 _nomUtilisateur = value.Trim();
-            }
+            }                                         
         }
 
 
@@ -68,11 +68,11 @@ namespace ApplicationGestionProduitCosmetique.Models
             get { return _motDePasse; }
             set
             {
-                if (string.IsNullOrWhiteSpace(value))
-                    throw new ArgumentException(nameof(MotDePasse), "Le mot de passe ne peut pas être vide");
+                //if (string.IsNullOrWhiteSpace(value))
+                //    throw new ArgumentException(nameof(MotDePasse), "Le mot de passe ne peut pas être vide");
                 //if (!EstMotDePasseValide(value))
-                //    throw new ArgumentException(nameof(MotDePasse), $"Le mot de passe doit contenir au moins {PASSWORD_MIN_LENGTH} caractères, une majuscule et un caractère spécial");
-                _motDePasse = value.Trim();
+                    //    throw new ArgumentException(nameof(MotDePasse), $"Le mot de passe doit contenir au moins {PASSWORD_MIN_LENGTH} caractères, une majuscule et un caractère spécial");
+                    _motDePasse = value.Trim();
             }
         }
 
