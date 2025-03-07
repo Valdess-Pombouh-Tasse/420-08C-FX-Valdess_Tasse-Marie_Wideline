@@ -53,9 +53,7 @@ namespace ApplicationGestionProduitCosmetique.Classes
 
             cn.Open();
 
-            // On récupère toutes les colonnes nécessaires
             string requete = "SELECT ID, CodeUtilisateur, NomUtilisateur, MotDePasse, Role FROM utilisateurs";
-
             MySqlCommand cmd = new MySqlCommand(requete, cn);
             MySqlDataReader dr = cmd.ExecuteReader();
 
@@ -69,35 +67,37 @@ namespace ApplicationGestionProduitCosmetique.Classes
                 if (!Enum.TryParse(roleString, true, out RoleUtilisateur roleEnum))
                 {
                     throw new InvalidOperationException($"Type utilisateur inconnu : {roleString}");
-                }         
+                }
 
                 Utilisateur utilisateur;
 
-                if (roleEnum == RoleUtilisateur.Client)
+                switch (roleEnum)
                 {
-                    utilisateur = new Client(codeUtilisateur, nomUtilisateur, motDePasse, roleEnum);
-                }
-                else if (roleEnum == RoleUtilisateur.Vendeur)
-                {
-                    utilisateur = new Vendeur(codeUtilisateur, nomUtilisateur, motDePasse, roleEnum);
-                }
-                else if (roleEnum == RoleUtilisateur.Manager)
-                {
-                    utilisateur = new Manager(codeUtilisateur, nomUtilisateur, motDePasse, roleEnum);
-                }
-                else
-                {
-                    throw new InvalidOperationException("Type utilisateur inconnu : " + roleString);
+                    case RoleUtilisateur.Client:
+                        utilisateur = new Client(codeUtilisateur, nomUtilisateur, motDePasse, roleEnum);
+                        break;
+
+                    case RoleUtilisateur.Vendeur:
+                        utilisateur = new Vendeur(codeUtilisateur, nomUtilisateur, motDePasse, roleEnum);
+                        break;
+
+                    case RoleUtilisateur.Manager:
+                        utilisateur = new Manager(codeUtilisateur, nomUtilisateur, motDePasse, roleEnum);
+                        break;
+
+                    default:
+                        throw new InvalidOperationException($"Type utilisateur inconnu : {roleEnum}");
                 }
 
                 utilisateurs.Add(utilisateur);
             }
 
             dr.Close();
-            cn.Close(); 
+            cn.Close();
 
             return utilisateurs;
         }
+
 
 
         /// <summary>
