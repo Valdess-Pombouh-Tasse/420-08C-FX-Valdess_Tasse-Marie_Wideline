@@ -6,7 +6,85 @@
         xmlns:local="clr-namespace:ApplicationGestionProduitCosmetique.Views"
         mc:Ignorable="d"
         Title="FormApplication" Height="450" Width="800">
-    <Grid>
-        
-    </Grid>
+    <StackPanel Margin="20" Orientation="Horizontal">
+        <StackPanel Margin="5">
+            <TextBlock Text="Produits" FontWeight="Bold" Foreground="#4169e1" FontSize="20"/>
+            <Border Width="500" Height="450" BorderBrush="Black" BorderThickness="1" CornerRadius="5">
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <StackPanel Margin="0,0,75,0" x:Name="spAjouterProduit" Orientation="Horizontal" >
+                            <Button x:Name="btnNouveauProduit" Background="White" BorderThickness="0" DockPanel.Dock="left">
+                                <Image Source="/Resources/images/new.png" Width="25" Margin="5"/>
+                            </Button>
+                            <TextBox x:Name="txtRechercher" Width="250" Height="25" Margin="0,0,5,0"/>
+                            <ComboBox Name="cboCategories" Width="150" Margin="5,5,5,5">
+
+                            </ComboBox>
+                            <Button x:Name="btnRechercherProduit" BorderThickness="0" Background="White">
+                                <Image Source="/Resources/images/search.png" Width="25" Margin="5"/>
+                            </Button>
+                        </StackPanel>
+                    </StackPanel>
+                    <!--Affichage des produits ici-->
+                    <StackPanel Margin="15">
+                        <Label Name="lblTitre" FontSize="10" FontWeight="Bold" HorizontalAlignment="Center" Margin="5"/>
+                        <ScrollViewer VerticalScrollBarVisibility="Auto" Height="380" Margin="2">
+                            <WrapPanel Name="wpProduit" Orientation="Horizontal">
+
+                            </WrapPanel>
+                        </ScrollViewer>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+        </StackPanel>
+
+        <StackPanel Margin="5">
+            <TextBlock Text="Facture" FontWeight="Bold" Foreground="#4169e1" FontSize="20"/>
+            <Border Width="420" Height="450" BorderBrush="Black" BorderThickness="1" CornerRadius="5">
+                <StackPanel Margin="5">
+                    <TextBlock x:Name="lblDateFacture" Text="Date" HorizontalAlignment="Left" Margin="5" />
+                    <StackPanel Orientation="Horizontal" Margin="5">
+                        <TextBox  x:Name="txtNoFacture" Width="200" Height="25" />
+                        <Button x:Name="btnRechercherFacture" BorderThickness="0" Background="White">
+                            <Image  Source="/Resources/images/search.png"  Width="25" Margin="5"/>
+
+                        </Button>
+                    </StackPanel>
+                    <!--Affichage des items de la facture-->
+                    <Border Height="250" BorderBrush="LightGray" BorderThickness="1" CornerRadius="5" Margin="5">
+                        <ScrollViewer VerticalScrollBarVisibility="Auto" Height="230" Margin="2">
+                            <WrapPanel Name="wpProduitFacture" Orientation="Horizontal">
+
+                            </WrapPanel>
+                        </ScrollViewer>
+
+                    </Border>
+                    <StackPanel>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,5,0">
+                            <Label  Content="Sous-Total"  HorizontalAlignment="Right" Margin="0,0,5,0"/>
+                            <TextBlock x:Name="lblSousTotal" Width="100" VerticalAlignment="Center"  TextAlignment="Right" Margin="0,0,5,0"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,5,0">
+                            <Label  Content="TPS" HorizontalAlignment="Right" Margin="0,0,5,0"/>
+                            <TextBlock x:Name="lblTPS" Width="100" VerticalAlignment="Center"  TextAlignment="Right" Margin="0,0,5,0"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,5,0">
+                            <Label  Content="TVQ" HorizontalAlignment="Right" Margin="0,0,5,0"/>
+                            <TextBlock x:Name="lblTVQ" Width="100" VerticalAlignment="Center" TextAlignment="Right" Margin="0,0,5,0"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,5,0">
+                            <Label  Content="Total" HorizontalAlignment="Right" Margin="0,0,5,0"/>
+                            <TextBlock x:Name="lblTotal" Width="100" VerticalAlignment="Center" TextAlignment="Right" Margin="0,0,5,0"/>
+                        </StackPanel>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+            <DockPanel>
+                <Button x:Name="btnNouvelleFacture" Background="White" BorderThickness="0" DockPanel.Dock="left">
+                    <Image Source="/Resources/images/new.png" Width="25" Margin="5"/>
+                </Button>
+                <Button x:Name="btnPayer"  Content="Payer" Width="50" Background="#4169e1" Foreground="White" HorizontalAlignment="Right" Margin="5"/>
+            </DockPanel>
+        </StackPanel>
+    </StackPanel>
 </Window>
