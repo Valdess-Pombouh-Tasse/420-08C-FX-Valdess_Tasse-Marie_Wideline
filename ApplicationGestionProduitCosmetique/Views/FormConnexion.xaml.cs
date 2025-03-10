@@ -56,27 +56,6 @@ namespace ApplicationGestionProduitCosmetique
         /// <param name="sender"></param>
         /// <param name="e"></param>
         ///  @author : Valdess
-        //private void btnConnecter_Click(object sender, RoutedEventArgs e)
-        //{
-        //    // Validation des champs
-        //    string nom = txtNom.Text.Trim();
-        //    string motDePasse = txtPassword.Password.Trim();
-        //    try
-        //    {
-        //        // Vérification de la connexion
-        //        if (GestionCompteUtilisateur.ConnexionUtilisateur(nom, motDePasse))
-        //        {
-        //            MessageBox.Show("Connexion réussie !", "Succès");
-        //            FormApplication formApp = new FormApplication();
-        //            formApp.Show();
-        //            this.Close();
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        MessageBox.Show("Une erreur est survenue : " + ex.Message, "Erreur");
-        //    }
-        //}
         private void btnConnecter_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -88,8 +67,12 @@ namespace ApplicationGestionProduitCosmetique
                 if (GestionCompteUtilisateur.ConnexionUtilisateur(nom, motDePasse, codeUtilisateur, out RoleUtilisateur role, out string messageErreur))
                 {
                     MessageBox.Show($"Connexion réussie ! Rôle : {role}", "Succès");
-
-                    if (role == RoleUtilisateur.Vendeur)
+                    if (role == RoleUtilisateur.Client)
+                    {
+                        FormApplication formAppClient = new FormApplication();
+                        formAppClient.Show();
+                    }
+                    else if (role == RoleUtilisateur.Vendeur)
                     {
                         FormApplication formApp = new FormApplication();
                         formApp.Show();
@@ -99,6 +82,7 @@ namespace ApplicationGestionProduitCosmetique
                         FormUtilisateur formUtilisateur = new FormUtilisateur();
                         formUtilisateur.Show();
                     }
+                    
 
                     this.Close(); // Ferme la fenêtre de connexion
                 }

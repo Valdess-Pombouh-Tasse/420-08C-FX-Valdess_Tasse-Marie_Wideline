@@ -175,6 +175,5 @@ namespace ApplicationGestionProduitCosmetique
                 MessageBox.Show("Veuillez sélectionner un utilisateur à supprimer.", "Information", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
         }
-
     }
 }
