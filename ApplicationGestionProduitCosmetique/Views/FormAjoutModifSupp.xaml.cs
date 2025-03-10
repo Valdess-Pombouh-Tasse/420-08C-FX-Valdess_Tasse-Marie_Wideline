@@ -30,6 +30,7 @@ namespace ApplicationGestionProduitCosmetique.Views
 
         public FormAjoutModifSupp()
         {
+
             InitializeComponent();
         }
         /// <summary>
@@ -71,11 +72,12 @@ namespace ApplicationGestionProduitCosmetique.Views
 
             return messageErreur == "";
         }
-        private void btnModifier_Click(object sender, RoutedEventArgs e)
+        private void btnValider_Click(object sender, RoutedEventArgs e)
         {
-
             if (ValiderFormulaireUtilisateur())
             {
+                RoleUtilisateur roleSelectionne = (RoleUtilisateur)cboRole.SelectedIndex;
+
                 if (Etat == EtatFormulaire.Ajouter)
                 {
                     if (TypeUtilisateur == RoleUtilisateur.Client)
@@ -83,8 +85,8 @@ namespace ApplicationGestionProduitCosmetique.Views
                         Utilisateur = new Client(
                             txtCode.Text,
                             txtNom.Text,
-                           txtPassword.Password,
-                            (RoleUtilisateur)cboRole.SelectedIndex
+                            txtPassword.Password,
+                            roleSelectionne
                         );
                     }
                     else
@@ -93,61 +95,48 @@ namespace ApplicationGestionProduitCosmetique.Views
                             txtCode.Text,
                             txtNom.Text,
                             txtPassword.Password,
-                            (RoleUtilisateur)cboRole.SelectedIndex
+                            roleSelectionne
                         );
                     }
                 }
-
                 else
                 {
-                    if (Utilisateur is Client client)
-                    {
-                        client.CodeUtilisateur = txtCode.Text;
-                        client.NomUtilisateur = txtNom.Text;
-                        client.MotDePasse = txtPassword.Password;
-                        client.Role = (RoleUtilisateur)cboRole.SelectedIndex;
-                    }
-                    else if (Utilisateur is Vendeur vendeur)
-                    {
-                        vendeur.CodeUtilisateur = txtCode.Text;
-                        vendeur.NomUtilisateur = txtNom.Text;
-                        vendeur.MotDePasse = txtPassword.Password;
-                        vendeur.Role = (RoleUtilisateur)cboRole.SelectedIndex;
-                    }
+                    Utilisateur.CodeUtilisateur = txtCode.Text;
+                    Utilisateur.NomUtilisateur = txtNom.Text;
+                    Utilisateur.MotDePasse = txtPassword.Password;
+                    Utilisateur.Role = roleSelectionne;
                 }
                 DialogResult = true;
             }
         }
 
-        /// <summary>
-        /// Permet d'annuler l'action d'ajout, de modification ou de suppression d'un coureur
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void btnAnnuler_Click(object sender, RoutedEventArgs e)
         {
             DialogResult = false;
         }
 
-        /// <summary>
-        /// Permet d'afficher les types d'utilisateur
-        /// </summary>
         private void InitialiserRoleUtilisateur()
         {
+            cboRole.Items.Clear();
+
             string[] vectRoleUtilisateur = EnumUtilitaire.GetAllDescriptions<RoleUtilisateur>();
 
-            for (int i = 0; i < vectRoleUtilisateur.Length; i++)
+            foreach (string description in vectRoleUtilisateur)
             {
-                cboRole.Items.Add(vectRoleUtilisateur[i]);
+                cboRole.Items.Add(description);
             }
         }
+
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             InitialiserRoleUtilisateur();
-            btnModifier.Content = Etat;
             tbTitre.Text = $"{Etat} un {TypeUtilisateur}";
 
-            if (Etat != EtatFormulaire.Ajouter && Utilisateur != null)
+            if (Etat == EtatFormulaire.Ajouter)
+            {
+                cboRole.SelectedItem = EnumUtilitaire.GetDescription(TypeUtilisateur);
+            }
+            else if (Utilisateur != null)
             {
                 txtCode.Text = Utilisateur.CodeUtilisateur;
                 txtNom.Text = Utilisateur.NomUtilisateur;

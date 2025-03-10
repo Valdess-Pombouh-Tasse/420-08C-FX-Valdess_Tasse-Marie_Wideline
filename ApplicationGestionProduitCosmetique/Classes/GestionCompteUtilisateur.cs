@@ -178,6 +178,7 @@ namespace ApplicationGestionProduitCosmetique.Classes
         /// * @author Marie
         public static void ModifierUtilisateur(Utilisateur utilisateur)
         {
+
             // Création de la connexion
             MySqlConnection cn = CreerConnection();
 
@@ -195,8 +196,8 @@ namespace ApplicationGestionProduitCosmetique.Classes
                 cmd.Parameters.AddWithValue("@nom", utilisateur.NomUtilisateur);
                 cmd.Parameters.AddWithValue("@motDePasse", utilisateur.MotDePasse);
                 cmd.Parameters.AddWithValue("@role", utilisateur.Role.ToString());
-               
-                
+
+
 
                 // Exécution de la commande
                 int ligneAffectee = cmd.ExecuteNonQuery();

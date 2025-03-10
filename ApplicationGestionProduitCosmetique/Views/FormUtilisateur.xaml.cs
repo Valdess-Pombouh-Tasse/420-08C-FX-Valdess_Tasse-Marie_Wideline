@@ -39,7 +39,6 @@ namespace ApplicationGestionProduitCosmetique
             set { _etat = value; }
         }
 
-
         public FormUtilisateur(EtatFormulaire etat = EtatFormulaire.Ajouter)
         {
             InitializeComponent();
@@ -48,15 +47,9 @@ namespace ApplicationGestionProduitCosmetique
 
         public void AfficherUtilisateur()
         {
-            lstUtilisateurs.Items.Clear();
-
-            if (_utilisateurs is not null)
-            {
-                foreach (Utilisateur utilisateur in Utilisateurs)
-                {
-                    lstUtilisateurs.Items.Add(utilisateur);
-                }
-            }
+            Utilisateurs = GestionCompteUtilisateur.ChargerUtilisateurs();
+            dgUtilisateurs.ItemsSource = null;
+            dgUtilisateurs.ItemsSource = Utilisateurs;
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -72,7 +65,7 @@ namespace ApplicationGestionProduitCosmetique
                 FormAjoutModifSupp formAjout = new FormAjoutModifSupp
                 {
                     Etat = EtatFormulaire.Ajouter,
-                    TypeUtilisateur = RoleUtilisateur.Vendeur
+                    //TypeUtilisateur = RoleUtilisateur.Vendeur
                 };
 
                 bool? resultat = formAjout.ShowDialog();
@@ -80,27 +73,17 @@ namespace ApplicationGestionProduitCosmetique
                 if (resultat == true)
                 {
                     Utilisateur nouvelUtilisateur = formAjout.Utilisateur;
-                    bool utilisateurExisteDeja = false;
 
-                    foreach (Utilisateur utilisateur in Utilisateurs)
-                    {
-                        if (utilisateur.CodeUtilisateur == nouvelUtilisateur.CodeUtilisateur)
-                        {
-                            utilisateurExisteDeja = true;
-                            break;
-                        }
-                    }
-
-                    if (!utilisateurExisteDeja)
-                    {
-                        GestionCompteUtilisateur.AjouterUtilisateur(nouvelUtilisateur);
-                        AfficherUtilisateur();
-                        MessageBox.Show("L'utilisateur a été ajouté avec succès !", "Confirmation", MessageBoxButton.OK, MessageBoxImage.Information);
-                    }
-                    else
+                    if (Utilisateurs.Any(u => u.CodeUtilisateur == nouvelUtilisateur.CodeUtilisateur))
                     {
                         MessageBox.Show("Un utilisateur avec ce code existe déjà.", "Erreur", MessageBoxButton.OK, MessageBoxImage.Warning);
+                        return;
                     }
+
+                    GestionCompteUtilisateur.AjouterUtilisateur(nouvelUtilisateur);
+                    AfficherUtilisateur();
+
+                    MessageBox.Show("L'utilisateur a été ajouté avec succès !", "Confirmation", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
             }
             catch (InvalidOperationException ie)
@@ -113,14 +96,19 @@ namespace ApplicationGestionProduitCosmetique
             }
         }
 
-      
         private void btnModifier_Click(object sender, RoutedEventArgs e)
         {
 
-            if (lstUtilisateurs.SelectedItem != null)
+            if (dgUtilisateurs.SelectedItem is Utilisateur utilisateurSelect)
             {
-                Utilisateur utilisateurSelect = lstUtilisateurs.SelectedItem as Utilisateur;
                 FormAjoutModifSupp formModif = new FormAjoutModifSupp();
+                formModif.tbTitre.Text = $"Modifier un utilisateur";
+                formModif.Utilisateur = utilisateurSelect;
+                formModif.txtNom.Text = utilisateurSelect.NomUtilisateur;
+                formModif.txtCode.Text = utilisateurSelect.CodeUtilisateur;
+                formModif.txtPassword.Password = utilisateurSelect.MotDePasse;
+                formModif.cboRole.SelectedItem = utilisateurSelect.Role;
+
                 bool? resultat = formModif.ShowDialog();
 
                 if (resultat == true)
@@ -144,10 +132,11 @@ namespace ApplicationGestionProduitCosmetique
             {
                 MessageBox.Show("Veuillez sélectionner un utilisateur à modifier.", "Aucune sélection", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
+
         }
         private void btnSupprimer_Click(object sender, RoutedEventArgs e)
         {
-            if (lstUtilisateurs.SelectedItem is Utilisateur utilisateurSelectionne)
+            if (dgUtilisateurs.SelectedItem is Utilisateur utilisateurSelectionne)
             {
                 MessageBoxResult result = MessageBox.Show(
                     $"Êtes-vous sûr de vouloir supprimer l'utilisateur : {utilisateurSelectionne.NomUtilisateur} ?",
