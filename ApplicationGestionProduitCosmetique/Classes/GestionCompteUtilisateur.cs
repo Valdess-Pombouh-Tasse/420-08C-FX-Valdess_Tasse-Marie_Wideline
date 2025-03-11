@@ -18,6 +18,8 @@ namespace ApplicationGestionProduitCosmetique.Classes
         static IConfiguration _config;
         public const string APPSETTINGS_FILE = "appsettings.json";
         public static string CONNECTION_STRING = "DefaultConnection";
+        public const string IMAGE_PATH = "images:path";
+        
 
         /// <summary>
         /// Permet de créer une connection
@@ -28,6 +30,18 @@ namespace ApplicationGestionProduitCosmetique.Classes
         {
             string connectionString = _config.GetConnectionString(CONNECTION_STRING);
             return new MySqlConnection(connectionString);
+        }
+
+        /// <summary>
+        /// Permet la fermeture de la connexion si ouverte.
+        /// </summary>
+        /// * @author Valdess
+        private static void FermerConnexion(MySqlConnection cn)
+        {
+            if (cn.State == System.Data.ConnectionState.Open)
+            {
+                cn.Close();
+            }
         }
 
         /// <summary>
@@ -135,8 +149,7 @@ namespace ApplicationGestionProduitCosmetique.Classes
             }
             finally
             {
-                if (cn is not null && cn.State == ConnectionState.Open)
-                    cn.Close();
+                FermerConnexion(cn);
             }
 
         }
@@ -215,11 +228,7 @@ namespace ApplicationGestionProduitCosmetique.Classes
             }
             finally
             {
-                // Fermeture de la connexion si elle est ouverte
-                if (cn != null && cn.State == ConnectionState.Open)
-                {
-                    cn.Close();
-                }
+                FermerConnexion(cn);
             }
         }
 
@@ -255,10 +264,7 @@ namespace ApplicationGestionProduitCosmetique.Classes
             }
             finally
             {
-                if (cn != null && cn.State == ConnectionState.Open)
-                {
-                    cn.Close();
-                }
+                FermerConnexion(cn);
             }
         }
         /// <summary>
@@ -269,51 +275,7 @@ namespace ApplicationGestionProduitCosmetique.Classes
         /// <param name="role"></param>
         /// <param name="messageErreur"></param>
         /// <returns></returns>
-        //        public static bool ConnexionUtilisateur(string nomUtilisateur, string motDePasse, out RoleUtilisateur role, out string messageErreur)
-        //        {
-        //            role = RoleUtilisateur.Client; // Valeur par défaut
-        //            messageErreur = "Nom d'utilisateur ou mot de passe incorrect.";
-
-        //            try
-        //            {
-        //                using (MySqlConnection cn = CreerConnection())
-        //                {
-        //                    cn.Open();
-
-        //                    string requete = "SELECT Role FROM utilisateurs WHERE NomUtilisateur = @nom AND MotDePasse = @motDePasse";
-        //                    using (MySqlCommand cmd = new MySqlCommand(requete, cn))
-        //                    {
-        //                        cmd.Parameters.AddWithValue("@nom", nomUtilisateur);
-        //                        cmd.Parameters.AddWithValue("@motDePasse", motDePasse);
-
-        //                        object result = cmd.ExecuteScalar();
-
-        //                        if (result != null)
-        //                        {
-        //                            string roleString = result.ToString();
-
-        //                            // Vérifier si la valeur du rôle existe dans l'énumération
-        //                            if (Enum.TryParse(roleString, true, out RoleUtilisateur roleEnum))
-        //                            {
-        //                                role = roleEnum;
-        //                                return true;
-        //                            }
-        //                            else
-        //                            {
-        //                                messageErreur = "Rôle inconnu.";
-        //                            }
-        //                        }
-        //                    }
-        //                }
-        //            }
-        //            catch (Exception ex)
-        //            {
-        //                messageErreur = "Erreur de connexion : " + ex.Message;
-        //            }
-
-        //            return false;
-        //        }
-
+        /// * @author Marie
         public static bool ConnexionUtilisateur(string nom, string motDePasse, string codeUtilisateur, out RoleUtilisateur role, out string messageErreur)
         {
             messageErreur = "";
@@ -367,6 +329,249 @@ namespace ApplicationGestionProduitCosmetique.Classes
             }
         }
 
+
+        /// <summary>
+        /// Permet d'obtenir liste des catégories provenant de la base de données triée par nom croissant
+        /// </summary>
+        /// <returns>Liste de Categorie</returns>
+        /// * @author Valdess
+        public static List<Categorie> ObtenirListeCategories()
+        {
+            List<Categorie> lstCategorie = new List<Categorie>();
+
+            MySqlConnection cn = CreerConnection();
+
+            try
+            {
+                cn.Open();
+                string requete = $"SELECT Id, Nom FROM categories ORDER BY Nom";
+                MySqlCommand cmdCategorie = new MySqlCommand(requete, cn);
+
+                MySqlDataReader rdCategorie = cmdCategorie.ExecuteReader();
+
+                while (rdCategorie.Read())
+                {
+                    Categorie categorie = new Categorie(rdCategorie.GetUInt32(0), rdCategorie.GetString(1));
+                    lstCategorie.Add(categorie);
+                }
+                rdCategorie.Close();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                FermerConnexion(cn);
+
+            }
+            return lstCategorie;
+        }
+
+        /// <summary>
+        /// Permet d'obtenir un produit à partir de son code
+        /// </summary>
+        /// <param name="code">Code unique du produit</param>
+        /// <returns>Le produit trouvé. Si non null.</returns>
+        /// * @author Valdess
+        public static Produit ObtenirProduit(string code)
+        {
+            Produit produit = null;
+
+            MySqlConnection cn = CreerConnection();
+
+            try
+            {
+                cn.Open();
+
+                string requete = "SELECT produits.Id,produits.Code,produits.Nom,produits.IdCategorie,produits.Prix,produits.Image, categories.Nom FROM produits INNER JOIN categories ON produits.IdCategorie = categories.id WHERE produits.Code = @code";
+
+                MySqlCommand cmd = new MySqlCommand(requete, cn);
+                cmd.Parameters.AddWithValue("@code", code);
+
+                MySqlDataReader dr = cmd.ExecuteReader();
+
+                if (dr.HasRows)
+                {
+                    dr.Read();
+
+                    uint idProduit = dr.GetUInt32(0);
+                    string codeProduit = dr.GetString(1);
+                    string nomProduit = dr.GetString(2);
+                    decimal prix = dr.GetDecimal(3);
+                    string image = dr.GetString(4);
+                    uint idCategorie = dr.GetUInt32(5);
+                    int idTeint = dr.GetInt32(6);
+                    int idVendeur = dr.GetInt32(7);
+                    string description = dr.GetString(8);
+                    int quantite = dr.GetInt32(9);
+
+                    string NomCategorie = dr.GetString(6);
+
+                    Categorie categorie = new Categorie(idCategorie, NomCategorie);
+
+                    if (categorie != null)
+                    {
+                        produit = new Produit(idProduit, codeProduit, nomProduit, prix, _config[IMAGE_PATH] + image, categorie, idTeint, idVendeur, description, quantite);
+                    }
+                }
+                dr.Close();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                FermerConnexion(cn);
+            }
+
+            return produit;
+        }
+
+        /// <summary>
+        /// Permet d'obtenir la liste des produits dans la base de données selon certains critères de recherche.
+        /// triés par nom croissant
+        /// </summary>
+        /// <param name="nomProduit">Partie du nom du produit à chercher</param>
+        /// <param name="categorie">Catégorie du produit</param>
+        /// <returns>La liste des produits trouvés selon les critères de recherche. Si aucun critère n'est spécifié alors on retourne tous les produits</returns>
+        /// <remarks>La liste des produits est toujours triée en ordre croissant de nom.</remarks>
+        /// * @author Valdess
+        public static List<Produit> ObtenirListeProduits(string nomProduit = "", Categorie categorie = null)
+        {
+            List<Produit> ListProduits = new List<Produit>();
+
+            MySqlConnection cn = CreerConnection();
+
+            try
+            {
+                cn.Open();
+                string requete = "SELECT p.Id,p.Code,p.Nom,p.IdCategorie,p.Prix,p.Image, c.Nom FROM produits p INNER JOIN categories c ON p.IdCategorie = c.id";
+
+                MySqlCommand cmd = new MySqlCommand();
+                cmd.Connection = cn;
+
+                if (!string.IsNullOrWhiteSpace(nomProduit) && categorie != null)
+                {
+                    requete += " WHERE p.IdCategorie = @idCat AND p.Nom LIKE @nomProd";
+                    cmd.Parameters.AddWithValue("@idCat", categorie.Id);
+                    cmd.Parameters.AddWithValue("@nomProd", "%" + nomProduit + "%");
+                }
+                else if (!string.IsNullOrWhiteSpace(nomProduit) && categorie == null)
+                {
+                    requete += " WHERE p.Nom LIKE @nomProd";
+                    cmd.Parameters.AddWithValue("@nomProd", "%" + nomProduit + "%");
+                }
+                else if (string.IsNullOrWhiteSpace(nomProduit) && categorie != null)
+                {
+                    requete += " WHERE p.IdCategorie = @idCat";
+                    cmd.Parameters.AddWithValue("@idCat", categorie.Id);
+                }
+
+                requete += " ORDER BY p.Nom ASC";
+
+                cmd.CommandText = requete;
+                MySqlDataReader dr = cmd.ExecuteReader();
+
+
+                while (dr.Read())
+                {
+                    uint idProduit = dr.GetUInt32(0);
+                    string codeProduit = dr.GetString(1);
+                    string nomProd = dr.GetString(2);
+                    decimal prix = dr.GetDecimal(3);
+                    string image = dr.GetString(4);
+                    uint idCategorie = dr.GetUInt32(5);
+                    int idTeint = dr.GetInt32(6);
+                    int idVendeur = dr.GetInt32(7);
+                    string description = dr.GetString(8);
+                    int quantite = dr.GetInt32(9);
+
+                    string NomCategorie = dr.GetString(6);                 
+
+                    Categorie objCategorie = new Categorie(idCategorie, NomCategorie);
+                    if (objCategorie != null)
+                    {
+                        Produit produit = new Produit(idProduit, codeProduit, nomProd, prix, _config[IMAGE_PATH] + image, objCategorie, idTeint, idVendeur, description, quantite);
+                        ListProduits.Add(produit);
+                    }
+                }
+
+                dr.Close();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                FermerConnexion(cn);
+
+            }
+
+            return ListProduits;
+        }
+
+        /// <summary>
+        /// Autohor Valdess
+        /// Permet d'obtenir un produit dans la base de données à partir de son identifiant unique
+        /// </summary>
+        /// <param name="id">Identifiant unique du produit</param>
+        /// <returns>Le produit trouvé ou Null si aucun produit trouvé.</returns>
+        public static Produit ObtenirProduit(uint id)
+        {
+            Produit produit = null;
+
+            MySqlConnection cn = CreerConnection();
+
+            try
+            {
+                cn.Open();
+                string requeteProduit = "SELECT p.Id,p.Code,p.Nom,p.IdCategorie,p.Prix,p.Image,c.Nom FROM produits p INNER JOIN categories c ON p.IdCategorie = c.id WHERE p.Id = @id";
+
+                MySqlCommand cmdProduit = new MySqlCommand(requeteProduit, cn);
+                cmdProduit.Parameters.AddWithValue("@id", id);
+
+                MySqlDataReader dr = cmdProduit.ExecuteReader();
+
+                if (dr.HasRows)
+                {
+                    dr.Read();
+
+                    uint idProduit = dr.GetUInt32(0);
+                    string codeProduit = dr.GetString(1);
+                    string nomProduit = dr.GetString(2);
+                    decimal prix = dr.GetDecimal(3);
+                    string image = dr.GetString(4);
+                    uint idCategorie = dr.GetUInt32(5);
+                    int idTeint = dr.GetInt32(6);
+                    int idVendeur = dr.GetInt32(7);
+                    string description = dr.GetString(8);
+                    int quantite = dr.GetInt32(9);
+
+                    string NomCategorie = dr.GetString(6);
+
+                    Categorie categorie = new Categorie(idCategorie, NomCategorie);
+
+                    if (categorie != null)
+                    {
+                        produit = new Produit(idProduit, codeProduit, nomProduit, prix, _config[IMAGE_PATH] + image, categorie, idTeint, idVendeur, description, quantite);
+                    }
+                }
+                dr.Close();
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            finally
+            {
+                FermerConnexion(cn);
+            }
+            return produit;
+        }
 
         /// <summary>
         /// Hashage sécurisé du mot de passe.

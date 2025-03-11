@@ -48,6 +48,16 @@ namespace ApplicationGestionProduitCosmetique.Classes
         /// </summary>
         private string _image;
 
+        /// <summary>
+        /// Description du produit
+        /// </summary>
+        private string _description;
+
+        /// <summary>
+        /// Quantité de produit
+        /// </summary>
+        private int _quantite;
+
 
         /// <summary>
         /// Obtient ou définit l'indentifiant unique du produit.
@@ -158,6 +168,42 @@ namespace ApplicationGestionProduitCosmetique.Classes
             }
         }
 
+        /// <summary>
+        /// Obtient ou définit la description du produit
+        /// </summary>
+        public string Description
+        {
+            get { return _description; }
+            set { _description = value; }
+        }
+
+       
+        /// <summary>
+        /// Obtient ou définit la quantité de produit
+        /// </summary>
+        public int Quantite
+        {
+            get { return _quantite; }
+            set { _quantite = value; }
+        }
+
+        private int _idTeint;
+
+        public int IdTeint
+        {
+            get { return _idTeint; }
+            set { _idTeint = value; }
+        }
+
+        private int _idVendeur;
+
+        public int IdVendeur
+        {
+            get { return _idVendeur; }
+            set { _idVendeur = value; }
+        }
+
+
 
         /// <summary>
         /// Permet de construire un nouveau produit
@@ -168,7 +214,7 @@ namespace ApplicationGestionProduitCosmetique.Classes
         /// <param name="prix">Prix de vente du produit</param>
         /// <param name="image">Nom du fichier image du produit</param>
         /// @author Valdess
-        public Produit(uint id, string code, string nom, Categorie categorie, decimal prix, string image)
+        public Produit(uint id, string code, string nom, decimal prix, string image, Categorie categorie, int idTeint, int idVendeur, string description, int quantite)
         {
             Id = id;
             Code = code;
@@ -176,6 +222,10 @@ namespace ApplicationGestionProduitCosmetique.Classes
             Categorie = categorie;
             Prix = prix;
             Image = image;
+            IdTeint = idTeint;
+            IdVendeur = idVendeur;
+            Description = description;
+            Quantite = quantite;
         }
 
 

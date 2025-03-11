@@ -10,6 +10,19 @@
 
   <ItemGroup>
     <None Remove="appsettings.json" />
+    <None Remove="Resources\Images\ImagesIcons\delete.png" />
+    <None Remove="Resources\Images\ImagesIcons\edit.png" />
+    <None Remove="Resources\Images\ImagesIcons\filtre.png" />
+    <None Remove="Resources\Images\ImagesIcons\iconUtilisateur.jpeg" />
+    <None Remove="Resources\Images\ImagesIcons\minus.png" />
+    <None Remove="Resources\Images\ImagesIcons\new.png" />
+    <None Remove="Resources\Images\ImagesIcons\new_schedule.png" />
+    <None Remove="Resources\Images\ImagesIcons\plus.png" />
+    <None Remove="Resources\Images\ImagesIcons\product.png" />
+    <None Remove="Resources\Images\ImagesIcons\product2.jpg" />
+    <None Remove="Resources\Images\ImagesIcons\sauvegarder.png" />
+    <None Remove="Resources\Images\ImagesIcons\search.png" />
+    <None Remove="Resources\Images\ImagesIcons\sortie.png" />
     <None Remove="Resources\Images\img1.jpg" />
     <None Remove="Resources\Images\img10.jpg" />
     <None Remove="Resources\Images\img2.jpg" />
@@ -29,6 +42,45 @@
 
   <ItemGroup>
     <Content Include="appsettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Images\ImagesIcons\delete.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Images\ImagesIcons\edit.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Images\ImagesIcons\filtre.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Images\ImagesIcons\iconUtilisateur.jpeg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Images\ImagesIcons\minus.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Images\ImagesIcons\new.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Images\ImagesIcons\new_schedule.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Images\ImagesIcons\plus.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Images\ImagesIcons\product.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Images\ImagesIcons\product2.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Images\ImagesIcons\sauvegarder.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Images\ImagesIcons\search.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Images\ImagesIcons\sortie.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Resources\Images\img1.jpg">
