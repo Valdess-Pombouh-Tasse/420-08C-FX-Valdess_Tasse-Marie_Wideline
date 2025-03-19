@@ -16,6 +16,7 @@ namespace ApplicationGestionProduitCosmetique.Models
         public static string CONNECTION_STRING = "DefaultConnection";
         public const string IMAGE_PATH = "images:path";
 
+        private static List<Produit> produits;
 
         /// <summary>
         /// Permet de créer une connection
@@ -39,7 +40,6 @@ namespace ApplicationGestionProduitCosmetique.Models
                 cn.Close();
             }
         }
-        private static List<Produit> produits;
 
         /// <summary>
         /// Permet d'obtenir un produit à partir de son code
@@ -241,6 +241,9 @@ namespace ApplicationGestionProduitCosmetique.Models
             return produit;
         }
 
+        //public static List<ListePanier> ChargerListePanier()
+        //{
 
+        //}
     }
 }

@@ -20,11 +20,11 @@ namespace ApplicationGestionProduitCosmetique.Views
     /// </summary>
     public partial class FormVendeur : Window
     {
-        public List<Produit> ListeProduits { get; set; }
-        public FormVendeur()
-        {
-            InitializeComponent();
-            lbProduits.ItemsSource = ListeProduits;
-        }
+        //public List<Produit> ListeProduits { get; set; }
+        //public FormVendeur()
+        //{
+        //    InitializeComponent();
+        //    lbProduits.ItemsSource = ListeProduits;
+        //}
     }
 }

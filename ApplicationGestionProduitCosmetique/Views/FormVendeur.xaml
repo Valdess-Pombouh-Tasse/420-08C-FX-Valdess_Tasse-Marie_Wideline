@@ -21,12 +21,12 @@
         <Border Grid.Row="1" Grid.Column="0" Background="#f0f0f0" Padding="10" BorderBrush="Gray" BorderThickness="1" CornerRadius="10">
             <StackPanel>
                 <TextBlock Text="Liste des Produits" FontWeight="Bold" Foreground="#4169e1" FontSize="18" Margin="0,0,0,10"/>
-                <ListBox Name="lbProduits" Height="400" Background="White" DisplayMemberPath="Nom" SelectionChanged="lbProduits_SelectionChanged"/>
+                <ListBox Name="lbProduits" Height="400" Background="White" DisplayMemberPath="Nom"/>
 
                 <!-- Boutons d'action -->
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="10">
-                    <Button Name="btnModifier" Content="Modifier" Background="#FFD700" Foreground="Black" Width="120" Height="35" Margin="5" Click="btnModifier_Click"/>
-                    <Button Name="btnSupprimer" Content="Supprimer" Background="#FF6347" Foreground="White" Width="120" Height="35" Margin="5" Click="btnSupprimer_Click"/>
+                    <Button Name="btnModifier" Content="Modifier" Background="#FFD700" Foreground="Black" Width="120" Height="35" Margin="5"/>
+                    <Button Name="btnSupprimer" Content="Supprimer" Background="#FF6347" Foreground="White" Width="120" Height="35" Margin="5"/>
                 </StackPanel>
             </StackPanel>
         </Border>
@@ -58,9 +58,9 @@
                 </StackPanel>
                 <StackPanel Margin="5">
                     <TextBlock Text="Image"/>
-                    <Button Name="btnImage" Content="Choisir Image" Width="120" Height="30" Click="btnImage_Click"/>
+                    <Button Name="btnImage" Content="Choisir Image" Width="120" Height="30"/>
                 </StackPanel>
-                <Button Name="btnAjouter" Content="Ajouter" Background="#4169e1" Foreground="White" Width="120" Height="35" Margin="5" Click="btnAjouter_Click"/>
+                <Button Name="btnAjouter" Content="Ajouter" Background="#4169e1" Foreground="White" Width="120" Height="35" Margin="5"/>
             </StackPanel>
         </Border>
     </Grid>

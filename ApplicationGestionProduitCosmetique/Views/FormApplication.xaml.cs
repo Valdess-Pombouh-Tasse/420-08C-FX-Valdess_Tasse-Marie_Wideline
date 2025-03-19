@@ -91,7 +91,7 @@ namespace ApplicationGestionProduitCosmetique.Views
                 imgProduit.Width = 90;
                 imgProduit.Height = 100;
                 imgProduit.Tag = produit;
-                //imgProduit.MouseLeftButtonDown += new MouseButtonEventHandler(ImageProduit_MouseLeftButtonUp);
+                imgProduit.MouseLeftButtonDown += new MouseButtonEventHandler(ImageProduit_MouseLeftButtonUp);
 
                 TextBlock descriptionProduit = new TextBlock();
                 imgProduit.HorizontalAlignment = System.Windows.HorizontalAlignment.Center;
@@ -130,6 +130,11 @@ namespace ApplicationGestionProduitCosmetique.Views
                 border.Child = stackPanel;
                 wpProduit.Children.Add(border);
             }
+        }
+
+        private void ImageProduit_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+
         }
         /// <summary>
         /// Permet de diminuer la taille de la fenetre de l'application
