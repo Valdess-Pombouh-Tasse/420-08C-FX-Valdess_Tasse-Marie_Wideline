@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ApplicationGestionProduitCosmetique.Classes;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -19,9 +20,11 @@ namespace ApplicationGestionProduitCosmetique.Views
     /// </summary>
     public partial class FormVendeur : Window
     {
+        public List<Produit> ListeProduits { get; set; }
         public FormVendeur()
         {
             InitializeComponent();
+            lbProduits.ItemsSource = ListeProduits;
         }
     }
 }

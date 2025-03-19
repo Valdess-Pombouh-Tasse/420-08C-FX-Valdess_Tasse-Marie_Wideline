@@ -218,10 +218,8 @@ namespace ApplicationGestionProduitCosmetique.Models
         /// @author Valdess
         public override string ToString()
         {
-
-            return $"{Code} {Nom} {Prix}";
+            return $"{Nom} - {Prix}$ ({Quantite} en stock)";
         }
-
         /// <summary>
         /// Permet de vérifier si deux objets de type Produit sont égaux.
         /// </summary>

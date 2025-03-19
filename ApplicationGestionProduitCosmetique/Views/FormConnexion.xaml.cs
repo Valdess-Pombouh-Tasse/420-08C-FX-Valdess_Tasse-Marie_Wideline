@@ -28,75 +28,111 @@ namespace ApplicationGestionProduitCosmetique
             InitializeComponent();
         }
 
-        /// <summary>
-        /// Méthode de validation du formulaire
-        /// </summary>
-        /// <returns></returns>
-        /// * @author Valdess
         private bool ValidationFormulaire()
         {
-            StringBuilder sb = new StringBuilder();
+            bool valide = true;
+
+            Reinitialiser();
 
             if (string.IsNullOrWhiteSpace(txtNom.Text))
-                sb.AppendLine("Le nom ne peut pas être vide");
-            if (string.IsNullOrWhiteSpace(txtPassword.Password))
-                sb.AppendLine($"Le mot de passe ne peut pas être vide et doit avoir au moins {Client.PASSWORD_MIN_LENGTH}");
-
-            if (sb.Length > 0)
             {
-                MessageBox.Show(sb.ToString(), "Validation du client");
-                return false;
+                AfficherErreur(txtNom, lblErreurNom, "Le nom est requis.");
+                valide = false;
             }
-            return true;
+
+            if (string.IsNullOrWhiteSpace(txtPassword.Password))
+            {
+                AfficherErreur(txtPassword, lblErreurPassword, "Le mot de passe est requis.");
+                valide = false;
+            }
+
+            string roleSelectionne = (cmbTypeUtilisateur.SelectedItem as ComboBoxItem)?.Content.ToString();
+            if ((roleSelectionne == "Vendeur" || roleSelectionne == "Manager") && string.IsNullOrWhiteSpace(txtCode.Text))
+            {
+                AfficherErreur(txtCode, lblErreurCode, "Le code est requis.");
+                valide = false;
+            }
+            return valide;
         }
 
-        /// <summary>
-        /// Méthode appelée lors du clic sur le bouton "Se connecter"
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        ///  @author : Valdess
+        private void cmbTypeUtilisateur_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (cmbTypeUtilisateur.SelectedItem is ComboBoxItem selectedItem)
+            {
+                bool isClient = selectedItem.Content.ToString() == "Client";
+
+                if (txtCode != null) txtCode.Visibility = isClient ? Visibility.Collapsed : Visibility.Visible;
+                if (lblCode != null) lblCode.Visibility = isClient ? Visibility.Collapsed : Visibility.Visible;
+                if (lblErreurCode != null) lblErreurCode.Visibility = Visibility.Collapsed; 
+            }
+        }
+
         private void btnConnecter_Click(object sender, RoutedEventArgs e)
         {
             try
             {
+                if (!ValidationFormulaire()) return;
+
                 string nom = txtNom.Text.Trim();
                 string motDePasse = txtPassword.Password.Trim();
                 string codeUtilisateur = txtCode.Text.Trim();
+                string roleSelectionne = (cmbTypeUtilisateur.SelectedItem as ComboBoxItem)?.Content.ToString();
 
                 if (GestionCompteUtilisateur.ConnexionUtilisateur(nom, motDePasse, codeUtilisateur, out RoleUtilisateur role, out string messageErreur))
                 {
-                    MessageBox.Show($"Connexion réussie ! Rôle : {role}", "Succès");
-                    if (role == RoleUtilisateur.Client)
+                    if (role.ToString() != roleSelectionne)
                     {
-                        FormApplication formAppClient = new FormApplication();
-                        formAppClient.Show();
+                        lblMessageErreur.Text = "Le type d'utilisateur sélectionné ne correspond pas.";
+                        lblMessageErreur.Visibility = Visibility.Visible;
+                        return;
                     }
-                    else if (role == RoleUtilisateur.Vendeur)
-                    {
-                        FormApplication formApp = new FormApplication();
-                        formApp.Show();
-                    }
-                    else if (role == RoleUtilisateur.Manager)
-                    {
-                        FormUtilisateur formUtilisateur = new FormUtilisateur();
-                        formUtilisateur.Show();
-                    }
-                    
 
-                    this.Close(); // Ferme la fenêtre de connexion
+                    Window? form = role switch
+                    {
+                        RoleUtilisateur.Client => new FormApplication(),
+                        RoleUtilisateur.Vendeur => new FormApplication(),
+                        RoleUtilisateur.Manager => new FormUtilisateur(),
+                        _ => null
+                    };
+
+                    form?.Show();
+                    this.Close();
                 }
                 else
                 {
-                    MessageBox.Show(messageErreur, "Erreur de connexion");
+                    lblMessageErreur.Text = "Nom ou mot de passe invalide.";
+                    lblMessageErreur.Visibility = Visibility.Visible;
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Une erreur est survenue : " + ex.Message, "Erreur");
+                lblMessageErreur.Text = "Une erreur inattendue est survenue : " + ex.Message;
+                lblMessageErreur.Visibility = Visibility.Visible;
             }
+        }
+
+        private void AfficherErreur(Control control, TextBlock lblErreur, string message)
+        {
+            control.BorderBrush = Brushes.Red;
+            control.BorderThickness = new Thickness(2);
+            lblErreur.Text = message;
+            lblErreur.Visibility = Visibility.Visible;
+        }
+
+        private void Reinitialiser()
+        {
+            ReinitialiserChamp(txtNom, lblErreurNom);
+            ReinitialiserChamp(txtPassword, lblErreurPassword);
+            ReinitialiserChamp(txtCode, lblErreurCode);
+            lblMessageErreur.Visibility = Visibility.Collapsed;
+        }
+
+        private void ReinitialiserChamp(Control control, TextBlock lblErreur)
+        {
+            control.BorderBrush = Brushes.Gray;
+            control.BorderThickness = new Thickness(1);
+            lblErreur.Visibility = Visibility.Collapsed;
         }
     }
 
-    
 }

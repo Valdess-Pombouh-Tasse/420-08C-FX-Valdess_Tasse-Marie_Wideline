@@ -54,7 +54,5 @@ namespace ApplicationGestionProduitCosmetique.Classes
             }
             return lesDescriptions.ToArray();
         }
-
-
     }
 }

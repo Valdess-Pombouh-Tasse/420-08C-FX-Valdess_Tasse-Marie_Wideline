@@ -107,7 +107,7 @@ namespace ApplicationGestionProduitCosmetique.Classes
             }
 
             dr.Close();
-            cn.Close();
+            FermerConnexion(cn);
 
             return utilisateurs;
         }
@@ -139,8 +139,7 @@ namespace ApplicationGestionProduitCosmetique.Classes
 
                 cmdFacture.ExecuteNonQuery();
 
-                // Fermeture de la connection
-                cn.Close();
+                FermerConnexion(cn);
 
             }
             catch (Exception ex)
@@ -276,7 +275,7 @@ namespace ApplicationGestionProduitCosmetique.Classes
         /// <param name="messageErreur"></param>
         /// <returns></returns>
         /// * @author Marie
-        public static bool ConnexionUtilisateur(string nom, string motDePasse, string codeUtilisateur, out RoleUtilisateur role, out string messageErreur)
+        public static bool ConnexionUtilisateur(string nom, string motDePasse, string? codeUtilisateur, out RoleUtilisateur role, out string messageErreur)
         {
             messageErreur = "";
             role = RoleUtilisateur.Client;
@@ -284,22 +283,30 @@ namespace ApplicationGestionProduitCosmetique.Classes
             try
             {
                 using (MySqlConnection connection = CreerConnection())
-
                 {
                     connection.Open();
 
-                    string query = "SELECT Role FROM Utilisateurs WHERE NomUtilisateur = @Nom AND CodeUtilisateur = @Code AND MotDePasse = @MotDePasse";
-                    using (MySqlCommand command = new MySqlCommand(query, connection))
+                    string requeteConnection = "SELECT Role FROM Utilisateurs WHERE NomUtilisateur = @Nom AND MotDePasse = @MotDePasse";
+
+                    if (!string.IsNullOrEmpty(codeUtilisateur))
+                    {
+                        requeteConnection += " AND CodeUtilisateur = @Code";
+                    }
+
+                    using (MySqlCommand command = new MySqlCommand(requeteConnection, connection))
                     {
                         command.Parameters.AddWithValue("@Nom", nom);
-                        command.Parameters.AddWithValue("@Code", codeUtilisateur);
                         command.Parameters.AddWithValue("@MotDePasse", motDePasse);
+
+                        if (!string.IsNullOrEmpty(codeUtilisateur))
+                        {
+                            command.Parameters.AddWithValue("@Code", codeUtilisateur);
+                        }
 
                         string result = command.ExecuteScalar() as string;
                         if (result != null)
                         {
-                            string roleUser = result.ToString();
-                            switch (roleUser.ToLower())
+                            switch (result.ToLower())
                             {
                                 case "vendeur":
                                     role = RoleUtilisateur.Vendeur;
@@ -311,12 +318,11 @@ namespace ApplicationGestionProduitCosmetique.Classes
                                     role = RoleUtilisateur.Client;
                                     break;
                             }
-             
                             return true;
                         }
                         else
                         {
-                            messageErreur = "Nom, code ou mot de passe incorrect.";
+                            messageErreur = "Nom ou mot de passe incorrect.";
                             return false;
                         }
                     }
@@ -328,7 +334,6 @@ namespace ApplicationGestionProduitCosmetique.Classes
                 return false;
             }
         }
-
 
         /// <summary>
         /// Permet d'obtenir liste des catégories provenant de la base de données triée par nom croissant
