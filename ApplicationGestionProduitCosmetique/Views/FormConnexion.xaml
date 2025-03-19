@@ -8,7 +8,7 @@
             <ColumnDefinition Width="17*"/>
             <ColumnDefinition Width="143*"/>
         </Grid.ColumnDefinitions>
-        <Border Width="500" Height="400" Background="White" CornerRadius="20"
+        <Border  Width="500" Height="400" Background="White" CornerRadius="20"
                 HorizontalAlignment="Left" VerticalAlignment="Top" 
                 Margin="65,77,0,0" Padding="20" BorderBrush="#D3D3D3" BorderThickness="1" Grid.Column="1">
             <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
@@ -16,7 +16,7 @@
                            HorizontalAlignment="Center" Margin="0,0,0,20"/>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,20">
                     <TextBlock Text="Type d'utilisateur:" VerticalAlignment="Center" Margin="0,0,10,0"/>
-                    <ComboBox x:Name="cmbTypeUtilisateur" Width="150">
+                    <ComboBox x:Name="cmbTypeUtilisateur" Width="150" SelectionChanged="cmbTypeUtilisateur_SelectionChanged">
                         <ComboBoxItem Content="Client" IsSelected="True"/>
                         <ComboBoxItem Content="Vendeur" />
                         <ComboBoxItem Content="Manager"/>
@@ -25,19 +25,25 @@
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,5">
                     <Label Content="Nom:" Width="120" VerticalAlignment="Center"/>
                     <TextBox x:Name="txtNom" Width="200"/>
+                    <TextBlock x:Name="lblErreurNom" Foreground="Red" Visibility="Collapsed"></TextBlock>
                 </StackPanel>
 
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,5">
-                    <Label Content="Code:" Width="120" VerticalAlignment="Center"/>
-                    <TextBox x:Name="txtCode" Width="200"/>
+                    <Label Name="lblCode" Content="Code:" Width="120" VerticalAlignment="Center" Visibility="Collapsed"/>
+                    <TextBox x:Name="txtCode" Width="200" Visibility="Collapsed"/>
+                    <TextBlock x:Name="lblErreurCode" Foreground="Red" Visibility="Collapsed"></TextBlock>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,5">
                     <Label Content="Mot de passe:" Width="120" VerticalAlignment="Center"/>
                     <PasswordBox x:Name="txtPassword" Width="200"/>
+                    <TextBlock x:Name="lblErreurPassword" Foreground="Red" Visibility="Collapsed"></TextBlock>
                 </StackPanel>
-                <Button Content="Se connecter" Width="150" Background="Green" Foreground="White"
-                        HorizontalAlignment="Center" Margin="20,10,20,0" Click="btnConnecter_Click"/>
-
+                <StackPanel>
+                    <Button Content="Se connecter" Width="150" Background="Green" Foreground="White"
+                        HorizontalAlignment="Center" Margin="10" Click="btnConnecter_Click"/>
+                </StackPanel>
+                <TextBlock x:Name="lblMessageErreur" Foreground="Red" FontWeight="Bold"
+                   HorizontalAlignment="Center" Margin="0,10,0,0" Visibility="Collapsed"/>
             </StackPanel>
         </Border>
     </Grid>
