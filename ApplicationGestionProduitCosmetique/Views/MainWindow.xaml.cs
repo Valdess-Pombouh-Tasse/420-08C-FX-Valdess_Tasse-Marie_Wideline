@@ -36,6 +36,15 @@ namespace ApplicationGestionProduitCosmetique
         {
             FormCreationcompte formCreationcompte = new FormCreationcompte();
             formCreationcompte.ShowDialog();
+            Close();
+            txtCreerCompte.Text = "Vous n'avez pas de Compte";
+            btnCreation.Visibility = Visibility.Visible;
+            btnCreation.Width = 100;
+            btnConnexion.Visibility = Visibility.Hidden;
+        }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
 
         }
     }

@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ApplicationGestionProduitCosmetique.Views"
         mc:Ignorable="d"
-        Title="FormCreationcompte" Height="550" Width="800">
+        Title="FormCreationcompte" Height="450" Width="700">
 
     <Window.Background>
         <ImageBrush ImageSource="/Resources/Images/img9.jpg" Stretch="Uniform" />

@@ -1,16 +1,17 @@
-﻿using System;
+﻿using ApplicationGestionProduitCosmetique.Classes;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ApplicationGestionProduitCosmetique.Classes
+namespace ApplicationGestionProduitCosmetique.Models
 {
     public class Produit
     {
         ///Les constantes
-        public const int CODE_NB_CARAC_MIN = 5;
+        public const int CODE_NB_CARAC_MIN = 2;
         public const int CODE_NB_CARAC_MAX = 10;
         public const int NOM_NB_CARAC_MIN = 3;
         public const int NOM_NB_CARAC_MAX = 30;
@@ -72,8 +73,8 @@ namespace ApplicationGestionProduitCosmetique.Classes
         /// Obtient ou définit le code du produit.
         /// </summary>
         /// <remarks>Le code doit toujours être en majuscule et sans espaces inutiles</remarks>
-        /// <exception cref="System.ArgumentException">Lancée lorsque le code est nul ou vide</exception>
-        /// <exception cref="System.ArgumentOutOfRangeException"> Lancée lorsque le code ne contient pas entre <see cref="CODE_NB_CARC_MIN"/> et <see cref="CODE_NB_CARC_MAX"/> caractères.</exception>
+        /// <exception cref="ArgumentException">Lancée lorsque le code est nul ou vide</exception>
+        /// <exception cref="ArgumentOutOfRangeException"> Lancée lorsque le code ne contient pas entre <see cref="CODE_NB_CARC_MIN"/> et <see cref="CODE_NB_CARC_MAX"/> caractères.</exception>
         public string Code
         {
             get { return _code; }
@@ -96,8 +97,8 @@ namespace ApplicationGestionProduitCosmetique.Classes
         /// Obtient ou définit le nom du produit
         /// </summary>
         /// <remarks>Le nom ne doit pas contenir d'espaces inutiles</remarks>
-        /// <exception cref="System.ArgumentException">Lancée lorsque le nom est nul ou vide</exception>
-        /// <exception cref="System.ArgumentOutOfRangeException">Lancée lorsque le nom ne contient pas entre <see cref="NOM_NB_CARC_MIN"/> et <see cref="NOM_NB_CARC_MAX"/> </exception>
+        /// <exception cref="ArgumentException">Lancée lorsque le nom est nul ou vide</exception>
+        /// <exception cref="ArgumentOutOfRangeException">Lancée lorsque le nom ne contient pas entre <see cref="NOM_NB_CARC_MIN"/> et <see cref="NOM_NB_CARC_MAX"/> </exception>
         /// @author Valdess
         public string Nom
         {
@@ -119,7 +120,7 @@ namespace ApplicationGestionProduitCosmetique.Classes
         /// <summary>
         /// Obtient ou définit la catérorie à laquelle appartient le produit
         /// </summary>
-        /// <exception cref="System.ArgumentNullException">Lancée lorsque la catégorie est nulle</exception>
+        /// <exception cref="ArgumentNullException">Lancée lorsque la catégorie est nulle</exception>
         /// @author Valdess
         public Categorie Categorie
         {
@@ -137,7 +138,7 @@ namespace ApplicationGestionProduitCosmetique.Classes
         /// <summary>
         /// Obtient ou définit le prix de vente du produit
         /// </summary>
-        /// <exception cref="System.ArgumentOutOfRangeException">Lancées lorsque le prix est inférieur ou égale à <see cref="PRIX_MIN_VAL"/></exception>
+        /// <exception cref="ArgumentOutOfRangeException">Lancées lorsque le prix est inférieur ou égale à <see cref="PRIX_MIN_VAL"/></exception>
         /// @author Valdess
         public decimal Prix
         {
@@ -154,9 +155,9 @@ namespace ApplicationGestionProduitCosmetique.Classes
         /// <summary>
         /// Obtient ou définit le nom du fichier image du produit.
         /// </summary>
-        /// <exception cref="System.ArgumentException">Lancée lorsque l'image est nulle, vide ou ne contenir que des espaces</exception>
+        /// <exception cref="ArgumentException">Lancée lorsque l'image est nulle, vide ou ne contenir que des espaces</exception>
         /// @author Valdess
-        public String Image
+        public string Image
         {
             get { return _image; }
             set
@@ -177,7 +178,7 @@ namespace ApplicationGestionProduitCosmetique.Classes
             set { _description = value; }
         }
 
-       
+
         /// <summary>
         /// Obtient ou définit la quantité de produit
         /// </summary>
@@ -186,23 +187,6 @@ namespace ApplicationGestionProduitCosmetique.Classes
             get { return _quantite; }
             set { _quantite = value; }
         }
-
-        private int _idTeint;
-
-        public int IdTeint
-        {
-            get { return _idTeint; }
-            set { _idTeint = value; }
-        }
-
-        private int _idVendeur;
-
-        public int IdVendeur
-        {
-            get { return _idVendeur; }
-            set { _idVendeur = value; }
-        }
-
 
 
         /// <summary>
@@ -214,7 +198,7 @@ namespace ApplicationGestionProduitCosmetique.Classes
         /// <param name="prix">Prix de vente du produit</param>
         /// <param name="image">Nom du fichier image du produit</param>
         /// @author Valdess
-        public Produit(uint id, string code, string nom, decimal prix, string image, Categorie categorie, int idTeint, int idVendeur, string description, int quantite)
+        public Produit(uint id, string code, string nom, decimal prix, string image, Categorie categorie, string description, int quantite)
         {
             Id = id;
             Code = code;
@@ -222,8 +206,6 @@ namespace ApplicationGestionProduitCosmetique.Classes
             Categorie = categorie;
             Prix = prix;
             Image = image;
-            IdTeint = idTeint;
-            IdVendeur = idVendeur;
             Description = description;
             Quantite = quantite;
         }
@@ -246,14 +228,14 @@ namespace ApplicationGestionProduitCosmetique.Classes
         /// <param name="obj">Objet de type Produit à comparer avec l'objet courant</param>
         /// <returns>true si les deux objets sont égaux i.e que leur code sont identique; false autrement.</returns>
         /// @author Valdess
-        public override bool Equals(Object? obj)
+        public override bool Equals(object? obj)
         {
             if (obj is null || obj is not Produit)
                 return false;
 
             Produit produit = obj as Produit;
 
-            if (string.Compare(this.Code, produit.Code, CultureInfo.InvariantCulture, CompareOptions.IgnoreCase | CompareOptions.IgnoreNonSpace) == 0)
+            if (string.Compare(Code, produit.Code, CultureInfo.InvariantCulture, CompareOptions.IgnoreCase | CompareOptions.IgnoreNonSpace) == 0)
                 return true;
 
             return false;
@@ -268,10 +250,10 @@ namespace ApplicationGestionProduitCosmetique.Classes
         /// @author Valdess
         public static bool operator ==(Produit a, Produit b)
         {
-            if (Object.ReferenceEquals(a, b))
+            if (ReferenceEquals(a, b))
                 return true;
 
-            if ((Object)a == null || (Object)b == null)
+            if ((object)a == null || (object)b == null)
                 return false;
 
             if (string.Compare(a.Code, b.Code, CultureInfo.InvariantCulture, CompareOptions.IgnoreCase | CompareOptions.IgnoreNonSpace) == 0)

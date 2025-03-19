@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ApplicationGestionProduitCosmetique.Classes
+namespace ApplicationGestionProduitCosmetique.Models
 {
     public class ProduitFacture
     {
@@ -36,7 +36,7 @@ namespace ApplicationGestionProduitCosmetique.Classes
         /// <summary>
         /// Obtient ou défini le produit à ajouter à la facture
         /// </summary>
-        /// <exception cref="System.ArgumentNullException">Lancée lorsque le produit est nul.</exception>
+        /// <exception cref="ArgumentNullException">Lancée lorsque le produit est nul.</exception>
         public Produit Produit
         {
             get { return _produit; }
@@ -51,7 +51,7 @@ namespace ApplicationGestionProduitCosmetique.Classes
         /// <summary>
         /// Obtient ou définit le prix unitaire du produit
         /// </summary>
-        /// <exception cref="System.ArgumentOutOfRangeException">Lancées lorsque le prix est inférieur ou égale à <see cref="PRIX_MIN_VAL"/></exception>
+        /// <exception cref="ArgumentOutOfRangeException">Lancées lorsque le prix est inférieur ou égale à <see cref="PRIX_MIN_VAL"/></exception>
         public decimal PrixUnitaire
         {
             get { return _prixUnitaire; }
@@ -66,7 +66,7 @@ namespace ApplicationGestionProduitCosmetique.Classes
         /// <summary>
         /// Obtient ou définit la quantité du produit achetée
         /// </summary>
-        /// <exception cref="System.ArgumentOutOfRangeException">Lancée lorsque la quantité est inférieur à ou égale à <see cref="QUANTITE_MIN_VAL"/> .</exception>
+        /// <exception cref="ArgumentOutOfRangeException">Lancée lorsque la quantité est inférieur à ou égale à <see cref="QUANTITE_MIN_VAL"/> .</exception>
         public uint Quantite
         {
 

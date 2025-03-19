@@ -344,7 +344,7 @@ namespace ApplicationGestionProduitCosmetique.Classes
             try
             {
                 cn.Open();
-                string requete = $"SELECT Id, Nom FROM categories ORDER BY Nom";
+                string requete = $"SELECT IDCategorie, NomCategorie FROM categories ORDER BY NomCategorie";
                 MySqlCommand cmdCategorie = new MySqlCommand(requete, cn);
 
                 MySqlDataReader rdCategorie = cmdCategorie.ExecuteReader();
@@ -384,7 +384,12 @@ namespace ApplicationGestionProduitCosmetique.Classes
             {
                 cn.Open();
 
-                string requete = "SELECT produits.Id,produits.Code,produits.Nom,produits.IdCategorie,produits.Prix,produits.Image, categories.Nom FROM produits INNER JOIN categories ON produits.IdCategorie = categories.id WHERE produits.Code = @code";
+                string requete = @"
+                        SELECT p.IdProduit, p.Code, p.Nom, p.Prix, p.Image, p.IdCategorie, 
+                               c.NomCategorie, p.Description, p.Quantite
+                        FROM produit p
+                        INNER JOIN categories c ON p.IdCategorie = c.IDCategorie
+                        WHERE p.Code = @code";
 
                 MySqlCommand cmd = new MySqlCommand(requete, cn);
                 cmd.Parameters.AddWithValue("@code", code);
@@ -398,21 +403,20 @@ namespace ApplicationGestionProduitCosmetique.Classes
                     uint idProduit = dr.GetUInt32(0);
                     string codeProduit = dr.GetString(1);
                     string nomProduit = dr.GetString(2);
-                    decimal prix = dr.GetDecimal(3);
-                    string image = dr.GetString(4);
-                    uint idCategorie = dr.GetUInt32(5);
-                    int idTeint = dr.GetInt32(6);
-                    int idVendeur = dr.GetInt32(7);
-                    string description = dr.GetString(8);
-                    int quantite = dr.GetInt32(9);
-
+                    //decimal prix = dr.GetDecimal(3);
+                    uint idCategorie = dr.GetUInt32(3);
+                    int prixInt = dr.GetInt32(4);
+                    decimal prix = (decimal)prixInt;
+                    string image = dr.GetString(5);
                     string NomCategorie = dr.GetString(6);
+                    string description = dr.GetString(7);
+                    int quantite = dr.GetInt32(8);
 
                     Categorie categorie = new Categorie(idCategorie, NomCategorie);
 
                     if (categorie != null)
                     {
-                        produit = new Produit(idProduit, codeProduit, nomProduit, prix, _config[IMAGE_PATH] + image, categorie, idTeint, idVendeur, description, quantite);
+                        produit = new Produit(idProduit, codeProduit, nomProduit, prix, _config[IMAGE_PATH] + image, categorie, description, quantite);
                     }
                 }
                 dr.Close();
@@ -447,7 +451,7 @@ namespace ApplicationGestionProduitCosmetique.Classes
             try
             {
                 cn.Open();
-                string requete = "SELECT p.Id,p.Code,p.Nom,p.IdCategorie,p.Prix,p.Image, c.Nom FROM produits p INNER JOIN categories c ON p.IdCategorie = c.id";
+                string requete = "SELECT p.IdProduit,p.Code,p.Nom,p.IdCategorie,p.Prix,p.Image, c.NomCategorie, p.Description, p.Quantite FROM produit p INNER JOIN categories c ON p.IdCategorie = c.IDCategorie";
 
                 MySqlCommand cmd = new MySqlCommand();
                 cmd.Connection = cn;
@@ -480,20 +484,20 @@ namespace ApplicationGestionProduitCosmetique.Classes
                     uint idProduit = dr.GetUInt32(0);
                     string codeProduit = dr.GetString(1);
                     string nomProd = dr.GetString(2);
-                    decimal prix = dr.GetDecimal(3);
-                    string image = dr.GetString(4);
-                    uint idCategorie = dr.GetUInt32(5);
-                    int idTeint = dr.GetInt32(6);
-                    int idVendeur = dr.GetInt32(7);
-                    string description = dr.GetString(8);
-                    int quantite = dr.GetInt32(9);
+                    uint idCategorie = dr.GetUInt32(3);
+                    int prixInt = dr.GetInt32(4);
+                    decimal prix = (decimal)prixInt;
+                    string image = dr.GetString(5);
+                    string NomCategorie = dr.GetString(6);
+                    string description = dr.GetString(7);
+                    int quantite = dr.GetInt32(8);
 
-                    string NomCategorie = dr.GetString(6);                 
+                           
 
                     Categorie objCategorie = new Categorie(idCategorie, NomCategorie);
                     if (objCategorie != null)
                     {
-                        Produit produit = new Produit(idProduit, codeProduit, nomProd, prix, _config[IMAGE_PATH] + image, objCategorie, idTeint, idVendeur, description, quantite);
+                        Produit produit = new Produit(idProduit, codeProduit, nomProd, prix, _config[IMAGE_PATH] + image, objCategorie,description, quantite);
                         ListProduits.Add(produit);
                     }
                 }
@@ -528,7 +532,7 @@ namespace ApplicationGestionProduitCosmetique.Classes
             try
             {
                 cn.Open();
-                string requeteProduit = "SELECT p.Id,p.Code,p.Nom,p.IdCategorie,p.Prix,p.Image,c.Nom FROM produits p INNER JOIN categories c ON p.IdCategorie = c.id WHERE p.Id = @id";
+                string requeteProduit = "SELECT p.IdProduit,p.Code,p.Nom,p.IdCategorie,p.Prix,p.Image,c.NomCategorie FROM produit p INNER JOIN categories c ON p.IdCategorie = c.IDCategorie WHERE p.IdProduit = @id";
 
                 MySqlCommand cmdProduit = new MySqlCommand(requeteProduit, cn);
                 cmdProduit.Parameters.AddWithValue("@id", id);
@@ -542,21 +546,18 @@ namespace ApplicationGestionProduitCosmetique.Classes
                     uint idProduit = dr.GetUInt32(0);
                     string codeProduit = dr.GetString(1);
                     string nomProduit = dr.GetString(2);
-                    decimal prix = dr.GetDecimal(3);
-                    string image = dr.GetString(4);
-                    uint idCategorie = dr.GetUInt32(5);
-                    int idTeint = dr.GetInt32(6);
-                    int idVendeur = dr.GetInt32(7);
-                    string description = dr.GetString(8);
-                    int quantite = dr.GetInt32(9);
-
-                    string NomCategorie = dr.GetString(6);
+                    uint idCategorie = dr.GetUInt32(3);
+                    decimal prix = dr.GetDecimal(4);
+                    string image = dr.GetString(5);
+                    string NomCategorie = dr.GetString(6);                   
+                    string description = dr.GetString(7);
+                    int quantite = dr.GetInt32(8);
 
                     Categorie categorie = new Categorie(idCategorie, NomCategorie);
 
                     if (categorie != null)
                     {
-                        produit = new Produit(idProduit, codeProduit, nomProduit, prix, _config[IMAGE_PATH] + image, categorie, idTeint, idVendeur, description, quantite);
+                        produit = new Produit(idProduit, codeProduit, nomProduit, prix, _config[IMAGE_PATH] + image, categorie, description, quantite);
                     }
                 }
                 dr.Close();

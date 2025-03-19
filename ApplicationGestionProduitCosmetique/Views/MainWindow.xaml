@@ -5,24 +5,29 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ApplicationGestionProduitCosmetique"
         mc:Ignorable="d"
-        Title="Accueil" Height="600" Width="900" Background="Pink">
+        Title="Accueil" Height="700" Width="900" Background="Pink" Loaded="Window_Loaded">
 
     <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="7*"/>
+            <ColumnDefinition Width="443*"/>
+        </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
         <!-- Barre de navigation -->
-        <DockPanel Grid.Row="0" Background="#FFDDDDDD" Height="70">
+        <DockPanel Grid.Row="0" Background="#FFDDDDDD" Height="70" Grid.ColumnSpan="2">
             <TextBlock Text="Cosmetic Shop" FontSize="30" FontWeight="ExtraBold"
                        Foreground="Indigo" VerticalAlignment="Center"
                         Margin="20"/>
         </DockPanel>
 
         <!-- Contenu principal -->
-        <Grid Grid.Row="1" Margin="20">
+        <Grid Grid.Row="1" Margin="1,15,15,15" Grid.Column="1">
             <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
@@ -56,16 +61,59 @@
             </Border>
 
             <!-- Boutons en dessous -->
-            <StackPanel Grid.Row="1" Orientation="Horizontal" 
-                        Margin="10" HorizontalAlignment="Center">
-               
-                <Button Name="btnConnexion" Content="Se connecter" Width="120" Margin="8"
-                        Foreground="White" FontWeight="Bold" Background="#2196F3"
-                        Padding="10" Click="btnConnexion_Click"/>
+            <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" Margin="15">
 
-                <Button Name="btnCreation" Content="Créer compte" Width="120" Margin="8"
-                        Foreground="White" FontWeight="Bold" Background="Red"
-                        Padding="10" Click="btnCreation_Click"/>
+                <Button Name="btnConnexion" Content="Se connecter" Width="95" Height="50"
+        Foreground="White" FontWeight="Bold" Background="#2196F3" 
+        Padding="10" Click="btnConnexion_Click">
+                    <Button.Style>
+                        <Style TargetType="Button">
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="Button">
+                                        <Border Background="{TemplateBinding Background}" 
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="2" CornerRadius="25"  Width="{TemplateBinding Width}"
+                                Height="{TemplateBinding Height}">
+                                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"/>
+                                        </Border>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </Button.Style>
+                </Button>
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center"
+                Margin="10,36,0,18"   Width="280" Grid.Row="2">
+
+                <TextBlock x:Name="txtCreerCompte" Text="Vous n'avez pas de Compte?"
+                   Foreground="DarkGray"  FontSize="12" FontWeight="Medium" FontFamily="Montserrat"/>
+
+                <Button x:Name="btnCreation" Cursor="Hand"  Background="Transparent"  BorderBrush="Transparent" FontFamily="Montserrat"
+                Click="btnCreation_Click" Command="{Binding ShowFormCreerCompteViewModel}">
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <ContentPresenter Content="{TemplateBinding Content}"/>
+                        </ControlTemplate>
+                    </Button.Template>
+                    <TextBlock x:Name="txtbtnCreation" Text="Créer un Compte" FontSize="13" FontWeight="Medium"
+                                     FontFamily="Montserrat" Margin="9,0,0,0" >
+                        <TextBlock.Style>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="Foreground" Value="White"/>
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Foreground" Value="Blue"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBlock.Style>
+                    </TextBlock>
+
+                </Button>
             </StackPanel>
         </Grid>
     </Grid>

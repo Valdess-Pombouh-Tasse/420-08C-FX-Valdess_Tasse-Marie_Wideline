@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:ApplicationGestionProduitCosmetique.Views"
         xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
         mc:Ignorable="d"
-        Title="FormApplication" Height="450" Width="800" Loaded="Window_Loaded">
+        Title="FormApplication" Height="570" Width="800" Loaded="Window_Loaded">
     <Border>
         <Grid>
 
@@ -56,7 +56,7 @@
                         </RadioButton>
                     </StackPanel>
 
-                    <RadioButton Grid.Row="2" Style="{StaticResource menuButton}" Tag="black" Margin="15,1,135,20" Background="AliceBlue">
+                    <RadioButton Grid.Row="2" Style="{StaticResource menuButton}" Tag="black" Margin="15,1,195,20" Background="AliceBlue">
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Foreground="Black" Text="Deconnexion" Style="{StaticResource menuButtonText}"/>
                             <fa:IconImage Icon="SignOut"  Style="{StaticResource menuButtonIcon}"/>

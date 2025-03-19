@@ -14,6 +14,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using Orientation = System.Windows.Controls.Orientation;
 
 namespace ApplicationGestionProduitCosmetique.Views
 {
@@ -64,106 +65,71 @@ namespace ApplicationGestionProduitCosmetique.Views
             wpProduit.Children.Clear();
             lblTitre.Content = $"Liste des ({listeProduits.Count}) produits ";
 
-            //foreach (Produit produit in listeProduits)
-            //{
-            //    Border border = new Border();
-            //    border.BorderBrush = new SolidColorBrush(Colors.LightGray);
-            //    border.BorderThickness = new Thickness(2);
-            //    border.CornerRadius = new CornerRadius(10);
-            //    border.Margin = new Thickness(5);
-            //    border.Padding = new Thickness(1);
-            //    border.Width = 100;
-            //    border.Height = 250;
+            foreach (Produit produit in listeProduits)
+            {
+                Border border = new Border();
+                border.BorderBrush = new SolidColorBrush(Colors.LightGray);
+                border.BorderThickness = new Thickness(2);
+                border.CornerRadius = new CornerRadius(10);
+                border.Margin = new Thickness(5);
+                border.Padding = new Thickness(1);
+                border.Width = 100;
+                border.Height = 250;
 
-            //    BitmapImage biProduit = new BitmapImage();
-            //    biProduit.BeginInit();
-            //    biProduit.UriSource = new Uri(produit.Image);
-            //    biProduit.CacheOption = BitmapCacheOption.OnLoad;
-            //    biProduit.CreateOptions = BitmapCreateOptions.IgnoreImageCache;
-            //    biProduit.EndInit();
+                BitmapImage biProduit = new BitmapImage();
+                biProduit.BeginInit();
+                biProduit.UriSource = new Uri(produit.Image);
+                biProduit.CacheOption = BitmapCacheOption.OnLoad;
+                biProduit.CreateOptions = BitmapCreateOptions.IgnoreImageCache;
+                biProduit.EndInit();
 
-            //    Image imgProduit = new Image();
-            //    imgProduit.Source = biProduit;
-            //    imgProduit.Margin = new Thickness(2);
-            //    imgProduit.HorizontalAlignment = HorizontalAlignment.Center;
-            //    imgProduit.VerticalAlignment = VerticalAlignment.Top;
-            //    imgProduit.Width = 90;
-            //    imgProduit.Height = 100;
-            //    imgProduit.Tag = produit;
-            //    imgProduit.MouseLeftButtonDown += new MouseButtonEventHandler(ImageProduit_MouseLeftButtonUp);
+                Image imgProduit = new Image();
+                imgProduit.Source = biProduit;
+                imgProduit.Margin = new Thickness(2);
+                imgProduit.HorizontalAlignment = System.Windows.HorizontalAlignment.Center;
+                imgProduit.VerticalAlignment = VerticalAlignment.Top;
+                imgProduit.Width = 90;
+                imgProduit.Height = 100;
+                imgProduit.Tag = produit;
+                //imgProduit.MouseLeftButtonDown += new MouseButtonEventHandler(ImageProduit_MouseLeftButtonUp);
 
-            //    TextBlock descriptionProduit = new TextBlock();
-            //    descriptionProduit.Text = produit.Nom;
-            //    descriptionProduit.FontSize = 12;
-            //    descriptionProduit.HorizontalAlignment = HorizontalAlignment.Center;
-            //    descriptionProduit.TextWrapping = TextWrapping.Wrap;
-            //    descriptionProduit.MaxWidth = 85;
+                TextBlock descriptionProduit = new TextBlock();
+                imgProduit.HorizontalAlignment = System.Windows.HorizontalAlignment.Center;
+                descriptionProduit.Text = produit.Nom;
+                descriptionProduit.FontSize = 12;
+                descriptionProduit.HorizontalAlignment = System.Windows.HorizontalAlignment.Center;
+                descriptionProduit.TextWrapping = TextWrapping.Wrap;
+                descriptionProduit.MaxWidth = 85;
 
-            //    TextBlock prixProduit = new TextBlock();
-            //    prixProduit.Text = produit.Prix.ToString("c");
-            //    prixProduit.FontSize = 13;
-            //    prixProduit.Foreground = new SolidColorBrush(Colors.Green);
-            //    prixProduit.FontWeight = FontWeights.Bold;
-            //    prixProduit.HorizontalAlignment = HorizontalAlignment.Right;
-            //    prixProduit.VerticalAlignment = VerticalAlignment.Bottom;
-            //    prixProduit.MaxWidth = 80;
-            //    prixProduit.Margin = new Thickness(4);
-
-
-            //    StackPanel buttonPanel = new StackPanel();
-            //    buttonPanel.Orientation = Orientation.Horizontal;
-            //    buttonPanel.HorizontalAlignment = HorizontalAlignment.Right;
-            //    buttonPanel.Margin = new Thickness(0, 10, 0, 0);
-
-            //    Button btnModifier = new Button();
-            //    btnModifier.Width = 30;
-            //    btnModifier.Height = 30;
-            //    btnModifier.Margin = new Thickness(5);
-            //    btnModifier.ToolTip = "Modifier";
-            //    btnModifier.Background = new SolidColorBrush(Colors.White);
-
-            //    Image imgModifier = new Image();
-            //    imgModifier.Source = new BitmapImage(new Uri("/Resources/edit.png", UriKind.Relative));
-            //    imgModifier.Width = 16;
-            //    imgModifier.Height = 16;
-            //    btnModifier.Content = imgModifier;
-            //    btnModifier.Click += new RoutedEventHandler(btnModifierProduit_Click);
-            //    btnModifier.Tag = produit;
+                TextBlock prixProduit = new TextBlock();
+                prixProduit.Text = produit.Prix.ToString("c");
+                prixProduit.FontSize = 13;
+                prixProduit.Foreground = new SolidColorBrush(Colors.Green);
+                prixProduit.FontWeight = FontWeights.Bold;
+                prixProduit.HorizontalAlignment = System.Windows.HorizontalAlignment.Right;
+                prixProduit.VerticalAlignment = VerticalAlignment.Bottom;
+                prixProduit.MaxWidth = 80;
+                prixProduit.Margin = new Thickness(4);
 
 
-            //    Button btnSupprimer = new Button();
-            //    btnSupprimer.Width = 30;
-            //    btnSupprimer.Height = 30;
-            //    btnSupprimer.Margin = new Thickness(5);
-            //    btnSupprimer.ToolTip = "Supprimer";
-            //    btnSupprimer.Background = new SolidColorBrush(Colors.White);
-            //    Image imgSupprimer = new Image();
-            //    imgSupprimer.Source = new BitmapImage(new Uri("/Resources/delete.png", UriKind.Relative));
-            //    imgSupprimer.Width = 16;
-            //    imgSupprimer.Height = 16;
+                StackPanel buttonPanel = new StackPanel();
+                buttonPanel.Orientation = Orientation.Horizontal;
+                buttonPanel.HorizontalAlignment = System.Windows.HorizontalAlignment.Right;
+                buttonPanel.Margin = new Thickness(0, 10, 0, 0);
 
-            //    btnSupprimer.Content = imgSupprimer;
-            //    btnSupprimer.Click += new RoutedEventHandler(btnSupprimerProduit_Click);
-            //    btnSupprimer.Tag = produit;
+                StackPanel stackPanel = new StackPanel();
+                stackPanel.Orientation = Orientation.Vertical;
+                stackPanel.HorizontalAlignment = System.Windows.HorizontalAlignment.Center;
+                stackPanel.VerticalAlignment = VerticalAlignment.Top;
 
+                stackPanel.Children.Add(imgProduit);
+                stackPanel.Children.Add(descriptionProduit);
+                stackPanel.Children.Add(prixProduit);
+                stackPanel.Children.Add(buttonPanel);
 
-            //    buttonPanel.Children.Add(btnModifier);
-            //    buttonPanel.Children.Add(btnSupprimer);
-
-            //    StackPanel stackPanel = new StackPanel();
-            //    stackPanel.Orientation = Orientation.Vertical;
-            //    stackPanel.HorizontalAlignment = HorizontalAlignment.Center;
-            //    stackPanel.VerticalAlignment = VerticalAlignment.Top;
-
-            //    stackPanel.Children.Add(imgProduit);
-            //    stackPanel.Children.Add(descriptionProduit);
-            //    stackPanel.Children.Add(prixProduit);
-            //    stackPanel.Children.Add(buttonPanel);
-
-            //    border.Child = stackPanel;
-
-            //    wpProduit.Children.Add(border);
-            //}
+                border.Child = stackPanel;
+                wpProduit.Children.Add(border);
+            }
         }
         /// <summary>
         /// Permet de diminuer la taille de la fenetre de l'application
