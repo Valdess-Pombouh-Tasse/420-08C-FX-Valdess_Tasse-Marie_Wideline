@@ -49,6 +49,9 @@ namespace ApplicationGestionProduitCosmetique.Views
         /// <summary>
         /// Fonction qui permet d'afficher la liste des produits
         /// </summary>
+        /// <summary>
+        /// Fonction qui permet d'afficher la liste des produits
+        /// </summary>
         private void AfficherListeProduit(List<Produit> produits = null)
         {
             List<Produit> listeProduits = new List<Produit>();
@@ -74,7 +77,7 @@ namespace ApplicationGestionProduitCosmetique.Views
                 border.Margin = new Thickness(5);
                 border.Padding = new Thickness(1);
                 border.Width = 100;
-                border.Height = 250;
+                border.Height = 280; // Augmenté pour inclure l'ID du vendeur
 
                 BitmapImage biProduit = new BitmapImage();
                 biProduit.BeginInit();
@@ -94,7 +97,6 @@ namespace ApplicationGestionProduitCosmetique.Views
                 imgProduit.MouseLeftButtonDown += new MouseButtonEventHandler(ImageProduit_MouseLeftButtonUp);
 
                 TextBlock descriptionProduit = new TextBlock();
-                imgProduit.HorizontalAlignment = System.Windows.HorizontalAlignment.Center;
                 descriptionProduit.Text = produit.Nom;
                 descriptionProduit.FontSize = 12;
                 descriptionProduit.HorizontalAlignment = System.Windows.HorizontalAlignment.Center;
@@ -111,6 +113,13 @@ namespace ApplicationGestionProduitCosmetique.Views
                 prixProduit.MaxWidth = 80;
                 prixProduit.Margin = new Thickness(4);
 
+                // Ajout de l'ID du vendeur
+                TextBlock vendeurProduit = new TextBlock();
+                vendeurProduit.Text = $"Vendeur: {produit.IdVendeur}";
+                vendeurProduit.FontSize = 11;
+                vendeurProduit.Foreground = new SolidColorBrush(Colors.Blue);
+                vendeurProduit.HorizontalAlignment = System.Windows.HorizontalAlignment.Center;
+                vendeurProduit.Margin = new Thickness(0, 2, 0, 0);
 
                 StackPanel buttonPanel = new StackPanel();
                 buttonPanel.Orientation = Orientation.Horizontal;
@@ -124,6 +133,7 @@ namespace ApplicationGestionProduitCosmetique.Views
 
                 stackPanel.Children.Add(imgProduit);
                 stackPanel.Children.Add(descriptionProduit);
+                stackPanel.Children.Add(vendeurProduit); // Affichage du vendeur
                 stackPanel.Children.Add(prixProduit);
                 stackPanel.Children.Add(buttonPanel);
 
@@ -131,6 +141,7 @@ namespace ApplicationGestionProduitCosmetique.Views
                 wpProduit.Children.Add(border);
             }
         }
+
 
         private void ImageProduit_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {

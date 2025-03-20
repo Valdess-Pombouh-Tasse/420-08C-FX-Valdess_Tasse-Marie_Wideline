@@ -1,4 +1,7 @@
 ﻿using ApplicationGestionProduitCosmetique.Classes;
+using ApplicationGestionProduitCosmetique.enums;
+using ApplicationGestionProduitCosmetique.Models;
+using ApplicationGestionProduitCosmetique.Views;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,11 +23,23 @@ namespace ApplicationGestionProduitCosmetique.Views
     /// </summary>
     public partial class FormVendeur : Window
     {
-        //public List<Produit> ListeProduits { get; set; }
-        //public FormVendeur()
-        //{
-        //    InitializeComponent();
-        //    lbProduits.ItemsSource = ListeProduits;
-        //}
+        public FormVendeur(int idVendeur)
+        {
+            InitializeComponent();
+            ChargerProduitsVendeur(idVendeur);
+        }
+
+        private void ChargerProduitsVendeur(int idVendeur)
+        {
+            try
+            {
+                List<Produit> produitsVendeur = GestionProduits.ObtenirProduitsParVendeur(idVendeur);
+            }
+            catch (Exception ex)
+            {
+                FenetreErreur.Afficher("Erreur lors du chargement des produits : " + ex.Message);
+            }
+        }
+
     }
 }

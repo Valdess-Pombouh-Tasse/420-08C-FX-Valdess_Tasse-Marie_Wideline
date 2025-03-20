@@ -87,14 +87,16 @@ namespace ApplicationGestionProduitCosmetique
                         return;
                     }
 
+                    int idVendeur = 1;
                     Window? form = role switch
                     {
                         RoleUtilisateur.Client => new FormApplication(),
-                        RoleUtilisateur.Vendeur => new FormApplication(),
+                        RoleUtilisateur.Vendeur => new FormVendeur(idVendeur),
                         RoleUtilisateur.Manager => new FormUtilisateur(),
                         _ => null
                     };
 
+                    form.WindowState = WindowState.Maximized;
                     form?.Show();
                     this.Close();
                 }
@@ -134,5 +136,4 @@ namespace ApplicationGestionProduitCosmetique
             lblErreur.Visibility = Visibility.Collapsed;
         }
     }
-
 }
