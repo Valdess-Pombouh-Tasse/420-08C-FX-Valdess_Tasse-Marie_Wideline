@@ -247,60 +247,62 @@ namespace ApplicationGestionProduitCosmetique.Models
         }
 
         /// <summary>
-        /// Permet d'obtenir la liste des produits d'un vendeur spécifique
+        /// Permet de charger la liste des produits d'un vendeur spécifique
         /// </summary>
         /// <param name="idVendeur">Identifiant unique du vendeur</param>
         /// <returns>Liste des produits associés au vendeur</returns>
         /// <remarks>* @author Marie</remarks>
-        public static List<Produit> ObtenirProduitsParVendeur(int idVendeur)
+        public static List<Produit> ObtenirProduitsVendeur(int idVendeur)
         {
-            List<Produit> ListProduits = new List<Produit>();
 
-            using (MySqlConnection cn = CreerConnection())
+            MySqlConnection cn = CreerConnection();
+            List<Produit> produitsVendeur = new List<Produit>();
+
+            try
             {
-                try
+                cn.Open();
+
+                string requete = @"
+            SELECT p.IdProduit, p.Code, p.Nom, p.IdCategorie, p.Prix, p.Image, 
+                   c.NomCategorie, p.Description, p.Quantite
+            FROM produit p
+            INNER JOIN categories c ON p.IdCategorie = c.IDCategorie
+            INNER JOIN utilisateurs u ON p.IdVendeur = u.ID
+            WHERE u.ID = @idVendeur";
+
+                MySqlCommand cmd = new MySqlCommand(requete, cn);
+                cmd.Parameters.AddWithValue("@idVendeur", idVendeur);
+                MySqlDataReader dr = cmd.ExecuteReader();
+
+                while (dr.Read())
                 {
-                    cn.Open();
-                        string requete = @"
-                        SELECT p.IdProduit, p.Code, p.Nom, p.IdCategorie, p.Prix, p.Image, c.NomCategorie, p.Description, p.Quantite
-                        FROM produit p
-                        INNER JOIN categories c ON p.IdCategorie = c.IDCategorie
-                        INNER JOIN utilisateurs u ON p.IdVendeur = u.IdUtilisateur 
-                        WHERE u.Role = 'vendeur'";
+                    uint idProduit = dr.GetUInt32(0);
+                    string codeProduit = dr.GetString(1);
+                    string nom = dr.GetString(2);
+                    uint idCategorie = dr.GetUInt32(3);
+                    decimal prix = dr.GetDecimal(4);
+                    string image = dr.IsDBNull(5) ? null : dr.GetString(5);
+                    string nomCategorie = dr.GetString(6);
+                    string description = dr.IsDBNull(7) ? null : dr.GetString(7);
+                    int quantite = dr.GetInt32(8);
 
-                    using (MySqlCommand cmd = new MySqlCommand(requete, cn))
-                    {
-                        cmd.Parameters.AddWithValue("@idVendeur", idVendeur);
-
-                        using (MySqlDataReader dr = cmd.ExecuteReader())
-                        {
-                            while (dr.Read())
-                            {
-                                uint idProduit = dr.GetUInt32(0);
-                                string codeProduit = dr.GetString(1);
-                                string nom = dr.GetString(2);
-                                uint idCategorie = dr.GetUInt32(3);
-                                decimal prix = dr.GetDecimal(4);
-                                string image = dr.GetString(5);
-                                string nomCategorie = dr.GetString(6);
-                                string description = dr.GetString(7);
-                                int quantite = dr.GetInt32(8);
-
-                                Categorie categorieObj = new Categorie(idCategorie, nomCategorie);
-
-                                Produit produit = new Produit(idProduit, codeProduit, nom, prix, image, categorieObj, description, quantite);
-                                ListProduits.Add(produit);
-                            }
-                        }
-                    }
+                    Categorie categorieObj = new Categorie(idCategorie, nomCategorie);
+                    Produit produit = new Produit(idProduit, codeProduit, nom, prix, image, categorieObj, description, quantite);
+                    produitsVendeur.Add(produit);
                 }
-                catch (Exception ex)
-                {
-                    throw new Exception("Erreur lors de la récupération des produits", ex);
-                }
+
+                dr.Close();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Erreur : " + ex.Message, "Erreur SQL", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            finally
+            {
+                FermerConnexion(cn);
             }
 
-            return ListProduits;
+            return produitsVendeur;
         }
 
         //public static List<ListePanier> ChargerListePanier()

@@ -275,65 +275,112 @@ namespace ApplicationGestionProduitCosmetique.Classes
         /// <param name="messageErreur"></param>
         /// <returns></returns>
         /// * @author Marie
-        public static bool ConnexionUtilisateur(string nom, string motDePasse, string? codeUtilisateur, out RoleUtilisateur role, out string messageErreur)
+        public static bool ConnexionUtilisateur(string nom, string motDePasse, string codeUtilisateur,
+                                        out RoleUtilisateur role, out int idUtilisateur,
+                                        out string messageErreur)
         {
+            idUtilisateur = -1;  // Valeur par défaut si la connexion échoue
+            role = RoleUtilisateur.Client;  // Valeur par défaut
             messageErreur = "";
-            role = RoleUtilisateur.Client;
 
             try
             {
-                using (MySqlConnection connection = CreerConnection())
+                using MySqlConnection cn = CreerConnection();
+                cn.Open();
+
+                string requete = "SELECT ID, Role FROM utilisateurs WHERE NomUtilisateur = @nom AND MotDePasse = @mdp AND CodeUtilisateur = @code";
+                using MySqlCommand cmd = new MySqlCommand(requete, cn);
+                cmd.Parameters.AddWithValue("@nom", nom);
+                cmd.Parameters.AddWithValue("@mdp", motDePasse);
+                cmd.Parameters.AddWithValue("@code", codeUtilisateur);
+
+                using MySqlDataReader dr = cmd.ExecuteReader();
+
+                if (dr.Read())
                 {
-                    connection.Open();
+                    idUtilisateur = dr.GetInt32("ID"); // Récupération de l'ID
+                    string roleString = dr.GetString("Role");
 
-                    string requeteConnection = "SELECT Role FROM Utilisateurs WHERE NomUtilisateur = @Nom AND MotDePasse = @MotDePasse";
-
-                    if (!string.IsNullOrEmpty(codeUtilisateur))
+                    if (!Enum.TryParse(roleString, true, out role))
                     {
-                        requeteConnection += " AND CodeUtilisateur = @Code";
+                        messageErreur = "Rôle utilisateur inconnu.";
+                        return false;
                     }
 
-                    using (MySqlCommand command = new MySqlCommand(requeteConnection, connection))
-                    {
-                        command.Parameters.AddWithValue("@Nom", nom);
-                        command.Parameters.AddWithValue("@MotDePasse", motDePasse);
-
-                        if (!string.IsNullOrEmpty(codeUtilisateur))
-                        {
-                            command.Parameters.AddWithValue("@Code", codeUtilisateur);
-                        }
-
-                        string result = command.ExecuteScalar() as string;
-                        if (result != null)
-                        {
-                            switch (result.ToLower())
-                            {
-                                case "vendeur":
-                                    role = RoleUtilisateur.Vendeur;
-                                    break;
-                                case "manager":
-                                    role = RoleUtilisateur.Manager;
-                                    break;
-                                default:
-                                    role = RoleUtilisateur.Client;
-                                    break;
-                            }
-                            return true;
-                        }
-                        else
-                        {
-                            messageErreur = "Nom ou mot de passe incorrect.";
-                            return false;
-                        }
-                    }
+                    return true;
+                }
+                else
+                {
+                    messageErreur = "Nom ou mot de passe incorrect.";
+                    return false;
                 }
             }
             catch (Exception ex)
             {
-                messageErreur = "Erreur de connexion à la base : " + ex.Message;
+                messageErreur = "Erreur de connexion : " + ex.Message;
                 return false;
             }
         }
+
+        //public static bool ConnexionUtilisateur(string nom, string motDePasse, string? codeUtilisateur, out RoleUtilisateur role, out string messageErreur)
+        //{
+        //    messageErreur = "";
+        //    role = RoleUtilisateur.Client;
+
+        //    try
+        //    {
+        //        using (MySqlConnection connection = CreerConnection())
+        //        {
+        //            connection.Open();
+
+        //            string requeteConnection = "SELECT Role FROM Utilisateurs WHERE NomUtilisateur = @Nom AND MotDePasse = @MotDePasse";
+
+        //            if (!string.IsNullOrEmpty(codeUtilisateur))
+        //            {
+        //                requeteConnection += " AND CodeUtilisateur = @Code";
+        //            }
+
+        //            using (MySqlCommand command = new MySqlCommand(requeteConnection, connection))
+        //            {
+        //                command.Parameters.AddWithValue("@Nom", nom);
+        //                command.Parameters.AddWithValue("@MotDePasse", motDePasse);
+
+        //                if (!string.IsNullOrEmpty(codeUtilisateur))
+        //                {
+        //                    command.Parameters.AddWithValue("@Code", codeUtilisateur);
+        //                }
+
+        //                string result = command.ExecuteScalar() as string;
+        //                if (result != null)
+        //                {
+        //                    switch (result.ToLower())
+        //                    {
+        //                        case "vendeur":
+        //                            role = RoleUtilisateur.Vendeur;
+        //                            break;
+        //                        case "manager":
+        //                            role = RoleUtilisateur.Manager;
+        //                            break;
+        //                        default:
+        //                            role = RoleUtilisateur.Client;
+        //                            break;
+        //                    }
+        //                    return true;
+        //                }
+        //                else
+        //                {
+        //                    messageErreur = "Nom ou mot de passe incorrect.";
+        //                    return false;
+        //                }
+        //            }
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        messageErreur = "Erreur de connexion à la base : " + ex.Message;
+        //        return false;
+        //    }
+        //}
 
         /// <summary>
         /// Permet d'obtenir liste des catégories provenant de la base de données triée par nom croissant

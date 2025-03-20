@@ -66,7 +66,6 @@ namespace ApplicationGestionProduitCosmetique
                 if (lblErreurCode != null) lblErreurCode.Visibility = Visibility.Collapsed; 
             }
         }
-
         private void btnConnecter_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -78,7 +77,7 @@ namespace ApplicationGestionProduitCosmetique
                 string codeUtilisateur = txtCode.Text.Trim();
                 string roleSelectionne = (cmbTypeUtilisateur.SelectedItem as ComboBoxItem)?.Content.ToString();
 
-                if (GestionCompteUtilisateur.ConnexionUtilisateur(nom, motDePasse, codeUtilisateur, out RoleUtilisateur role, out string messageErreur))
+                if (GestionCompteUtilisateur.ConnexionUtilisateur(nom, motDePasse, codeUtilisateur, out RoleUtilisateur role, out int idUtilisateur, out string messageErreur))
                 {
                     if (role.ToString() != roleSelectionne)
                     {
@@ -87,22 +86,27 @@ namespace ApplicationGestionProduitCosmetique
                         return;
                     }
 
-                    int idVendeur = 1;
+                    // Vérification de l'ID récupéré
+                    MessageBox.Show($"ID de l'utilisateur connecté : {idUtilisateur}");
+
                     Window? form = role switch
                     {
                         RoleUtilisateur.Client => new FormApplication(),
-                        RoleUtilisateur.Vendeur => new FormVendeur(idVendeur),
+                        RoleUtilisateur.Vendeur => new FormVendeur(idUtilisateur), // Utilisation de l'ID récupéré
                         RoleUtilisateur.Manager => new FormUtilisateur(),
                         _ => null
                     };
 
-                    form.WindowState = WindowState.Maximized;
-                    form?.Show();
-                    this.Close();
+                    if (form != null)
+                    {
+                        form.WindowState = WindowState.Maximized;
+                        form.Show();
+                        this.Close();
+                    }
                 }
                 else
                 {
-                    lblMessageErreur.Text = "Nom ou mot de passe invalide.";
+                    lblMessageErreur.Text = messageErreur;
                     lblMessageErreur.Visibility = Visibility.Visible;
                 }
             }
@@ -112,6 +116,52 @@ namespace ApplicationGestionProduitCosmetique
                 lblMessageErreur.Visibility = Visibility.Visible;
             }
         }
+
+        //private void btnConnecter_Click(object sender, RoutedEventArgs e)
+        //{
+        //    try
+        //    {
+        //        if (!ValidationFormulaire()) return;
+
+        //        string nom = txtNom.Text.Trim();
+        //        string motDePasse = txtPassword.Password.Trim();
+        //        string codeUtilisateur = txtCode.Text.Trim();
+        //        string roleSelectionne = (cmbTypeUtilisateur.SelectedItem as ComboBoxItem)?.Content.ToString();
+
+        //        if (GestionCompteUtilisateur.ConnexionUtilisateur(nom, motDePasse, codeUtilisateur, out RoleUtilisateur role, out string messageErreur))
+        //        {
+        //            if (role.ToString() != roleSelectionne)
+        //            {
+        //                lblMessageErreur.Text = "Le type d'utilisateur sélectionné ne correspond pas.";
+        //                lblMessageErreur.Visibility = Visibility.Visible;
+        //                return;
+        //            }
+
+        //            int idVendeur = 1;
+        //            Window? form = role switch
+        //            {
+        //                RoleUtilisateur.Client => new FormApplication(),
+        //                RoleUtilisateur.Vendeur => new FormVendeur(idVendeur),
+        //                RoleUtilisateur.Manager => new FormUtilisateur(),
+        //                _ => null
+        //            };
+
+        //            form.WindowState = WindowState.Maximized;
+        //            form?.Show();
+        //            this.Close();
+        //        }
+        //        else
+        //        {
+        //            lblMessageErreur.Text = "Nom ou mot de passe invalide.";
+        //            lblMessageErreur.Visibility = Visibility.Visible;
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        lblMessageErreur.Text = "Une erreur inattendue est survenue : " + ex.Message;
+        //        lblMessageErreur.Visibility = Visibility.Visible;
+        //    }
+        //}
 
         private void AfficherErreur(Control control, TextBlock lblErreur, string message)
         {
