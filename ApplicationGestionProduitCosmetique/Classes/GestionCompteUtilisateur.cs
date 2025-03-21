@@ -21,6 +21,7 @@ namespace ApplicationGestionProduitCosmetique.Classes
         public const string IMAGE_PATH = "images:path";
         
 
+
         /// <summary>
         /// Permet de créer une connection
         /// </summary>

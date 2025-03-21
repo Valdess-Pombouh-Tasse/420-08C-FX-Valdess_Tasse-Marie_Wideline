@@ -51,13 +51,12 @@ namespace ApplicationGestionProduitCosmetique.Views
 
         private void AfficherListeProduit(List<Produit> produits = null)
         {
-            // Récupérer la liste des produits en évitant les doublons
             List<Produit> listeProduits = produits ?? GestionCompteUtilisateur.ObtenirListeProduits()
-                                                      .GroupBy(p => p.Id)  // Suppression des doublons basés sur l'ID
+                                                      .GroupBy(p => p.Id)  
                                                       .Select(g => g.First())
                                                       .ToList();
 
-            wpProduits.Children.Clear(); // Nettoyer les produits affichés précédemment
+            wpProduits.Children.Clear();
 
             foreach (Produit produit in listeProduits)
             {
@@ -181,14 +180,10 @@ namespace ApplicationGestionProduitCosmetique.Views
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-           // if (GestionCompteUtilisateur.UtilisateurConnecte is not null &&
-               // GestionCompteUtilisateur.UtilisateurConnecte.Role == RoleUtilisateur.Vendeur)
-           // {
-
-               // int idVendeurConnecte = Convert.ToInt32(GestionCompteUtilisateur.UtilisateurConnecte.CodeUtilisateur); // Convertir si nécessaire
-             AfficherProduitsVendeurDansListBox(12);
-           // }
-            AfficherListeProduit();
+            
+                AfficherProduitsVendeurDansListBox(12);
+            
+                AfficherListeProduit();
         }
 
         private void btnAjouter_Click(object sender, RoutedEventArgs e)

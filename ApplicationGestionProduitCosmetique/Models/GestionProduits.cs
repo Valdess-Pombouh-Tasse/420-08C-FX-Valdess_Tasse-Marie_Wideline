@@ -14,12 +14,21 @@ namespace ApplicationGestionProduitCosmetique.Models
 {
     public static class GestionProduits
     {
-        static IConfiguration _config;
+        
         public const string APPSETTINGS_FILE = "appsettings.json";
         public static string CONNECTION_STRING = "DefaultConnection";
         public const string IMAGE_PATH = "images:path";
 
         private static List<Produit> produits;
+
+        static IConfiguration _config;
+        /// <summary>
+        /// Constructeur static permettant de charger les configurations de l'application
+        /// </summary>
+        static GestionProduits()
+        {
+            _config = new ConfigurationBuilder().AddJsonFile(APPSETTINGS_FILE, false, true).Build();
+        }
 
         /// <summary>
         /// Permet de créer une connection
@@ -277,7 +286,6 @@ namespace ApplicationGestionProduitCosmetique.Models
 
                 while (dr.Read())
                 {
-                    MessageBox.Show($"Produit récupéré : {dr.GetString(2)} - Prix: {dr.GetDecimal(4)}", "DEBUG SQL");
 
                     uint idProduit = dr.GetUInt32(0);
                     string codeProduit = dr.GetString(1);
