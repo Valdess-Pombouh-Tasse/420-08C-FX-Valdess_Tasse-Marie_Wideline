@@ -55,17 +55,9 @@ namespace ApplicationGestionProduitCosmetique
             return valide;
         }
 
-        private void cmbTypeUtilisateur_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (cmbTypeUtilisateur.SelectedItem is ComboBoxItem selectedItem)
-            {
-                bool isClient = selectedItem.Content.ToString() == "Client";
 
-                if (txtCode != null) txtCode.Visibility = isClient ? Visibility.Collapsed : Visibility.Visible;
-                if (lblCode != null) lblCode.Visibility = isClient ? Visibility.Collapsed : Visibility.Visible;
-                if (lblErreurCode != null) lblErreurCode.Visibility = Visibility.Collapsed; 
-            }
-        }
+
+
         private void btnConnecter_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -77,7 +69,7 @@ namespace ApplicationGestionProduitCosmetique
                 string codeUtilisateur = txtCode.Text.Trim();
                 string roleSelectionne = (cmbTypeUtilisateur.SelectedItem as ComboBoxItem)?.Content.ToString();
 
-                if (GestionCompteUtilisateur.ConnexionUtilisateur(nom, motDePasse, codeUtilisateur, out RoleUtilisateur role, out int idUtilisateur, out string messageErreur))
+                if (GestionCompteUtilisateur.ConnexionUtilisateur(nom, motDePasse, codeUtilisateur, out RoleUtilisateur role, out string messageErreur))
                 {
                     if (role.ToString() != roleSelectionne)
                     {
@@ -86,23 +78,41 @@ namespace ApplicationGestionProduitCosmetique
                         return;
                     }
 
-                    // Vérification de l'ID récupéré
-                    MessageBox.Show($"ID de l'utilisateur connecté : {idUtilisateur}");
+                    // Ajout d'un message pour vérifier quel rôle est détecté
+                    MessageBox.Show($"Rôle détecté : {role.ToString()}");
 
-                    Window? form = role switch
+                    // Création de la fenêtre appropriée selon le rôle
+                    Window form = null;
+
+                    if (role == RoleUtilisateur.Client)
                     {
-                        RoleUtilisateur.Client => new FormApplication(),
-                        RoleUtilisateur.Vendeur => new FormVendeur(idUtilisateur), // Utilisation de l'ID récupéré
-                        RoleUtilisateur.Manager => new FormUtilisateur(),
-                        _ => null
-                    };
-                    form.WindowState = WindowState.Maximized;
-                    form?.Show();
-                    this.Close();
+                        form = new FormApplication();
+                    }
+                    else if (role == RoleUtilisateur.Vendeur)
+                    {
+                        form = new FormVendeur();
+                    }
+                    else if (role == RoleUtilisateur.Manager)
+                    {
+                        form = new FormUtilisateur();
+                    }
+
+                    // Vérification que la fenêtre a bien été instanciée avant de l'afficher
+                    if (form != null)
+                    {
+                        form.WindowState = WindowState.Maximized;
+                        form.Show();
+                        this.Close();
+                    }
+                    else
+                    {
+                        lblMessageErreur.Text = "Une erreur s'est produite lors de l'initialisation de la fenêtre.";
+                        lblMessageErreur.Visibility = Visibility.Visible;
+                    }
                 }
                 else
                 {
-                    lblMessageErreur.Text = messageErreur;
+                    lblMessageErreur.Text = "Nom ou mot de passe invalide.";
                     lblMessageErreur.Visibility = Visibility.Visible;
                 }
             }
@@ -113,51 +123,7 @@ namespace ApplicationGestionProduitCosmetique
             }
         }
 
-        //private void btnConnecter_Click(object sender, RoutedEventArgs e)
-        //{
-        //    try
-        //    {
-        //        if (!ValidationFormulaire()) return;
 
-        //        string nom = txtNom.Text.Trim();
-        //        string motDePasse = txtPassword.Password.Trim();
-        //        string codeUtilisateur = txtCode.Text.Trim();
-        //        string roleSelectionne = (cmbTypeUtilisateur.SelectedItem as ComboBoxItem)?.Content.ToString();
-
-        //        if (GestionCompteUtilisateur.ConnexionUtilisateur(nom, motDePasse, codeUtilisateur, out RoleUtilisateur role, out string messageErreur))
-        //        {
-        //            if (role.ToString() != roleSelectionne)
-        //            {
-        //                lblMessageErreur.Text = "Le type d'utilisateur sélectionné ne correspond pas.";
-        //                lblMessageErreur.Visibility = Visibility.Visible;
-        //                return;
-        //            }
-
-        //            int idVendeur = 1;
-        //            Window? form = role switch
-        //            {
-        //                RoleUtilisateur.Client => new FormApplication(),
-        //                RoleUtilisateur.Vendeur => new FormVendeur(idVendeur),
-        //                RoleUtilisateur.Manager => new FormUtilisateur(),
-        //                _ => null
-        //            };
-
-        //            form.WindowState = WindowState.Maximized;
-        //            form?.Show();
-        //            this.Close();
-        //        }
-        //        else
-        //        {
-        //            lblMessageErreur.Text = "Nom ou mot de passe invalide.";
-        //            lblMessageErreur.Visibility = Visibility.Visible;
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        lblMessageErreur.Text = "Une erreur inattendue est survenue : " + ex.Message;
-        //        lblMessageErreur.Visibility = Visibility.Visible;
-        //    }
-        //}
 
         private void AfficherErreur(Control control, TextBlock lblErreur, string message)
         {
@@ -180,6 +146,20 @@ namespace ApplicationGestionProduitCosmetique
             control.BorderBrush = Brushes.Gray;
             control.BorderThickness = new Thickness(1);
             lblErreur.Visibility = Visibility.Collapsed;
+        }
+
+        private void cmbTypeUtilisateur_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (cmbTypeUtilisateur.SelectedItem is ComboBoxItem selectedItem)
+            {
+                MessageBox.Show($"Rôle sélectionné : {selectedItem.Content.ToString()}");
+
+                bool isClient = selectedItem.Content.ToString() == "Client";
+
+                if (txtCode != null) txtCode.Visibility = isClient ? Visibility.Collapsed : Visibility.Visible;
+                if (lblCode != null) lblCode.Visibility = isClient ? Visibility.Collapsed : Visibility.Visible;
+                if (lblErreurCode != null) lblErreurCode.Visibility = Visibility.Collapsed;
+            }
         }
     }
 }

@@ -176,7 +176,7 @@ namespace ApplicationGestionProduitCosmetique.Views
 
                 // Ajout de l'ID du vendeur
                 TextBlock vendeurProduit = new TextBlock();
-                vendeurProduit.Text = $"Vendeur: {produit.IdVendeur}";
+                vendeurProduit.Text = $"Vendeur: {produit}";
                 vendeurProduit.FontSize = 11;
                 vendeurProduit.Foreground = new SolidColorBrush(Colors.Blue);
                 vendeurProduit.HorizontalAlignment = System.Windows.HorizontalAlignment.Center;
