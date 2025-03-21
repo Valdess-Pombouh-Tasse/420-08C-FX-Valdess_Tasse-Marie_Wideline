@@ -94,7 +94,7 @@ namespace ApplicationGestionProduitCosmetique
                         RoleUtilisateur.Manager => new FormUtilisateur(),
                         _ => null
                     };
-
+                    form.WindowState = WindowState.Maximized;
                     form?.Show();
                     this.Close();
                 }

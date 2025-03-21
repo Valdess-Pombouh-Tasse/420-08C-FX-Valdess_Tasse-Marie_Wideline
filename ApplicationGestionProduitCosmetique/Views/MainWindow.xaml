@@ -1,11 +1,11 @@
-﻿<Window x:Class="ApplicationGestionProduitCosmetique.MainWindow"
+﻿<Window x:Name="window" x:Class="ApplicationGestionProduitCosmetique.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ApplicationGestionProduitCosmetique"
         mc:Ignorable="d"
-        Title="Accueil" Height="700" Width="900" Background="Pink" Loaded="Window_Loaded">
+        Title="Accueil" Height="700" Width="900" Background="Pink" Loaded="Window_Loaded" Effect="{Binding WindowState, ElementName=window}" WindowState="Maximized">
 
     <Grid>
         <Grid.ColumnDefinitions>
