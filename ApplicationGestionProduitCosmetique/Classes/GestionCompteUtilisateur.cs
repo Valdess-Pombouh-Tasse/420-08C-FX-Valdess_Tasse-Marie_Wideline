@@ -275,7 +275,7 @@ namespace ApplicationGestionProduitCosmetique.Classes
         /// <param name="messageErreur"></param>
         /// <returns></returns>
         /// * @author Marie
-        public static bool ConnexionUtilisateur(string nom, string motDePasse, string? codeUtilisateur, out RoleUtilisateur role, out string messageErreur)
+        public static bool ConnexionUtilisateur(string nom, string motDePasse, string? codeUtilisateur, out RoleUtilisateur role, out int idUtilisateur, out string messageErreur)
         {
             messageErreur = "";
             role = RoleUtilisateur.Client;

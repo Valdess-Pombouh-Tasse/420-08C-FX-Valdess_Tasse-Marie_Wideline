@@ -28,6 +28,7 @@ namespace ApplicationGestionProduitCosmetique
         
         private void btnConnexion_Click(object sender, RoutedEventArgs e)
         {
+            
             FormConnexion frmConnexion = new FormConnexion();
             frmConnexion.WindowState = WindowState.Maximized;
             frmConnexion.Show();

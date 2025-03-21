@@ -59,7 +59,6 @@ namespace ApplicationGestionProduitCosmetique.Models
         /// </summary>
         private int _quantite;
 
-
         /// <summary>
         /// Obtient ou définit l'indentifiant unique du produit.
         /// </summary>
@@ -68,6 +67,15 @@ namespace ApplicationGestionProduitCosmetique.Models
             get { return _id; }
             set { _id = value; }
         }
+
+        private int _idVendeur;
+
+        public int IdVendeur
+        {
+            get { return _idVendeur; }
+            set { _idVendeur = value; }
+        }
+
 
         /// <summary>
         /// Obtient ou définit le code du produit.

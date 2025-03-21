@@ -26,5 +26,11 @@ namespace ApplicationGestionProduitCosmetique.Views
         //    InitializeComponent();
         //    lbProduits.ItemsSource = ListeProduits;
         //}
+        public FormVendeur(int idUtilisateur)
+        {
+            IdUtilisateur = idUtilisateur;
+        }
+
+        public int IdUtilisateur { get; }
     }
 }
