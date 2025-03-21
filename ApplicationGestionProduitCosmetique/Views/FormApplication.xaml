@@ -54,6 +54,12 @@
                                 <TextBlock Text="Articles Choisis" Foreground="Black" Style="{StaticResource menuButtonText}"/>
                             </StackPanel>
                         </RadioButton>
+                        <RadioButton Style="{StaticResource menuButton}" Tag="{StaticResource Color7}" Command="{Binding ShowArticleChoisirViewModel}">
+                            <StackPanel Orientation="Horizontal">
+                                <fa:IconImage Icon="ShoppingCart" Style="{StaticResource menuButtonIcon}"/>
+                                <TextBlock Text="Articles Commandé" Foreground="Black" Style="{StaticResource menuButtonText}"/>
+                            </StackPanel>
+                        </RadioButton>
                     </StackPanel>
 
                     <RadioButton Grid.Row="2" Style="{StaticResource menuButton}" Tag="black" Margin="15,1,195,20" Background="AliceBlue">

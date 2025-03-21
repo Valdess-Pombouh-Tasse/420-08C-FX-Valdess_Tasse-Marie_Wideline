@@ -23,7 +23,10 @@ namespace ApplicationGestionProduitCosmetique.Views
     /// </summary>
     public partial class FormApplication : Window
     {
+        public Utilisateur Utilisateur { get; private set; }
         List<Produit> _produits;
+        public ListePanier listePanier = new ListePanier();
+
 
         public List<Produit> Produits
         {
@@ -31,6 +34,10 @@ namespace ApplicationGestionProduitCosmetique.Views
             set { _produits = value; }
         }
 
+        public static class accueil
+        {
+            public static Utilisateur utilisateur { get; set; }
+        }
         public FormApplication()
         {
             InitializeComponent();
@@ -39,11 +46,33 @@ namespace ApplicationGestionProduitCosmetique.Views
             listCategories.Add(new Categorie(0, "Toutes"));
             cboCategories.ItemsSource = listCategories;
             cboCategories.SelectedIndex = listCategories.Count - 1;
+
+            Utilisateur utilisateur = accueil.utilisateur;
+            txtUtilisateurClient.Text = utilisateur.NomUtilisateur;
+            this.Utilisateur = utilisateur;
+            accueil.utilisateur = utilisateur;
+            this.MaxHeight = SystemParameters.MaximizedPrimaryScreenHeight;
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             AfficherListeProduit();
+            RetournerListeVoeux();
+        }
+
+        public Utilisateur ObtenirUtilisateur()
+        {
+            return Utilisateur;
+        }
+
+        public static class SharedResources
+        {
+            public static ListePanier MaListe { get; set; }
+        }
+
+        public ListePanier RetournerListeVoeux()
+        {
+            return listePanier;
         }
 
         /// <summary>
@@ -137,6 +166,36 @@ namespace ApplicationGestionProduitCosmetique.Views
                 stackPanel.Children.Add(prixProduit);
                 stackPanel.Children.Add(buttonPanel);
 
+                Separator separator1 = new Separator();
+                string nom = produit.Nom;
+                TextBlock nomblock = new TextBlock();
+                nomblock.Text = nom;
+                nomblock.FontSize = 12;
+                nomblock.FontWeight = FontWeights.Bold;
+                nomblock.TextAlignment = TextAlignment.Center;
+                string quantite = produit.Quantite.ToString();
+                TextBlock quantiteBlocK = new TextBlock();
+                quantiteBlocK.Text = quantite;
+                Separator separator2 = new Separator();
+                BitmapImage bibtn = new BitmapImage();
+                bibtn.BeginInit();
+                string cheminIcon = System.Configuration.ConfigurationManager.AppSettings["icons"];
+
+                bibtn.UriSource = new Uri(cheminIcon + "plus.png", UriKind.Relative);
+                bibtn.CacheOption = BitmapCacheOption.OnLoad;
+                bibtn.CreateOptions = BitmapCreateOptions.IgnoreImageCache;
+                bibtn.EndInit();
+                Image btnImageAjout = new Image();
+                btnImageAjout.Source = bibtn;
+                btnImageAjout.HorizontalAlignment = System.Windows.HorizontalAlignment.Center;
+                btnImageAjout.VerticalAlignment = VerticalAlignment.Center;
+                btnImageAjout.Width = 20;
+                btnImageAjout.Height = btnImageAjout.Width;
+
+
+                btnImageAjout.MouseLeftButtonDown += new MouseButtonEventHandler(ImageAjout_MouseLeftButtonDown);
+                btnImageAjout.Tag = produit;
+
                 border.Child = stackPanel;
                 wpProduit.Children.Add(border);
             }
@@ -146,6 +205,53 @@ namespace ApplicationGestionProduitCosmetique.Views
         private void ImageProduit_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
 
+        }
+
+        /// <summary>
+        /// permet d'ajouter un article a la liste d'article de voeux d'un article
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void ImageAjout_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            Image btnImageAjout = sender as Image;
+            if (btnImageAjout != null)
+            {
+                Produit pArticle = btnImageAjout.Tag as Produit;
+                if (pArticle != null)
+                {
+                    // Vérifier si listePanier est bien initialisée
+                    if (listePanier == null)
+                    {
+                        listePanier = new ListePanier();
+                    }
+
+                    Items items = new Items();
+                    items.LstProduit = pArticle;
+                    items.NbItem = 1;
+                    items.NomItem = System.Configuration.ConfigurationManager.AppSettings["images"] + pArticle.Nom;
+                    bool articleExiste = false;
+
+                    for (int i = 0; i < listePanier.Items.Count; i++)
+                    {
+                        if (listePanier.Items[i].LstProduit == items.LstProduit)
+                        {
+                            listePanier.Items[i].NbItem++;
+                            // InitialiserlstArticleChoisir();
+                            // afficherToast("L'article a été rajouté avec succès", "succes");
+                            articleExiste = true;
+                            break; // Sortie de la boucle dès qu'on trouve l'article
+                        }
+                    }
+
+                    if (!articleExiste)
+                    {
+                        listePanier.AjouterArticle(items);
+                        SharedResources.MaListe = listePanier;
+                        // afficherToast("L'article a été ajouté avec succès", "succes");
+                    }
+                }
+            }
         }
         /// <summary>
         /// Permet de diminuer la taille de la fenetre de l'application
