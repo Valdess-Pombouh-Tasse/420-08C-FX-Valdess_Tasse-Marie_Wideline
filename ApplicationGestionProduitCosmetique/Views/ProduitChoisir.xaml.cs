@@ -25,24 +25,25 @@ namespace ApplicationGestionProduitCosmetique.Views
     /// </summary>
     public partial class ProduitChoisir : Window
     {
-        List<Produit> produits = new List<Produit>();
+        List<Produit> produits;
         ListePanier listePanier = SharedResources.MaListe;
         Facture facture = new Facture();
+
 
         public List<Produit> Produits
         {
             get { return produits; }
             set { produits = value; }
         }
-        public ProduitChoisir()
+        public ProduitChoisir(List<Produit> produits)
         {
             InitializeComponent();
-            AfficherProduitDansPanier(facture);
+            Produits = produits;
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            //wpProduitPanier.it
+            AfficherProduitDansPanier(Produits);
         }
 
         /// <summary>
@@ -60,21 +61,21 @@ namespace ApplicationGestionProduitCosmetique.Views
         /// <summary>
         /// Permet d'afficher liste des produits choisir dans le panier
         /// </summary>
-        private void AfficherProduitDansPanier(Facture facture)
+        private void AfficherProduitDansPanier(List<Produit> produits)
         {
             wpProduitPanier.Children.Clear();
 
-            foreach (ProduitFacture prodF in facture.ProduitsFacture)
+            foreach (Produit prodF in produits)
             {
                 TextBlock descriptionProduit = new TextBlock();
-                descriptionProduit.Text = prodF.Produit.Nom;
+                descriptionProduit.Text = prodF.Nom;
                 descriptionProduit.FontSize = 15;
                 descriptionProduit.HorizontalAlignment = System.Windows.HorizontalAlignment.Left;
                 descriptionProduit.TextWrapping = TextWrapping.Wrap;
                 descriptionProduit.Margin = new Thickness(5, 0, 5, 0);
 
                 TextBlock codeProduit = new TextBlock();
-                codeProduit.Text = prodF.Produit.Code;
+                codeProduit.Text = prodF.Code;
                 codeProduit.FontSize = 10;
                 codeProduit.HorizontalAlignment = System.Windows.HorizontalAlignment.Left;
                 codeProduit.Margin = new Thickness(5, 0, 5, 0);
@@ -114,7 +115,7 @@ namespace ApplicationGestionProduitCosmetique.Views
                 imgBtnReduire.HorizontalAlignment = System.Windows.HorizontalAlignment.Center;
                 imgBtnReduire.VerticalAlignment = VerticalAlignment.Center;
                 btnReduction.Content = imgBtnReduire;
-                btnReduction.Tag = prodF.Produit;
+                btnReduction.Tag = prodF;
 
                 Button btnAjouter = new Button();
                 btnAjouter.Width = 15;
@@ -135,10 +136,10 @@ namespace ApplicationGestionProduitCosmetique.Views
                 imgBtnAjout.HorizontalAlignment = System.Windows.HorizontalAlignment.Center;
                 imgBtnAjout.VerticalAlignment = VerticalAlignment.Center;
                 btnAjouter.Content = imgBtnAjout;
-                btnAjouter.Tag = prodF.Produit;
+                btnAjouter.Tag = prodF;
 
                 TextBlock prixProduit = new TextBlock();
-                prixProduit.Text = prodF.Produit.Prix.ToString("c");
+                prixProduit.Text = prodF.Prix.ToString("c");
                 prixProduit.FontSize = 13;
                 prixProduit.FontWeight = FontWeights.Bold;
                 prixProduit.HorizontalAlignment = System.Windows.HorizontalAlignment.Right;
@@ -170,22 +171,11 @@ namespace ApplicationGestionProduitCosmetique.Views
                 wpProduitPanier.Children.Add(borderLigne);
             }
 
-            lblSousTotal.Text = facture.MontantSousTotal.ToString("c");
-            lblTPS.Text = facture.MontantTPS.ToString("c");
-            lblTVQ.Text = facture.MontantTVQ.ToString("c");
-            lblTotal.Text = facture.MontantTotal.ToString("c");
-
-            if (facture.ProduitsFacture.Count == 0)
-            {
-                lblSousTotal.Text = 0.ToString("c");
-                lblTPS.Text = 0.ToString("c");
-                lblTVQ.Text = 0.ToString("c");
-                lblTotal.Text = 0.ToString("c");
-            }
+           
         }
 
-      
-        private Facture nouvelleFacture = null;
+
+        Facture nouvelleFacture = null;
         private void btnAugmenterProduit_Click(object sender, RoutedEventArgs e)
         {
             Button button = (Button)sender;
@@ -205,7 +195,7 @@ namespace ApplicationGestionProduitCosmetique.Views
             {
                 produitExist.Quantite++;
             }
-            AfficherProduitDansPanier(nouvelleFacture);
+            AfficherProduitDansPanier(Produits);
         }
 
         private void btnDimunuerProduit_Click(object sender, RoutedEventArgs e)
