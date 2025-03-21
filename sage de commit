@@ -1,0 +1,250 @@
+[33mcommit 54282a5ed7bedc57a687646e6bfbbc7267f229d4[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmaster[m[33m)[m
+Author: Marie Wideline Pierre <mapie002@edu.cegepgarneau.ca>
+Date:   Fri Mar 21 00:25:29 2025 -0400
+
+    Fusion du code
+
+[33mcommit 196e83ac9a2d3b364429c102e2ef635ef5bfde36[m
+Merge: 4564d89 7b8dbc8
+Author: Marie Wideline Pierre <mapie002@edu.cegepgarneau.ca>
+Date:   Fri Mar 21 00:07:02 2025 -0400
+
+    Ajustement du code
+
+[33mcommit 4564d8995fac85283660903cf0bf4ed7e93cb830[m
+Merge: 48be414 3bbfac2
+Author: Marie Wideline Pierre <mapie002@edu.cegepgarneau.ca>
+Date:   Fri Mar 21 00:03:51 2025 -0400
+
+    Fix: fusion du code
+
+[33mcommit 7b8dbc811236f5762a789bab687c048dd0716e6f[m
+Author: Valdess-Pombouh-Tasse <valdesstasse@gmail.com>
+Date:   Thu Mar 20 23:54:42 2025 -0400
+
+    Fusion du code
+
+[33mcommit 48be414beda7061b282b2511e556afb821d59a28[m
+Author: Marie Wideline Pierre <mapie002@edu.cegepgarneau.ca>
+Date:   Thu Mar 20 23:35:10 2025 -0400
+
+    copie recent
+
+[33mcommit 3bbfac29de17bd26b89a7234054cb223197d4ff9[m
+Author: Valdess-Pombouh-Tasse <valdesstasse@gmail.com>
+Date:   Thu Mar 20 23:32:56 2025 -0400
+
+    Feat: Modification et implementation du code client
+
+[33mcommit 5555c937d3243f7d3edf8c4672db246df4344718[m
+Author: Marie Wideline Pierre <mapie002@edu.cegepgarneau.ca>
+Date:   Thu Mar 20 19:44:34 2025 -0400
+
+    fix : mise à jour du code
+
+[33mcommit 6017fd3b8874b4a1016d88cfcc764fdd3764f5a7[m
+Author: Marie Wideline Pierre <mapie002@edu.cegepgarneau.ca>
+Date:   Thu Mar 20 15:46:04 2025 -0400
+
+    feat : Ajout de la méthode pour obtenir les produits par vendeur
+
+[33mcommit 6411be861ab5e303cfdffb2212806131db112204[m
+Author: Valdess-Pombouh-Tasse <valdesstasse@gmail.com>
+Date:   Wed Mar 19 09:50:49 2025 -0400
+
+    completer code
+
+[33mcommit b3d630c32468575102e19cfcead1449f8f80629d[m
+Merge: a4b28c3 84ce699
+Author: Valdess-Pombouh-Tasse <valdesstasse@gmail.com>
+Date:   Tue Mar 18 22:32:28 2025 -0400
+
+    Suppression confirmée de GestionProduits.cs
+
+[33mcommit a4b28c3cd4e71c3159a05ee78c26f7a4a774e739[m
+Author: Valdess-Pombouh-Tasse <valdesstasse@gmail.com>
+Date:   Tue Mar 18 22:20:21 2025 -0400
+
+    Feat: Affichage des produits et implementation de l'espace client
+
+[33mcommit 84ce6994dde71f30e454661b7e70e4bd8e1528ec[m
+Author: Marie Wideline Pierre <mapie002@edu.cegepgarneau.ca>
+Date:   Tue Mar 18 22:14:51 2025 -0400
+
+    fix: Ajout d'une fenêtre pour la gestion  des erreurs et mise à jour du code
+
+[33mcommit 5acb14feb85442e651f447421f3edcffb9f6f478[m
+Author: Valdess-Pombouh-Tasse <valdesstasse@gmail.com>
+Date:   Mon Mar 10 23:39:11 2025 -0400
+
+    Feat: Implementation et affichage des produits
+
+[33mcommit f182929dd46ae9f29051bcdbde8f304d7d42a31a[m
+Merge: 00a45f2 2443b95
+Author: Valdess-Pombouh-Tasse <valdesstasse@gmail.com>
+Date:   Mon Mar 10 18:55:35 2025 -0400
+
+    Fix: Implementation de l'interface client
+
+[33mcommit 00a45f2c88d58197cfd162899013fff4916590a2[m
+Author: Valdess-Pombouh-Tasse <valdesstasse@gmail.com>
+Date:   Mon Mar 10 18:54:12 2025 -0400
+
+    Fix: Implementation de l'interface client
+
+[33mcommit 2443b953b9544a772c97413256cc6d00327ed85b[m
+Author: Marie Wideline Pierre <mapie002@edu.cegepgarneau.ca>
+Date:   Fri Mar 7 15:05:26 2025 -0500
+
+    Mise à jour du code
+
+[33mcommit d56bf97ed2abb8cacf68edd1435b6e4e014ca0a8[m
+Merge: 17a6ee3 65f67bf
+Author: Valdess-Pombouh-Tasse <valdesstasse@gmail.com>
+Date:   Thu Mar 6 22:14:00 2025 -0500
+
+    Feat: Implémentation des classes produit, facture et produitFacture
+
+[33mcommit 17a6ee33339582f9e8b38a761d2d9e3a22827285[m
+Author: Valdess-Pombouh-Tasse <valdesstasse@gmail.com>
+Date:   Thu Mar 6 22:07:34 2025 -0500
+
+    Feat: Implementation des classes produit, facture et produitFacture
+
+[33mcommit 65f67bf8596cb13e83d6ee692acf3782508a128a[m
+Author: Marie Wideline Pierre <mapie002@edu.cegepgarneau.ca>
+Date:   Thu Mar 6 13:00:14 2025 -0500
+
+    fix  :  optimisation de l'interface
+
+[33mcommit 110f07a5e34f4fcbdb486d3b5d8db70031c460ad[m
+Author: Valdess-Pombouh-Tasse <valdesstasse@gmail.com>
+Date:   Tue Mar 4 08:29:26 2025 -0500
+
+    Modification du code
+
+[33mcommit a96a7bc5c34ad25e71ea86ff52c0f61294b5b7c1[m
+Author: Marie Wideline Pierre <mapie002@edu.cegepgarneau.ca>
+Date:   Mon Mar 3 20:27:51 2025 -0500
+
+    fix:Mise à jour du code
+
+[33mcommit ede4368d82643bb7753f4c26a4ac074dee5d1bcd[m
+Merge: c642f2f 586bd68
+Author: Marie Wideline Pierre <mapie002@edu.cegepgarneau.ca>
+Date:   Mon Mar 3 14:53:59 2025 -0500
+
+    Merge branch 'master' of https://github.com/Valdess-Pombouh-Tasse/420-08C-FX-Valdess_Tasse-Marie_Wideline
+
+[33mcommit c642f2f387cc8a4e0496d25f7a22baf6abfddc0b[m
+Author: Marie Wideline Pierre <mapie002@edu.cegepgarneau.ca>
+Date:   Mon Mar 3 14:53:49 2025 -0500
+
+    Optimisation du code
+
+[33mcommit 586bd6841881abccca77ac41850d6eaaf976130a[m
+Merge: 0f4b565 503ce82
+Author: Valdess-Pombouh-Tasse <valdesstasse@gmail.com>
+Date:   Mon Mar 3 14:16:22 2025 -0500
+
+    Résolution du conflit sur Vendeur.cs
+
+[33mcommit 0f4b565f1eac57f41c95c2c051d7a650c9aeb2fc[m
+Author: Valdess-Pombouh-Tasse <valdesstasse@gmail.com>
+Date:   Mon Mar 3 13:38:23 2025 -0500
+
+    Fusion de code
+
+[33mcommit 503ce82b340633321ad0f7c63654ffa75f56ed4a[m
+Author: Marie Wideline Pierre <mapie002@edu.cegepgarneau.ca>
+Date:   Mon Mar 3 11:52:07 2025 -0500
+
+    feat : Correction formulaire
+
+[33mcommit c4225f1123630ce8863aeca80b44c67a71350f97[m
+Author: Marie Wideline Pierre <mapie002@edu.cegepgarneau.ca>
+Date:   Sun Mar 2 01:04:16 2025 -0500
+
+    fix:Ajout d'un comboBox pour gérer le type d'utilisateur
+
+[33mcommit 4821f0e7ff022d654340c460d1b58ff6b5f977b5[m
+Author: Marie Wideline Pierre <mapie002@edu.cegepgarneau.ca>
+Date:   Sun Mar 2 01:02:03 2025 -0500
+
+    feat:Mise à jour du code
+
+[33mcommit 83d75fc28bc00c51704fa8981b84fcaa7f3fe954[m
+Author: Valdess-Pombouh-Tasse <valdesstasse@gmail.com>
+Date:   Fri Feb 28 16:01:26 2025 -0500
+
+    Fix: fusion de code
+
+[33mcommit f171e0ca00df7846a6d708c780cc804e5da9965e[m
+Author: Valdess-Pombouh-Tasse <valdesstasse@gmail.com>
+Date:   Fri Feb 28 15:58:21 2025 -0500
+
+    Fix: correction
+
+[33mcommit 47cd33426ca7621c61d6e3f79a818c04ef780745[m
+Merge: bee8e2f 7423483
+Author: Valdess-Pombouh-Tasse <valdesstasse@gmail.com>
+Date:   Fri Feb 28 11:10:22 2025 -0500
+
+    Fix: fusion du code
+
+[33mcommit bee8e2f47d99f6f41daeae1916bfb8a841bef1c7[m
+Author: Valdess-Pombouh-Tasse <valdesstasse@gmail.com>
+Date:   Fri Feb 28 11:06:04 2025 -0500
+
+    Fix: Ajustement du code
+
+[33mcommit 7423483a15bb3cb2e26f3557bd9ae1bf39cf9a73[m
+Author: Marie Wideline Pierre <mapie002@edu.cegepgarneau.ca>
+Date:   Fri Feb 28 01:53:36 2025 -0500
+
+    feat : Modification et suppression d'un utilisateur
+
+[33mcommit 773db64506083d938012f690faa222d9bc6a2309[m
+Author: Marie Wideline Pierre <mapie002@edu.cegepgarneau.ca>
+Date:   Thu Feb 27 23:34:30 2025 -0500
+
+    feat : Chargement de la liste  des utilisateurs
+
+[33mcommit 7d48e19bfc50f745536c0c71a51c67466412331b[m
+Author: Valdess-Pombouh-Tasse <valdesstasse@gmail.com>
+Date:   Thu Feb 27 21:02:56 2025 -0500
+
+    Feat: Implementation du boutton de connexion
+
+[33mcommit 730421cc99c2208cd765488561d2ae80f3085a30[m
+Merge: 6841879 7b5ab4b
+Author: Valdess-Pombouh-Tasse <valdesstasse@gmail.com>
+Date:   Thu Feb 27 19:09:47 2025 -0500
+
+    Feat: Gestion conflit
+
+[33mcommit 6841879e9333a2f1216a80c2c2e24c6e55d57003[m
+Author: Valdess-Pombouh-Tasse <valdesstasse@gmail.com>
+Date:   Thu Feb 27 19:01:57 2025 -0500
+
+    Feat: Implmentation de la classe Utilisateur et modification de l'interface
+
+[33mcommit 43e0938906cf84feeaf12a5f125276a48ab26656[m
+Author: Valdess-Pombouh-Tasse <valdesstasse@gmail.com>
+Date:   Thu Feb 27 16:49:23 2025 -0500
+
+    Feat:Création de la classe utilisateur
+
+[33mcommit 7b5ab4bf9694e5d30b890b8bcea0f666483bc97b[m
+Author: Marie Wideline Pierre <mapie002@edu.cegepgarneau.ca>
+Date:   Thu Feb 27 16:23:47 2025 -0500
+
+    feat : Création du diagramme de classe
+
+[33mcommit 028c25baf33d19dfe756466c5a2d6ddde40b956b[m
+Author: Marie Wideline Pierre <mapie002@edu.cegepgarneau.ca>
+Date:   Thu Feb 27 16:19:57 2025 -0500
+
+    feat: Modélisation de l'application
+
+[33mcommit c4e9c5b5ce1b49df7fc8947933bc7ecce48

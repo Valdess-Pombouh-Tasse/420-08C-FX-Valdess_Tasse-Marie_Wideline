@@ -55,18 +55,8 @@ namespace ApplicationGestionProduitCosmetique
             return valide;
         }
 
-        private void cmbTypeUtilisateur_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (cmbTypeUtilisateur.SelectedItem is ComboBoxItem selectedItem)
-            {
-                bool isClient = selectedItem.Content.ToString() == "Client";
 
-                if (txtCode != null) txtCode.Visibility = isClient ? Visibility.Collapsed : Visibility.Visible;
-                if (lblCode != null) lblCode.Visibility = isClient ? Visibility.Collapsed : Visibility.Visible;
-                if (lblErreurCode != null) lblErreurCode.Visibility = Visibility.Collapsed; 
-            }
-        }
-       
+
 
         private void btnConnecter_Click(object sender, RoutedEventArgs e)
         {
@@ -88,18 +78,37 @@ namespace ApplicationGestionProduitCosmetique
                         return;
                     }
 
-                    int idVendeur = 1;
-                    Window? form = role switch
-                    {
-                        RoleUtilisateur.Client => new FormApplication(),
-                        RoleUtilisateur.Vendeur => new FormVendeur(idVendeur),
-                        RoleUtilisateur.Manager => new FormUtilisateur(),
-                        _ => null
-                    };
+                    // Ajout d'un message pour vérifier quel rôle est détecté
+                    MessageBox.Show($"Rôle détecté : {role.ToString()}");
 
-                    form.WindowState = WindowState.Maximized;
-                    form?.Show();
-                    this.Close();
+                    // Création de la fenêtre appropriée selon le rôle
+                    Window form = null;
+
+                    if (role == RoleUtilisateur.Client)
+                    {
+                        form = new FormApplication();
+                    }
+                    else if (role == RoleUtilisateur.Vendeur)
+                    {
+                        form = new FormVendeur();
+                    }
+                    else if (role == RoleUtilisateur.Manager)
+                    {
+                        form = new FormUtilisateur();
+                    }
+
+                    // Vérification que la fenêtre a bien été instanciée avant de l'afficher
+                    if (form != null)
+                    {
+                        form.WindowState = WindowState.Maximized;
+                        form.Show();
+                        this.Close();
+                    }
+                    else
+                    {
+                        lblMessageErreur.Text = "Une erreur s'est produite lors de l'initialisation de la fenêtre.";
+                        lblMessageErreur.Visibility = Visibility.Visible;
+                    }
                 }
                 else
                 {
@@ -113,6 +122,8 @@ namespace ApplicationGestionProduitCosmetique
                 lblMessageErreur.Visibility = Visibility.Visible;
             }
         }
+
+
 
         private void AfficherErreur(Control control, TextBlock lblErreur, string message)
         {
@@ -135,6 +146,20 @@ namespace ApplicationGestionProduitCosmetique
             control.BorderBrush = Brushes.Gray;
             control.BorderThickness = new Thickness(1);
             lblErreur.Visibility = Visibility.Collapsed;
+        }
+
+        private void cmbTypeUtilisateur_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (cmbTypeUtilisateur.SelectedItem is ComboBoxItem selectedItem)
+            {
+                MessageBox.Show($"Rôle sélectionné : {selectedItem.Content.ToString()}");
+
+                bool isClient = selectedItem.Content.ToString() == "Client";
+
+                if (txtCode != null) txtCode.Visibility = isClient ? Visibility.Collapsed : Visibility.Visible;
+                if (lblCode != null) lblCode.Visibility = isClient ? Visibility.Collapsed : Visibility.Visible;
+                if (lblErreurCode != null) lblErreurCode.Visibility = Visibility.Collapsed;
+            }
         }
     }
 }
