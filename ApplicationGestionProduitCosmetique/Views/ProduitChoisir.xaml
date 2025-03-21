@@ -5,66 +5,65 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ApplicationGestionProduitCosmetique.Views"
         mc:Ignorable="d"
-        Title="ProduitChoisir" Height="450" Width="800" Loaded="Window_Loaded">
+        Title="ProduitChoisir" Height="650" Width="1000" Loaded="Window_Loaded">
 
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="7*"/>
-            <ColumnDefinition Width="4*"/>
-            <ColumnDefinition Width="189*"/>
-        </Grid.ColumnDefinitions>
-        <Grid Grid.ColumnSpan="3">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="7*"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
-
-            <TextBlock Grid.Row="0" x:Name="lblliste" Width="200" FontWeight="Bold" Text="Panier" HorizontalAlignment="Center"  Margin="5" />
-
-            <Grid Grid.Row="1" HorizontalAlignment="Right" Width="300" Height="61">
-
-
-            </Grid>
-
-            <StackPanel Grid.Row="2">
-                <ListView   x:Name="lvListePanier" Background="Transparent" Grid.Row="2"   HorizontalContentAlignment="Stretch" >
-                    <ListView.ItemTemplate>
-                        <DataTemplate>
-                            <StackPanel Orientation="Horizontal" >
-                                <Image Source="file:///C:/data-420-14B-FX/imagesProjet/test.jpg" Width="50" Height="50" Margin="5"/>
-
-                                <Label Content="{Binding LstArticle.Nom}" Width="350" Margin="5,0,5,0" Foreground="DarkBlue" FontSize="16"/>
-                                <Image  Source="/Resources/Images/ImagesIcons/minus.png"  Width="20" Margin="5" >
-                                    <Image.ToolTip>
-                                        <ToolTip Content="Diminuer la quantité"/>
-                                    </Image.ToolTip>
-                                </Image>
-                                <TextBox Name="qwerty" Text="{Binding NbItem}"  Width="40" Height="25" Margin="5,0,5,0" TextAlignment="Center"/>
-                                <Image  Source="/Resources/Images/ImagesIcons/plus.png"  Width="20" Margin="5">
-                                    <Image.ToolTip>
-                                        <ToolTip Content="Augmenter la quantité"/>
-                                    </Image.ToolTip>
-                                </Image>
-                                <Image  Source="/Resources/Images/ImagesIcons/delete.png"  Width="20" Margin="5">
-                                    <Image.ToolTip>
-                                        <ToolTip Content="Supprimer l'article"/>
-                                    </Image.ToolTip>
-                                </Image>
-                            </StackPanel>
-                        </DataTemplate>
-                    </ListView.ItemTemplate>
-
-                </ListView>
+    <Border>
+        <Grid>
+            
+            <StackPanel>
+                
             </StackPanel>
-            <TextBlock Grid.Row="3" x:Name="lblPrixSansTaxe" FontWeight="Bold" Text="Prix sans taxes" HorizontalAlignment="Center"  Margin="5" />
-            <StackPanel Grid.Row="4" HorizontalAlignment="Right" Orientation="Horizontal" Margin="0,0,28,0" >
-                <Button x:Name="btnEnreigistrerLst" Padding="10"  Content="Enregistrer" Click="btnEnreigistrerLst_Click"/>
+
+
+            <StackPanel Margin="5">
+                <TextBlock Text="Panier" FontWeight="Bold" Foreground="#4169e1" FontSize="20"/>
+                <Border Width="520" Height="550" BorderBrush="Black" BorderThickness="1" CornerRadius="5">
+                    <StackPanel Margin="5">
+                        <TextBlock x:Name="lblDateFacture" Text="Date" HorizontalAlignment="Left" Margin="5" />
+                        <StackPanel Orientation="Horizontal" Margin="5">
+                            <TextBox  x:Name="txtNoFacture" Width="200" Height="25" />
+                            <Button x:Name="btnRechercherFacture" BorderThickness="0" Background="White" >
+                                <Image  Source="/Resources/Images/ImagesIcons/search.png"  Width="25" Margin="5"/>
+
+                            </Button>
+                        </StackPanel>
+                        <!--Affichage des items de la facture-->
+                        <Border Height="250" BorderBrush="LightGray" BorderThickness="1" CornerRadius="5" Margin="5">
+                            <ScrollViewer VerticalScrollBarVisibility="Auto" Height="230" Margin="2">
+                                <WrapPanel Name="wpProduitPanier" Orientation="Horizontal">
+
+                                </WrapPanel>
+                            </ScrollViewer>
+
+                        </Border>
+                        <StackPanel>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,5,0">
+                                <Label  Content="Sous-Total"  HorizontalAlignment="Right" Margin="0,0,5,0"/>
+                                <TextBlock x:Name="lblSousTotal" Width="100" VerticalAlignment="Center"  TextAlignment="Right" Margin="0,0,5,0"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,5,0">
+                                <Label  Content="TPS" HorizontalAlignment="Right" Margin="0,0,5,0"/>
+                                <TextBlock x:Name="lblTPS" Width="100" VerticalAlignment="Center"  TextAlignment="Right" Margin="0,0,5,0"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,5,0">
+                                <Label  Content="TVQ" HorizontalAlignment="Right" Margin="0,0,5,0"/>
+                                <TextBlock x:Name="lblTVQ" Width="100" VerticalAlignment="Center" TextAlignment="Right" Margin="0,0,5,0"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,5,0">
+                                <Label  Content="Total" HorizontalAlignment="Right" Margin="0,0,5,0"/>
+                                <TextBlock x:Name="lblTotal" Width="100" VerticalAlignment="Center" TextAlignment="Right" Margin="0,0,5,0"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+                <DockPanel>
+                    <Button x:Name="btnNouvelleFacture" Background="White" BorderThickness="0" DockPanel.Dock="left" >
+                        <Image Source="/Resources/Images/ImagesIcons/new.png" Width="25" Margin="5"/>
+                    </Button>
+                    <Button x:Name="btnPayer"  Content="Payer" Width="50" Background="#4169e1" Foreground="White" HorizontalAlignment="Right" Margin="5" />
+                </DockPanel>
             </StackPanel>
 
         </Grid>
-    </Grid>
+    </Border>
 </Window>

@@ -1,4 +1,5 @@
-﻿using ApplicationGestionProduitCosmetique.Models;
+﻿using ApplicationGestionProduitCosmetique.enums;
+using ApplicationGestionProduitCosmetique.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,11 +9,14 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
+using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using static ApplicationGestionProduitCosmetique.Views.FormApplication;
+using Button = System.Windows.Controls.Button;
+using Orientation = System.Windows.Controls.Orientation;
 
 namespace ApplicationGestionProduitCosmetique.Views
 {
@@ -23,6 +27,7 @@ namespace ApplicationGestionProduitCosmetique.Views
     {
         List<Produit> produits = new List<Produit>();
         ListePanier listePanier = SharedResources.MaListe;
+        Facture facture = new Facture();
 
         public List<Produit> Produits
         {
@@ -32,24 +37,12 @@ namespace ApplicationGestionProduitCosmetique.Views
         public ProduitChoisir()
         {
             InitializeComponent();
+            AfficherProduitDansPanier(facture);
         }
 
-        /// <summary>
-        /// permet de diminuer le nombre d'article de la liste de voeux
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void imgItemDiminuer_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            //Items elmItem = listePanier.Items[lvListeVoeux.SelectedIndex];
-            ////Items elmItem = listePanier.Items[lvListeVoeux.SelectedIndex];
-            //elmItem.Quantite--;
-            //if (elmItem.Quantite == 0)
-            //{
-            //    listePanier.RetirerArticle(elmItem);
-            //}
-
-            //InitialiserlstArticleChoisir();
+            //wpProduitPanier.it
         }
 
         /// <summary>
@@ -58,48 +51,199 @@ namespace ApplicationGestionProduitCosmetique.Views
         public void InitialiserlstArticleChoisir()
         {
 
-            //if (listePanier != null)
-            //{
-            //    lblPrixSansTaxe.Text = $"le prix total de vos Articles: {listePanier.PrixSousTotal.ToString()}$";
-            //    lvListeVoeux.Items.Refresh();
-            //}
-        }
-
-        /// <summary>
-        /// permet d'augmenter le nombre d'article de la liste de voeux
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void imgItemAugmenter_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
-        {
-            //Items elmItem = listeVoeux.Items[lvListeVoeux.SelectedIndex];
-            //elmItem.NbItem++;
-
-            //InitialiserlstArticleChoisir();
+            if (listePanier != null)
+            {
+                lblTPS.Text = $"le prix total de vos Articles: {listePanier.PrixSousTotal.ToString()}$";
+                wpProduitPanier.Children.Clear();
+            }
         }
         /// <summary>
-        /// permet de supprimer l'article de la liste de voeux
+        /// Permet d'afficher liste des produits choisir dans le panier
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void imgItemSupprimer_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        private void AfficherProduitDansPanier(Facture facture)
         {
-            //Items elmItem = listePanier.Items[lvListeVoeux.SelectedIndex];
-            //MessageBoxResult result = MessageBox.Show("Voulez-vous vraiment supprimer cet article?", "Supprimer l'article", MessageBoxButton.YesNo, MessageBoxImage.Question,
-            //        MessageBoxResult.No);
-            //if (result == MessageBoxResult.Yes)
-            //{
+            wpProduitPanier.Children.Clear();
 
-            //    listePanier.RetirerArticle(elmItem);
-            //    InitialiserlstArticleChoisir();
-            //    MessageBox.Show("L'article  été Supprimé", "supprimer film");
-            //}
-            //else
-            //{
-            //    MessageBox.Show("la suppression a été annulé");
-            //}
+            foreach (ProduitFacture prodF in facture.ProduitsFacture)
+            {
+                TextBlock descriptionProduit = new TextBlock();
+                descriptionProduit.Text = prodF.Produit.Nom;
+                descriptionProduit.FontSize = 15;
+                descriptionProduit.HorizontalAlignment = System.Windows.HorizontalAlignment.Left;
+                descriptionProduit.TextWrapping = TextWrapping.Wrap;
+                descriptionProduit.Margin = new Thickness(5, 0, 5, 0);
 
+                TextBlock codeProduit = new TextBlock();
+                codeProduit.Text = prodF.Produit.Code;
+                codeProduit.FontSize = 10;
+                codeProduit.HorizontalAlignment = System.Windows.HorizontalAlignment.Left;
+                codeProduit.Margin = new Thickness(5, 0, 5, 0);
+
+                StackPanel stackPanelCodeDescrip = new StackPanel();
+                stackPanelCodeDescrip.Orientation = Orientation.Vertical;
+                stackPanelCodeDescrip.HorizontalAlignment = System.Windows.HorizontalAlignment.Left;
+                stackPanelCodeDescrip.VerticalAlignment = VerticalAlignment.Center;
+                stackPanelCodeDescrip.Children.Add(descriptionProduit);
+                stackPanelCodeDescrip.Children.Add(codeProduit);
+
+                System.Windows.Controls.TextBox qteProduit = new System.Windows.Controls.TextBox();
+                qteProduit.Text = prodF.Quantite.ToString();
+                qteProduit.FontSize = 10;
+                qteProduit.Width = 40;
+                qteProduit.Height = 20;
+                qteProduit.TextAlignment = TextAlignment.Center;
+                qteProduit.HorizontalAlignment = System.Windows.HorizontalAlignment.Center;
+                qteProduit.VerticalAlignment = VerticalAlignment.Center;
+
+                Button btnReduction = new Button();
+                btnReduction.Width = 15;
+                btnReduction.Height = 15;
+                btnReduction.Margin = new Thickness(5);
+                btnReduction.ToolTip = "Retirer 1";
+                btnReduction.Background = new SolidColorBrush(Colors.Blue);
+                btnReduction.BorderBrush = new SolidColorBrush(Colors.White);
+                btnReduction.BorderThickness = new Thickness(1);
+                btnReduction.HorizontalAlignment = System.Windows.HorizontalAlignment.Center;
+                btnReduction.VerticalAlignment = VerticalAlignment.Center;
+                btnReduction.Click += new RoutedEventHandler(btnDimunuerProduit_Click);
+
+                Image imgBtnReduire = new Image();
+                imgBtnReduire.Source = new BitmapImage(new Uri("/Resources/minus.png", UriKind.Relative));
+                imgBtnReduire.Width = 15;
+                imgBtnReduire.Height = 15;
+                imgBtnReduire.HorizontalAlignment = System.Windows.HorizontalAlignment.Center;
+                imgBtnReduire.VerticalAlignment = VerticalAlignment.Center;
+                btnReduction.Content = imgBtnReduire;
+                btnReduction.Tag = prodF.Produit;
+
+                Button btnAjouter = new Button();
+                btnAjouter.Width = 15;
+                btnAjouter.Height = 15;
+                btnAjouter.Margin = new Thickness(5);
+                btnAjouter.ToolTip = "Ajouter 1";
+                btnAjouter.Background = new SolidColorBrush(Colors.Blue);
+                btnAjouter.BorderBrush = new SolidColorBrush(Colors.White);
+                btnAjouter.BorderThickness = new Thickness(1);
+                btnAjouter.HorizontalAlignment = System.Windows.HorizontalAlignment.Center;
+                btnAjouter.VerticalAlignment = VerticalAlignment.Center;
+                btnAjouter.Click += new RoutedEventHandler(btnAugmenterProduit_Click);
+
+                Image imgBtnAjout = new Image();
+                imgBtnAjout.Source = new BitmapImage(new Uri("/Resources/plus.png", UriKind.Relative));
+                imgBtnAjout.Width = 15;
+                imgBtnAjout.Height = 15;
+                imgBtnAjout.HorizontalAlignment = System.Windows.HorizontalAlignment.Center;
+                imgBtnAjout.VerticalAlignment = VerticalAlignment.Center;
+                btnAjouter.Content = imgBtnAjout;
+                btnAjouter.Tag = prodF.Produit;
+
+                TextBlock prixProduit = new TextBlock();
+                prixProduit.Text = prodF.Produit.Prix.ToString("c");
+                prixProduit.FontSize = 13;
+                prixProduit.FontWeight = FontWeights.Bold;
+                prixProduit.HorizontalAlignment = System.Windows.HorizontalAlignment.Right;
+                prixProduit.Margin = new Thickness(4);
+
+                StackPanel stackPanel = new StackPanel();
+                stackPanel.Orientation = Orientation.Horizontal;
+                stackPanel.HorizontalAlignment = System.Windows.HorizontalAlignment.Left;
+                stackPanel.VerticalAlignment = VerticalAlignment.Center;
+
+                Border borderLigne = new Border();
+                borderLigne.Width = 380;
+                borderLigne.Margin = new Thickness(4);
+                borderLigne.BorderBrush = new SolidColorBrush(Colors.Gray);
+                borderLigne.BorderThickness = new Thickness(1);
+                borderLigne.Background = new SolidColorBrush(Color.FromArgb(128, 0, 255, 0));
+                borderLigne.CornerRadius = new CornerRadius(3);
+                borderLigne.HorizontalAlignment = System.Windows.HorizontalAlignment.Left;
+                borderLigne.VerticalAlignment = VerticalAlignment.Center;
+
+                stackPanel.Children.Add(stackPanelCodeDescrip);
+                stackPanel.Children.Add(btnReduction);
+                stackPanel.Children.Add(qteProduit);
+                stackPanel.Children.Add(btnAjouter);
+                stackPanel.Children.Add(prixProduit);
+
+                borderLigne.Child = stackPanel;
+
+                wpProduitPanier.Children.Add(borderLigne);
+            }
+
+            lblSousTotal.Text = facture.MontantSousTotal.ToString("c");
+            lblTPS.Text = facture.MontantTPS.ToString("c");
+            lblTVQ.Text = facture.MontantTVQ.ToString("c");
+            lblTotal.Text = facture.MontantTotal.ToString("c");
+
+            if (facture.ProduitsFacture.Count == 0)
+            {
+                lblSousTotal.Text = 0.ToString("c");
+                lblTPS.Text = 0.ToString("c");
+                lblTVQ.Text = 0.ToString("c");
+                lblTotal.Text = 0.ToString("c");
+            }
         }
+
+      
+        private Facture nouvelleFacture = null;
+        private void btnAugmenterProduit_Click(object sender, RoutedEventArgs e)
+        {
+            Button button = (Button)sender;
+            Produit produit = (Produit)button.Tag;
+
+            ProduitFacture produitExist = null;
+            foreach (var prodF in nouvelleFacture.ProduitsFacture)
+            {
+                if (prodF.Produit.Equals(produit))
+                {
+                    produitExist = prodF;
+                }
+            }
+
+
+            if (produitExist != null)
+            {
+                produitExist.Quantite++;
+            }
+            AfficherProduitDansPanier(nouvelleFacture);
+        }
+
+        private void btnDimunuerProduit_Click(object sender, RoutedEventArgs e)
+        {
+            //Button button = (Button)sender;
+            //Produit produit = (Produit)button.Tag;
+
+            //bool produitExist = false;
+            //foreach (var prodF in nouveauPanier.ProduitsFacture)
+            //{
+            //    if (prodF.Produit.Equals(produit))
+            //    {
+            //        produitExist = true;
+            //    }
+            //}
+
+            //if (produitExist)
+            //    nouveauPanier.RetirerArticle(produit);
+
+            //AfficherProduitDansFacture(nouvelleFacture);
+        }
+
+
+
+        
+        /// <summary>
+        /// permet d'initialiser la liste des articles choisir
+        /// </summary>
+        //public void InitialiserlstArticleChoisir()
+        //{
+
+        //    //if (listePanier != null)
+        //    //{
+        //    //    lblPrixSansTaxe.Text = $"le prix total de vos Articles: {listePanier.PrixSousTotal.ToString()}$";
+        //    //    lvListeVoeux.Items.Refresh();
+        //    //}
+        //}
+
 
         /// <summary>
         private void btnEnreigistrerLst_Click(object sender, RoutedEventArgs e)
@@ -107,9 +251,6 @@ namespace ApplicationGestionProduitCosmetique.Views
 
         }
 
-        private void Window_Loaded(object sender, RoutedEventArgs e)
-        {
-            //lvListePanier.ItemsSource = panier.Items;
-        }
+        
     }
 }

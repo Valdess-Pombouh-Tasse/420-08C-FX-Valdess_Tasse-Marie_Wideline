@@ -17,7 +17,7 @@
   <Class Name="ApplicationGestionProduitCosmetique.Models.Utilisateur">
     <Position X="3" Y="1" Width="2.25" />
     <TypeIdentifier>
-      <HashCode>AAAAgQAAEAABAAAAAAAAAAAIEgQAAIAAAAAAAAAAAAg=</HashCode>
+      <HashCode>AAAAgAAAEAAAAAAEEAAAAAAIAgQAAIAAAAAAAAAAAAg=</HashCode>
       <FileName>Models\Utilisateur.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -26,6 +26,20 @@
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Models\Manager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ApplicationGestionProduitCosmetique.Models.Produit">
+    <Position X="7.75" Y="1" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAIgAEAlgABgAABYBCAAQBAAAQAIgAAgoiA=</HashCode>
+      <FileName>Models\Produit.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ApplicationGestionProduitCosmetique.Models.Items">
+    <Position X="10.5" Y="1.5" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>CAAgCgAAAAAAAAAAAAAAwAAAAAAACAAAgAIAAAAAAAg=</HashCode>
+      <FileName>Models\Items.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Font Name="Segoe UI" Size="9" />
