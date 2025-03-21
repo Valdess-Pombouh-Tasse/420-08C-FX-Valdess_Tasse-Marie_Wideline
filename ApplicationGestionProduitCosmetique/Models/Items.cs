@@ -55,11 +55,12 @@ namespace ApplicationGestionProduitCosmetique.Models
         }
         public Items() { }
 
-        public Items(int nbItem, string nomItem, Produit lstProduit, string nomUtilisateurs)
+        public Items(int nbItem, string nomItem, Produit lstProduit, int idItems, string nomUtilisateurs)
         {
             NbItem = nbItem;
             NomItem = nomItem;
             LstProduit = lstProduit;
+            IdItems = idItems;
             NomUtilisateurs = nomUtilisateurs;
         }
     }

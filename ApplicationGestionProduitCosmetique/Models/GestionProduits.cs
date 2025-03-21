@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows;
+using static ApplicationGestionProduitCosmetique.Views.FormApplication;
 
 namespace ApplicationGestionProduitCosmetique.Models
 {
@@ -281,9 +282,9 @@ namespace ApplicationGestionProduitCosmetique.Models
                     string nom = dr.GetString(2);
                     uint idCategorie = dr.GetUInt32(3);
                     decimal prix = dr.GetDecimal(4);
-                    string image = dr.IsDBNull(5) ? null : dr.GetString(5);
+                    string image = dr.GetString(5);
                     string nomCategorie = dr.GetString(6);
-                    string description = dr.IsDBNull(7) ? null : dr.GetString(7);
+                    string description =  dr.GetString(7);
                     int quantite = dr.GetInt32(8);
 
                     Categorie categorieObj = new Categorie(idCategorie, nomCategorie);
@@ -305,9 +306,164 @@ namespace ApplicationGestionProduitCosmetique.Models
             return produitsVendeur;
         }
 
-        //public static List<ListePanier> ChargerListePanier()
-        //{
+        public static List<ListePanier> ChargerListePanier()
+        {
+            List<ListePanier> listePanier = new List<ListePanier>();
+            List<string> vectReferencePanier = new List<string>();
 
-        //}
+            MySqlConnection cn = CreerConnection();
+
+            try
+            {
+                cn.Open();
+
+                // Récupération des références de panier uniques pour l'utilisateur connecté
+                string requeteReferences = "SELECT DISTINCT ReferencePanier FROM panier WHERE NomUtilisateur = @nomUtilisateur";
+                MySqlCommand cmdReferences = new MySqlCommand(requeteReferences, cn);
+                cmdReferences.Parameters.AddWithValue("@nomUtilisateur", accueil.utilisateur.NomUtilisateur);
+
+                MySqlDataReader drReferences = cmdReferences.ExecuteReader();
+                while (drReferences.Read())
+                {
+                    vectReferencePanier.Add(drReferences.GetString(0));
+                }
+                drReferences.Close();
+
+                // Pour chaque référence de panier, récupérer les produits associés
+                foreach (string reference in vectReferencePanier)
+                {
+                    List<Items> listItems = new List<Items>();
+
+                    string requeteProduits = "SELECT IdProduit, Quantite FROM panier WHERE ReferencePanier = @reference AND NomUtilisateur = @nomUtilisateur";
+                    MySqlCommand cmdProduits = new MySqlCommand(requeteProduits, cn);
+                    cmdProduits.Parameters.AddWithValue("@reference", reference);
+                    cmdProduits.Parameters.AddWithValue("@nomUtilisateur", accueil.utilisateur.NomUtilisateur);
+
+                    MySqlDataReader drProduits = cmdProduits.ExecuteReader();
+
+                    while (drProduits.Read())
+                    {
+                        int idProduit = drProduits.GetInt32(0);
+                        int quantite = drProduits.GetInt32(1);
+
+                        // Récupérer les détails du produit
+                        Produit produit = ObtenirProduit((uint)idProduit);
+
+                        if (produit is not null)
+                        {
+                            Items item = new Items(idProduit, produit.Nom, produit, quantite, accueil.utilisateur.NomUtilisateur);
+                            listItems.Add(item);
+                        }
+                    }
+                    drProduits.Close();
+
+                    // Créer la liste de panier avec les articles
+                    ListePanier panier = new ListePanier(reference, listItems);
+                    listePanier.Add(panier);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Erreur lors de la récupération du panier : " + ex.Message);
+                throw;
+            }
+            finally
+            {
+                FermerConnexion(cn);
+            }
+
+            return listePanier;
+        }
+
+        public static ListePanier ObtenirPanier(string referencePanier)
+        {
+            ListePanier panier = null;
+            MySqlConnection cn = CreerConnection();
+            try
+            {
+                cn.Open();
+                List<Items> listItems = new List<Items>();
+                string requeteProduits = "SELECT IdProduit, Quantite FROM panier WHERE ReferencePanier = @reference AND NomUtilisateur = @nomUtilisateur";
+                MySqlCommand cmdProduits = new MySqlCommand(requeteProduits, cn);
+                cmdProduits.Parameters.AddWithValue("@reference", referencePanier);
+                cmdProduits.Parameters.AddWithValue("@nomUtilisateur", accueil.utilisateur.NomUtilisateur);
+                MySqlDataReader drProduits = cmdProduits.ExecuteReader();
+                while (drProduits.Read())
+                {
+                    int idProduit = drProduits.GetInt32(0);
+                    int quantite = drProduits.GetInt32(1);
+                    // Récupérer les détails du produit
+                    Produit produit = ObtenirProduit((uint)idProduit);
+                    if (produit is not null)
+                    {
+                        Items item = new Items(idProduit, produit.Nom, produit, quantite, accueil.utilisateur.NomUtilisateur);
+                        listItems.Add(item);
+                    }
+                }
+                drProduits.Close();
+                // Créer la liste de panier avec les articles
+                panier = new ListePanier(referencePanier, listItems);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Erreur lors de la récupération du panier : " + ex.Message);
+                throw;
+            }
+            finally
+            {
+                FermerConnexion(cn);
+            }
+            return panier;
+        }
+
+        public static void AjouterProduitPanier(Items item)
+        {
+            MySqlConnection cn = CreerConnection();
+            try
+            {
+                cn.Open();
+                string requete = "INSERT INTO panier (ReferencePanier, IdProduit, Quantite, NomUtilisateur) VALUES (@reference, @idProduit, @quantite, @nomUtilisateur)";
+                MySqlCommand cmd = new MySqlCommand(requete, cn);
+                cmd.Parameters.AddWithValue("@reference", item.NomItem);
+                cmd.Parameters.AddWithValue("@idProduit", item.IdItems);
+                cmd.Parameters.AddWithValue("@quantite", item.NbItem);
+                cmd.Parameters.AddWithValue("@nomUtilisateur", item.NomUtilisateurs);
+                cmd.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Erreur lors de l'ajout du produit au panier : " + ex.Message);
+                throw;
+            }
+            finally
+            {
+                FermerConnexion(cn);
+            }
+        }
+
+        public static void SupprimerProduitPanier(Items item)
+        {
+            MySqlConnection cn = CreerConnection();
+            try
+            {
+                cn.Open();
+                string requete = "DELETE FROM panier WHERE ReferencePanier = @reference AND IdProduit = @idProduit AND NomUtilisateur = @nomUtilisateur";
+                MySqlCommand cmd = new MySqlCommand(requete, cn);
+                cmd.Parameters.AddWithValue("@reference", item.NomItem);
+                cmd.Parameters.AddWithValue("@idProduit", item.IdItems);
+                cmd.Parameters.AddWithValue("@nomUtilisateur", item.NomUtilisateurs);
+                cmd.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Erreur lors de la suppression du produit du panier : " + ex.Message);
+                throw;
+            }
+            finally
+            {
+                FermerConnexion(cn);
+            }
+        }
+
     }
 }
