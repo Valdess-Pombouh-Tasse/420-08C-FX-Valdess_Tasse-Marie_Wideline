@@ -35,7 +35,7 @@
         <Border Grid.Row="1" Grid.Column="1" Background="#f8f8f8" Padding="10" BorderBrush="Gray" BorderThickness="1" CornerRadius="10">
             <StackPanel>
                 <TextBlock Text="Affichage des Produits" FontWeight="Bold" Foreground="#4169e1" FontSize="18" Margin="0,0,0,10"/>
-                <ScrollViewer VerticalScrollBarVisibility="Auto" Height="400" MouseLeftButtonDown="ScrollViewer_MouseLeftButtonDown" MouseLeftButtonUp="ScrollViewer_MouseLeftButtonUp">
+                <ScrollViewer VerticalScrollBarVisibility="Auto" Height="400">
                     <WrapPanel Name="wpProduits" Orientation="Horizontal"/>
                 </ScrollViewer>
             </StackPanel>
@@ -58,9 +58,9 @@
                 </StackPanel>
                 <StackPanel Margin="5">
                     <TextBlock Text="Image"/>
-                    <Button Name="btnImage" Content="Choisir Image" Width="120" Height="30"/>
+                    <Button Name="btnImage" Content="Choisir Image" Width="120" Height="30" Click="btnImage_Click"/>
                 </StackPanel>
-                <Button Name="btnAjouter" Content="Ajouter" Background="#4169e1" Foreground="White" Width="120" Height="35" Margin="5"/>
+                <Button Name="btnAjouter" Content="Ajouter" Background="#4169e1" Foreground="White" Width="120" Height="35" Margin="5" Click="btnAjouter_Click"/>
             </StackPanel>
         </Border>
     </Grid>

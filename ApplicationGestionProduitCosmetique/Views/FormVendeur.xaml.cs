@@ -1,4 +1,5 @@
 ﻿using ApplicationGestionProduitCosmetique.Classes;
+using ApplicationGestionProduitCosmetique.enums;
 using ApplicationGestionProduitCosmetique.Models;
 using System;
 using System.Collections.Generic;
@@ -30,129 +31,140 @@ namespace ApplicationGestionProduitCosmetique.Views
         public FormVendeur()
         {
             InitializeComponent();
-            lbProduits.ItemsSource = Produits;
+           
         }
 
-        /// <summary>
-        /// Fonction qui permet d'afficher la liste des produits
-        /// </summary>
-        /// <summary>
-        /// Fonction qui permet d'afficher la liste des produits
-        /// </summary>
+
+        private void AfficherProduitsVendeurDansListBox(int Idvendeur)
+        {
+            var produitsVendeur = GestionProduits.ObtenirProduitsVendeur(Idvendeur);
+
+            lbProduits.Items.Clear();
+
+            foreach (var produit in produitsVendeur)
+            {
+                lbProduits.Items.Add($"{produit.Nom} - {produit.Prix:C} - Qté: {produit.Quantite}");
+            }
+        }
+
+
+
         private void AfficherListeProduit(List<Produit> produits = null)
         {
-            List<Produit> listeProduits = new List<Produit>();
+            // Récupérer la liste des produits en évitant les doublons
+            List<Produit> listeProduits = produits ?? GestionCompteUtilisateur.ObtenirListeProduits()
+                                                      .GroupBy(p => p.Id)  // Suppression des doublons basés sur l'ID
+                                                      .Select(g => g.First())
+                                                      .ToList();
 
-            if (produits == null)
-            {
-                listeProduits = GestionCompteUtilisateur.ObtenirListeProduits();
-            }
-            else
-            {
-                listeProduits = produits;
-            }
-
+            wpProduits.Children.Clear(); // Nettoyer les produits affichés précédemment
 
             foreach (Produit produit in listeProduits)
             {
-                Border border = new Border();
-                border.BorderBrush = new SolidColorBrush(Colors.LightGray);
-                border.BorderThickness = new Thickness(2);
-                border.CornerRadius = new CornerRadius(10);
-                border.Margin = new Thickness(5);
-                border.Padding = new Thickness(1);
-                border.Width = 100;
-                border.Height = 280; // Augmenté pour inclure l'ID du vendeur
+                // Création du conteneur principal
+                Border border = new Border
+                {
+                    BorderBrush = new SolidColorBrush(Colors.LightGray),
+                    BorderThickness = new Thickness(2),
+                    CornerRadius = new CornerRadius(10),
+                    Margin = new Thickness(5),
+                    Padding = new Thickness(5),
+                    Width = 100,
+                    Height = 280
+                };
 
-                BitmapImage biProduit = new BitmapImage();
-                biProduit.BeginInit();
-                biProduit.UriSource = new Uri(produit.Image);
-                biProduit.CacheOption = BitmapCacheOption.OnLoad;
-                biProduit.CreateOptions = BitmapCreateOptions.IgnoreImageCache;
-                biProduit.EndInit();
+                // Image du produit
+                BitmapImage biProduit = new BitmapImage(new Uri(produit.Image, UriKind.RelativeOrAbsolute));
+                Image imgProduit = new Image
+                {
+                    Source = biProduit,
+                    Margin = new Thickness(2),
+                    HorizontalAlignment = HorizontalAlignment.Center,
+                    Width = 90,
+                    Height = 100,
+                    Tag = produit
+                };
+                imgProduit.MouseLeftButtonDown += ImageProduit_MouseLeftButtonUp;
 
-                Image imgProduit = new Image();
-                imgProduit.Source = biProduit;
-                imgProduit.Margin = new Thickness(2);
-                imgProduit.HorizontalAlignment = System.Windows.HorizontalAlignment.Center;
-                imgProduit.VerticalAlignment = VerticalAlignment.Top;
-                imgProduit.Width = 90;
-                imgProduit.Height = 100;
-                imgProduit.Tag = produit;
-                imgProduit.MouseLeftButtonDown += new MouseButtonEventHandler(ImageProduit_MouseLeftButtonUp);
+                // Description du produit
+                TextBlock descriptionProduit = new TextBlock
+                {
+                    Text = produit.Nom,
+                    FontSize = 12,
+                    HorizontalAlignment = HorizontalAlignment.Center,
+                    TextWrapping = TextWrapping.Wrap,
+                    MaxWidth = 85
+                };
 
-                TextBlock descriptionProduit = new TextBlock();
-                descriptionProduit.Text = produit.Nom;
-                descriptionProduit.FontSize = 12;
-                descriptionProduit.HorizontalAlignment = System.Windows.HorizontalAlignment.Center;
-                descriptionProduit.TextWrapping = TextWrapping.Wrap;
-                descriptionProduit.MaxWidth = 85;
+                // Prix du produit
+                TextBlock prixProduit = new TextBlock
+                {
+                    Text = produit.Prix.ToString("C"),
+                    FontSize = 13,
+                    Foreground = new SolidColorBrush(Colors.Green),
+                    FontWeight = FontWeights.Bold,
+                    HorizontalAlignment = HorizontalAlignment.Right,
+                    Margin = new Thickness(4)
+                };
 
-                TextBlock prixProduit = new TextBlock();
-                prixProduit.Text = produit.Prix.ToString("c");
-                prixProduit.FontSize = 13;
-                prixProduit.Foreground = new SolidColorBrush(Colors.Green);
-                prixProduit.FontWeight = FontWeights.Bold;
-                prixProduit.HorizontalAlignment = System.Windows.HorizontalAlignment.Right;
-                prixProduit.VerticalAlignment = VerticalAlignment.Bottom;
-                prixProduit.MaxWidth = 80;
-                prixProduit.Margin = new Thickness(4);
+                // Conteneur pour la quantité (en bas)
+                StackPanel quantitePanel = new StackPanel
+                {
+                    Orientation = Orientation.Horizontal,
+                    HorizontalAlignment = HorizontalAlignment.Center,
+                    VerticalAlignment = VerticalAlignment.Bottom,
+                    Margin = new Thickness(0, 5, 0, 5)
+                };
 
-                // Ajout de l'ID du vendeur
-                TextBlock vendeurProduit = new TextBlock();
-                vendeurProduit.Text = $"Vendeur: {produit}";
-                vendeurProduit.FontSize = 11;
-                vendeurProduit.Foreground = new SolidColorBrush(Colors.Blue);
-                vendeurProduit.HorizontalAlignment = System.Windows.HorizontalAlignment.Center;
-                vendeurProduit.Margin = new Thickness(0, 2, 0, 0);
+                TextBlock lblQuantite = new TextBlock
+                {
+                    Text = "Qté: ",
+                    FontSize = 12,
+                    FontWeight = FontWeights.Bold,
+                    Foreground = new SolidColorBrush(Colors.Black)
+                };
 
-                StackPanel buttonPanel = new StackPanel();
-                buttonPanel.Orientation = Orientation.Horizontal;
-                buttonPanel.HorizontalAlignment = System.Windows.HorizontalAlignment.Right;
-                buttonPanel.Margin = new Thickness(0, 10, 0, 0);
+                TextBlock quantiteBlocK = new TextBlock
+                {
+                    Text = produit.Quantite.ToString(),
+                    FontSize = 12,
+                    FontWeight = FontWeights.Bold,
+                    Foreground = new SolidColorBrush(Colors.DarkBlue)
+                };
 
-                StackPanel stackPanel = new StackPanel();
-                stackPanel.Orientation = Orientation.Vertical;
-                stackPanel.HorizontalAlignment = System.Windows.HorizontalAlignment.Center;
-                stackPanel.VerticalAlignment = VerticalAlignment.Top;
+                quantitePanel.Children.Add(lblQuantite);
+                quantitePanel.Children.Add(quantiteBlocK);
+
+                // Bouton d'ajout (image)
+                BitmapImage bibtn = new BitmapImage(new Uri(System.Configuration.ConfigurationManager.AppSettings["icons"] + "plus.png", UriKind.Relative));
+                Image btnImageAjout = new Image
+                {
+                    Source = bibtn,
+                    HorizontalAlignment = HorizontalAlignment.Center,
+                    VerticalAlignment = VerticalAlignment.Center,
+                    Width = 20,
+                    Height = 20,
+                    Tag = produit
+                };
+                btnImageAjout.MouseLeftButtonDown += ImageAjout_MouseLeftButtonDown;
+
+                // Empiler les éléments dans un StackPanel
+                StackPanel stackPanel = new StackPanel
+                {
+                    Orientation = Orientation.Vertical,
+                    HorizontalAlignment = HorizontalAlignment.Center
+                };
 
                 stackPanel.Children.Add(imgProduit);
                 stackPanel.Children.Add(descriptionProduit);
-                stackPanel.Children.Add(vendeurProduit);
                 stackPanel.Children.Add(prixProduit);
-                stackPanel.Children.Add(buttonPanel);
+                stackPanel.Children.Add(quantitePanel);
+                stackPanel.Children.Add(btnImageAjout);
 
-                Separator separator1 = new Separator();
-                string nom = produit.Nom;
-                TextBlock nomblock = new TextBlock();
-                nomblock.Text = nom;
-                nomblock.FontSize = 12;
-                nomblock.FontWeight = FontWeights.Bold;
-                nomblock.TextAlignment = TextAlignment.Center;
-                string quantite = produit.Quantite.ToString();
-                TextBlock quantiteBlocK = new TextBlock();
-                quantiteBlocK.Text = quantite;
-                Separator separator2 = new Separator();
-                BitmapImage bibtn = new BitmapImage();
-                bibtn.BeginInit();
-                string cheminIcon = System.Configuration.ConfigurationManager.AppSettings["icons"];
-
-                bibtn.UriSource = new Uri(cheminIcon + "plus.png", UriKind.Relative);
-                bibtn.CacheOption = BitmapCacheOption.OnLoad;
-                bibtn.CreateOptions = BitmapCreateOptions.IgnoreImageCache;
-                bibtn.EndInit();
-                Image btnImageAjout = new Image();
-                btnImageAjout.Source = bibtn;
-                btnImageAjout.HorizontalAlignment = System.Windows.HorizontalAlignment.Center;
-                btnImageAjout.VerticalAlignment = VerticalAlignment.Center;
-                btnImageAjout.Width = 20;
-                btnImageAjout.Height = btnImageAjout.Width;
-
-
-                btnImageAjout.MouseLeftButtonDown += new MouseButtonEventHandler(ImageAjout_MouseLeftButtonDown);
-                btnImageAjout.Tag = produit;
-
+                // Ajouter le stackPanel au Border
                 border.Child = stackPanel;
+
+                // Ajouter au conteneur principal
                 wpProduits.Children.Add(border);
             }
         }
@@ -169,7 +181,24 @@ namespace ApplicationGestionProduitCosmetique.Views
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
+           // if (GestionCompteUtilisateur.UtilisateurConnecte is not null &&
+               // GestionCompteUtilisateur.UtilisateurConnecte.Role == RoleUtilisateur.Vendeur)
+           // {
+
+               // int idVendeurConnecte = Convert.ToInt32(GestionCompteUtilisateur.UtilisateurConnecte.CodeUtilisateur); // Convertir si nécessaire
+             AfficherProduitsVendeurDansListBox(12);
+           // }
             AfficherListeProduit();
+        }
+
+        private void btnAjouter_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void btnImage_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

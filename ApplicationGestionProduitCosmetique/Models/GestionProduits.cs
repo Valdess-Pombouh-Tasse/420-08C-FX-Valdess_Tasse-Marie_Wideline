@@ -247,15 +247,10 @@ namespace ApplicationGestionProduitCosmetique.Models
             return produit;
         }
 
-        /// <summary>
-        /// Permet de charger la liste des produits d'un vendeur spécifique
-        /// </summary>
-        /// <param name="idVendeur">Identifiant unique du vendeur</param>
-        /// <returns>Liste des produits associés au vendeur</returns>
-        /// <remarks>* @author Marie</remarks>
+        
         public static List<Produit> ObtenirProduitsVendeur(int idVendeur)
         {
-
+           
             MySqlConnection cn = CreerConnection();
             List<Produit> produitsVendeur = new List<Produit>();
 
@@ -264,19 +259,26 @@ namespace ApplicationGestionProduitCosmetique.Models
                 cn.Open();
 
                 string requete = @"
-            SELECT p.IdProduit, p.Code, p.Nom, p.IdCategorie, p.Prix, p.Image, 
-                   c.NomCategorie, p.Description, p.Quantite
-            FROM produit p
-            INNER JOIN categories c ON p.IdCategorie = c.IDCategorie
-            INNER JOIN utilisateurs u ON p.IdVendeur = u.ID
-            WHERE u.ID = @idVendeur";
+        SELECT p.IdProduit, p.Code, p.Nom, p.IdCategorie, p.Prix, p.Image, 
+               c.NomCategorie, p.Description, p.Quantite
+        FROM produit p
+        INNER JOIN categories c ON p.IdCategorie = c.IDCategorie
+        INNER JOIN utilisateurs u ON p.IdVendeur = u.ID
+        WHERE u.ID = @idVendeur";
 
                 MySqlCommand cmd = new MySqlCommand(requete, cn);
                 cmd.Parameters.AddWithValue("@idVendeur", idVendeur);
                 MySqlDataReader dr = cmd.ExecuteReader();
 
+                if (!dr.HasRows)
+                {
+                    MessageBox.Show("Aucun produit trouvé en base pour cet ID vendeur.", "DEBUG SQL");
+                }
+
                 while (dr.Read())
                 {
+                    MessageBox.Show($"Produit récupéré : {dr.GetString(2)} - Prix: {dr.GetDecimal(4)}", "DEBUG SQL");
+
                     uint idProduit = dr.GetUInt32(0);
                     string codeProduit = dr.GetString(1);
                     string nom = dr.GetString(2);
@@ -284,7 +286,7 @@ namespace ApplicationGestionProduitCosmetique.Models
                     decimal prix = dr.GetDecimal(4);
                     string image = dr.GetString(5);
                     string nomCategorie = dr.GetString(6);
-                    string description =  dr.GetString(7);
+                    string description = dr.GetString(7);
                     int quantite = dr.GetInt32(8);
 
                     Categorie categorieObj = new Categorie(idCategorie, nomCategorie);
@@ -296,7 +298,7 @@ namespace ApplicationGestionProduitCosmetique.Models
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Erreur : " + ex.Message, "Erreur SQL", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Erreur SQL : " + ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
             }
             finally
             {
@@ -305,6 +307,38 @@ namespace ApplicationGestionProduitCosmetique.Models
 
             return produitsVendeur;
         }
+
+
+        public static int ObtenirIdVendeurParCode(string codeUtilisateur)
+        {
+            MySqlConnection cn = CreerConnection();
+            int idVendeur = -1;
+
+            try
+            {
+                cn.Open();
+                string requete = "SELECT ID FROM utilisateurs WHERE Code = @CodeUtilisateur AND Role = 'Vendeur'";
+                MySqlCommand cmd = new MySqlCommand(requete, cn);
+                cmd.Parameters.AddWithValue("@CodeUtilisateur", codeUtilisateur);
+
+                object result = cmd.ExecuteScalar();
+                if (result != null)
+                {
+                    idVendeur = Convert.ToInt32(result);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Erreur : " + ex.Message, "Erreur SQL", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            finally
+            {
+                FermerConnexion(cn);
+            }
+
+            return idVendeur;
+        }
+
 
         public static List<ListePanier> ChargerListePanier()
         {

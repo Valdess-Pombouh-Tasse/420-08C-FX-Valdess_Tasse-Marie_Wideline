@@ -112,7 +112,7 @@ namespace ApplicationGestionProduitCosmetique.Classes
             return utilisateurs;
         }
 
-
+        public static Utilisateur UtilisateurConnecte { get; set; }
 
         /// <summary>
         /// Permet d'ajouter un ajouter un 
@@ -305,13 +305,12 @@ namespace ApplicationGestionProduitCosmetique.Classes
                         string result = command.ExecuteScalar() as string;
                         if (result != null)
                         {
-                            // Assurez-vous que le rôle est bien récupéré comme "vendeur", "manager", "client"
-                            switch (result.ToLower())
+                            switch (result)
                             {
-                                case "vendeur":
+                                case "Vendeur":
                                     role = RoleUtilisateur.Vendeur;
                                     break;
-                                case "manager":
+                                case "Manager":
                                     role = RoleUtilisateur.Manager;
                                     break;
                                 default:
@@ -335,65 +334,7 @@ namespace ApplicationGestionProduitCosmetique.Classes
             }
         }
 
-        //public static bool ConnexionUtilisateur(string nom, string motDePasse, string? codeUtilisateur, out RoleUtilisateur role, out string messageErreur)
-        //{
-        //    messageErreur = "";
-        //    role = RoleUtilisateur.Client;
-
-        //    try
-        //    {
-        //        using (MySqlConnection connection = CreerConnection())
-        //        {
-        //            connection.Open();
-
-        //            string requeteConnection = "SELECT Role FROM Utilisateurs WHERE NomUtilisateur = @Nom AND MotDePasse = @MotDePasse";
-
-        //            if (!string.IsNullOrEmpty(codeUtilisateur))
-        //            {
-        //                requeteConnection += " AND CodeUtilisateur = @Code";
-        //            }
-
-        //            using (MySqlCommand command = new MySqlCommand(requeteConnection, connection))
-        //            {
-        //                command.Parameters.AddWithValue("@Nom", nom);
-        //                command.Parameters.AddWithValue("@MotDePasse", motDePasse);
-
-        //                if (!string.IsNullOrEmpty(codeUtilisateur))
-        //                {
-        //                    command.Parameters.AddWithValue("@Code", codeUtilisateur);
-        //                }
-
-        //                string result = command.ExecuteScalar() as string;
-        //                if (result != null)
-        //                {
-        //                    switch (result.ToLower())
-        //                    {
-        //                        case "vendeur":
-        //                            role = RoleUtilisateur.Vendeur;
-        //                            break;
-        //                        case "manager":
-        //                            role = RoleUtilisateur.Manager;
-        //                            break;
-        //                        default:
-        //                            role = RoleUtilisateur.Client;
-        //                            break;
-        //                    }
-        //                    return true;
-        //                }
-        //                else
-        //                {
-        //                    messageErreur = "Nom ou mot de passe incorrect.";
-        //                    return false;
-        //                }
-        //            }
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        messageErreur = "Erreur de connexion à la base : " + ex.Message;
-        //        return false;
-        //    }
-        //}
+    
         /// <summary>
         /// Permet d'obtenir liste des catégories provenant de la base de données triée par nom croissant
         /// </summary>

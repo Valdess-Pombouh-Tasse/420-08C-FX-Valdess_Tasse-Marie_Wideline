@@ -78,10 +78,7 @@ namespace ApplicationGestionProduitCosmetique
                         return;
                     }
 
-                    // Ajout d'un message pour vérifier quel rôle est détecté
-                    MessageBox.Show($"Rôle détecté : {role.ToString()}");
-
-                    // Création de la fenêtre appropriée selon le rôle
+                    
                     Window form = null;
 
                     if (role == RoleUtilisateur.Client)
@@ -97,7 +94,6 @@ namespace ApplicationGestionProduitCosmetique
                         form = new FormUtilisateur();
                     }
 
-                    // Vérification que la fenêtre a bien été instanciée avant de l'afficher
                     if (form != null)
                     {
                         form.WindowState = WindowState.Maximized;
@@ -152,7 +148,7 @@ namespace ApplicationGestionProduitCosmetique
         {
             if (cmbTypeUtilisateur.SelectedItem is ComboBoxItem selectedItem)
             {
-                MessageBox.Show($"Rôle sélectionné : {selectedItem.Content.ToString()}");
+
 
                 bool isClient = selectedItem.Content.ToString() == "Client";
 

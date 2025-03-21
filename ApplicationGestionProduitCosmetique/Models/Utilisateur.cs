@@ -47,7 +47,7 @@ namespace ApplicationGestionProduitCosmetique.Models
             }                                         
         }
 
-
+        //public int Id { get; set; }
         public string CodeUtilisateur
         {
             get { return _codeUtilisateur; }

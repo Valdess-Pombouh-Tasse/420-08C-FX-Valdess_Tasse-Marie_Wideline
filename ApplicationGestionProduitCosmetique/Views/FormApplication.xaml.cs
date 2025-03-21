@@ -47,11 +47,11 @@ namespace ApplicationGestionProduitCosmetique.Views
             cboCategories.ItemsSource = listCategories;
             cboCategories.SelectedIndex = listCategories.Count - 1;
 
-            Utilisateur utilisateur = accueil.utilisateur;
-            txtUtilisateurClient.Text = utilisateur.NomUtilisateur;
-            this.Utilisateur = utilisateur;
-            accueil.utilisateur = utilisateur;
-            this.MaxHeight = SystemParameters.MaximizedPrimaryScreenHeight;
+            //Utilisateur utilisateur = accueil.utilisateur;
+            //txtUtilisateurClient.Text = utilisateur.NomUtilisateur;
+            //this.Utilisateur = utilisateur;
+            //accueil.utilisateur = utilisateur;
+            //this.MaxHeight = SystemParameters.MaximizedPrimaryScreenHeight;
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
