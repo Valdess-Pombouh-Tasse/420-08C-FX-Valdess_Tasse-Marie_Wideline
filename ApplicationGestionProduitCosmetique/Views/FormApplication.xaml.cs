@@ -1,6 +1,6 @@
 ﻿using ApplicationGestionProduitCosmetique.Classes;
 using ApplicationGestionProduitCosmetique.Models;
-using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,9 +12,17 @@ using System.Windows.Documents;
 using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Effects;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using Microsoft.Extensions.Configuration;
+using System.Xml;
+using static System.Runtime.InteropServices.JavaScript.JSType;
+using System.Text.RegularExpressions;
 using Orientation = System.Windows.Controls.Orientation;
+using static ApplicationGestionProduitCosmetique.Views.ProduitChoisir;
+using System.Windows.Interop;
+
 
 namespace ApplicationGestionProduitCosmetique.Views
 {
@@ -26,6 +34,7 @@ namespace ApplicationGestionProduitCosmetique.Views
         public Utilisateur Utilisateur { get; private set; }
         List<Produit> _produits;
         public ListePanier listePanier = new ListePanier();
+        private List<Produit> panierProduits = new List<Produit>();
 
 
         public List<Produit> Produits
@@ -46,6 +55,14 @@ namespace ApplicationGestionProduitCosmetique.Views
             listCategories.Add(new Categorie(0, "Toutes"));
             cboCategories.ItemsSource = listCategories;
             cboCategories.SelectedIndex = listCategories.Count - 1;
+
+            if (accueil.utilisateur == null)
+            {              
+                lblErreurUtilisateur.Visibility = Visibility.Visible; 
+                lblErreurUtilisateur.Content = "Aucun utilisateur connecté.";
+
+                return;
+            }
 
             Utilisateur utilisateur = accueil.utilisateur;
             txtUtilisateurClient.Text = utilisateur.NomUtilisateur;
@@ -73,6 +90,13 @@ namespace ApplicationGestionProduitCosmetique.Views
         public ListePanier RetournerListeVoeux()
         {
             return listePanier;
+        }
+
+        public static extern IntPtr SendMessage(IntPtr hWnd, int wMsg, int wParam, int lParam);
+        private void pnlbar_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            WindowInteropHelper helper = new WindowInteropHelper(this);
+            SendMessage(helper.Handle, 161, 2, 0);
         }
 
         /// <summary>
@@ -105,8 +129,16 @@ namespace ApplicationGestionProduitCosmetique.Views
                 border.CornerRadius = new CornerRadius(10);
                 border.Margin = new Thickness(5);
                 border.Padding = new Thickness(1);
-                border.Width = 100;
+                border.Width = 200;
                 border.Height = 280; // Augmenté pour inclure l'ID du vendeur
+                border.Background = new SolidColorBrush(Colors.AliceBlue);
+                border.Effect = new DropShadowEffect
+                {
+                    Color = new Color { A = 0, R = 0, G = 0, B = 0 },
+                    Direction = 320,
+                    ShadowDepth = 5,
+                    Opacity = 0.5
+                };
 
                 BitmapImage biProduit = new BitmapImage();
                 biProduit.BeginInit();
@@ -120,8 +152,8 @@ namespace ApplicationGestionProduitCosmetique.Views
                 imgProduit.Margin = new Thickness(2);
                 imgProduit.HorizontalAlignment = System.Windows.HorizontalAlignment.Center;
                 imgProduit.VerticalAlignment = VerticalAlignment.Top;
-                imgProduit.Width = 90;
-                imgProduit.Height = 100;
+                imgProduit.Width = 125;
+                imgProduit.Height = 125;
                 imgProduit.Tag = produit;
                 imgProduit.MouseLeftButtonDown += new MouseButtonEventHandler(ImageProduit_MouseLeftButtonUp);
 
@@ -184,7 +216,7 @@ namespace ApplicationGestionProduitCosmetique.Views
                 bibtn.UriSource = new Uri(cheminIcon + "plus.png", UriKind.Relative);
                 bibtn.CacheOption = BitmapCacheOption.OnLoad;
                 bibtn.CreateOptions = BitmapCreateOptions.IgnoreImageCache;
-                bibtn.EndInit();
+              
                 Image btnImageAjout = new Image();
                 btnImageAjout.Source = bibtn;
                 btnImageAjout.HorizontalAlignment = System.Windows.HorizontalAlignment.Center;
@@ -205,6 +237,37 @@ namespace ApplicationGestionProduitCosmetique.Views
         private void ImageProduit_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
 
+            System.Windows.MessageBox.Show("Produit ajouté au panier");
+            Image imageProduit = sender as Image;
+            List<Produit> produits = new List<Produit>();
+            if (imageProduit != null)
+            {
+                Produit produit = imageProduit.Tag as Produit;
+                if (produit != null)
+                {
+                    Items items = new Items();
+                    items.LstProduit = produit;
+                    items.NbItem = 1;
+                    items.NomItem = System.Configuration.ConfigurationManager.AppSettings["images"] + produit.Nom;
+                    bool articleExiste = false;
+                    for (int i = 0; i < listePanier.Items.Count; i++)
+                    {
+                        if (listePanier.Items[i].LstProduit == items.LstProduit)
+                        {
+                            listePanier.Items[i].NbItem++;
+                            articleExiste = true;
+                        }
+                    }
+                    if (!articleExiste)
+                    {
+                        listePanier.AjouterArticle(items);
+                        SharedResources.MaListe = listePanier;
+                    }
+                    produits.Add(produit);
+                    System.Windows.MessageBox.Show("Produit ajouté au panier");
+                }
+            }
+            
         }
 
         /// <summary>
@@ -253,6 +316,8 @@ namespace ApplicationGestionProduitCosmetique.Views
                 }
             }
         }
+
+       
         /// <summary>
         /// Permet de diminuer la taille de la fenetre de l'application
         /// </summary>

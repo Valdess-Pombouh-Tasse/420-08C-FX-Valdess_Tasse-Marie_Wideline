@@ -52,6 +52,7 @@
                             <StackPanel Orientation="Horizontal">
                                 <fa:IconImage Icon="ShoppingCart" Style="{StaticResource menuButtonIcon}"/>
                                 <TextBlock Text="Articles Choisis" Foreground="Black" Style="{StaticResource menuButtonText}"/>
+                                
                             </StackPanel>
                         </RadioButton>
                         <RadioButton Style="{StaticResource menuButton}" Tag="{StaticResource Color7}" Command="{Binding ShowArticleChoisirViewModel}">
@@ -66,9 +67,9 @@
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Foreground="Black" Text="Deconnexion" Style="{StaticResource menuButtonText}"/>
                             <fa:IconImage Icon="SignOut"  Style="{StaticResource menuButtonIcon}"/>
-
                         </StackPanel>
                     </RadioButton>
+                    <Label x:Name="lblErreurUtilisateur" Visibility="Collapsed" Foreground="Red" />
                 </Grid>
 
             </Border>
@@ -88,7 +89,7 @@
                         <RowDefinition Height="*"/>
                         <RowDefinition Height="10*"/>
                     </Grid.RowDefinitions>
-                    <StackPanel x:Name="pnlbar" Grid.Row="0" Orientation="Horizontal" FlowDirection="RightToLeft" Background="Transparent" Margin="0,0,5,0">
+                    <StackPanel x:Name="pnlbar" Grid.Row="0" Orientation="Horizontal" FlowDirection="RightToLeft" Background="Transparent" Margin="0,0,5,0" MouseLeftButtonDown="pnlbar_MouseLeftButtonDown">
                         <Button x:Name="btnFermer" Style="{StaticResource controlButton}" Tag="{StaticResource Color4}" Click="btnFermer_Click">
                             <fa:IconImage Icon="Xmark" Style="{StaticResource controlButtonIcon}"/>
 
@@ -143,7 +144,6 @@
                         </StackPanel>
                     </Grid>
 
-                    <!--<ContentControl Content="{Binding CorpsCourrantView}" Grid.Row="3" Margin="20,20,20,34"/>-->
                 </Grid>
 
             </Border>
