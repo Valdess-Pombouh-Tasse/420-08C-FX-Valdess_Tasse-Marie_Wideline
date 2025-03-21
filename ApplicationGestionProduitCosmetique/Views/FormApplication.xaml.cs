@@ -12,7 +12,6 @@ using System.Windows.Documents;
 using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Effects;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using Orientation = System.Windows.Controls.Orientation;
@@ -28,6 +27,7 @@ namespace ApplicationGestionProduitCosmetique.Views
         List<Produit> _produits;
         public ListePanier listePanier = new ListePanier();
 
+
         public List<Produit> Produits
         {
             get { return _produits; }
@@ -38,7 +38,6 @@ namespace ApplicationGestionProduitCosmetique.Views
         {
             public static Utilisateur utilisateur { get; set; }
         }
-
         public FormApplication()
         {
             InitializeComponent();
@@ -79,6 +78,9 @@ namespace ApplicationGestionProduitCosmetique.Views
         /// <summary>
         /// Fonction qui permet d'afficher la liste des produits
         /// </summary>
+        /// <summary>
+        /// Fonction qui permet d'afficher la liste des produits
+        /// </summary>
         private void AfficherListeProduit(List<Produit> produits = null)
         {
             List<Produit> listeProduits = new List<Produit>();
@@ -100,19 +102,11 @@ namespace ApplicationGestionProduitCosmetique.Views
                 Border border = new Border();
                 border.BorderBrush = new SolidColorBrush(Colors.LightGray);
                 border.BorderThickness = new Thickness(2);
-                border.CornerRadius = new CornerRadius(15); // Plus arrondi
-                border.Margin = new Thickness(10); // Espacement entre les cartes
-                border.Padding = new Thickness(5); // Ajouter du padding à l'intérieur
-                border.Width = 150;  // Agrandir la carte
-                border.Height = 350; // Agrandir la carte
-
-                // Ajouter une ombre pour un effet de profondeur
-                DropShadowEffect shadowEffect = new DropShadowEffect();
-                shadowEffect.Color = Colors.Black;
-                shadowEffect.Direction = 270;
-                shadowEffect.ShadowDepth = 5;
-                shadowEffect.BlurRadius = 10;
-                border.Effect = shadowEffect;
+                border.CornerRadius = new CornerRadius(10);
+                border.Margin = new Thickness(5);
+                border.Padding = new Thickness(1);
+                border.Width = 100;
+                border.Height = 280; // Augmenté pour inclure l'ID du vendeur
 
                 BitmapImage biProduit = new BitmapImage();
                 biProduit.BeginInit();
@@ -123,63 +117,101 @@ namespace ApplicationGestionProduitCosmetique.Views
 
                 Image imgProduit = new Image();
                 imgProduit.Source = biProduit;
-                imgProduit.Margin = new Thickness(10);
-                //imgProduit.HorizontalAlignment = HorizontalAlignment.Center;
+                imgProduit.Margin = new Thickness(2);
+                imgProduit.HorizontalAlignment = System.Windows.HorizontalAlignment.Center;
                 imgProduit.VerticalAlignment = VerticalAlignment.Top;
-                imgProduit.Width = 120;  // Agrandir l'image
-                imgProduit.Height = 140;
-                imgProduit.Stretch = Stretch.UniformToFill; // Maintenir le ratio de l'image
+                imgProduit.Width = 90;
+                imgProduit.Height = 100;
                 imgProduit.Tag = produit;
                 imgProduit.MouseLeftButtonDown += new MouseButtonEventHandler(ImageProduit_MouseLeftButtonUp);
 
                 TextBlock descriptionProduit = new TextBlock();
                 descriptionProduit.Text = produit.Nom;
-                descriptionProduit.FontSize = 14;  // Augmenter la taille du texte
-                descriptionProduit.Foreground = new SolidColorBrush(Colors.Black); // Couleur du texte
-                //descriptionProduit.HorizontalAlignment = HorizontalAlignment.Center;
+                descriptionProduit.FontSize = 12;
+                descriptionProduit.HorizontalAlignment = System.Windows.HorizontalAlignment.Center;
                 descriptionProduit.TextWrapping = TextWrapping.Wrap;
-                descriptionProduit.MaxWidth = 120;
+                descriptionProduit.MaxWidth = 85;
 
                 TextBlock prixProduit = new TextBlock();
                 prixProduit.Text = produit.Prix.ToString("c");
-                prixProduit.FontSize = 16;  // Augmenter la taille du prix
-                prixProduit.Foreground = new SolidColorBrush(Colors.Green);  // Mettre le prix en vert
+                prixProduit.FontSize = 13;
+                prixProduit.Foreground = new SolidColorBrush(Colors.Green);
                 prixProduit.FontWeight = FontWeights.Bold;
-                //prixProduit.HorizontalAlignment = HorizontalAlignment.Center;
+                prixProduit.HorizontalAlignment = System.Windows.HorizontalAlignment.Right;
                 prixProduit.VerticalAlignment = VerticalAlignment.Bottom;
-                prixProduit.Margin = new Thickness(10);
+                prixProduit.MaxWidth = 80;
+                prixProduit.Margin = new Thickness(4);
 
-                //// Ajouter l'ID du vendeur
-                //TextBlock vendeurProduit = new TextBlock();
-                //vendeurProduit.Text = $"Vendeur: {produit.Vendeur.Nom}";  // Affichage du nom du vendeur
-                //vendeurProduit.FontSize = 12;
-                //vendeurProduit.Foreground = new SolidColorBrush(Colors.Blue);
-                //vendeurProduit.HorizontalAlignment = HorizontalAlignment.Center;
-                //vendeurProduit.Margin = new Thickness(0, 2, 0, 0);
+                // Ajout de l'ID du vendeur
+                TextBlock vendeurProduit = new TextBlock();
+                vendeurProduit.Text = $"Vendeur: {produit}";
+                vendeurProduit.FontSize = 11;
+                vendeurProduit.Foreground = new SolidColorBrush(Colors.Blue);
+                vendeurProduit.HorizontalAlignment = System.Windows.HorizontalAlignment.Center;
+                vendeurProduit.Margin = new Thickness(0, 2, 0, 0);
+
+                StackPanel buttonPanel = new StackPanel();
+                buttonPanel.Orientation = Orientation.Horizontal;
+                buttonPanel.HorizontalAlignment = System.Windows.HorizontalAlignment.Right;
+                buttonPanel.Margin = new Thickness(0, 10, 0, 0);
 
                 StackPanel stackPanel = new StackPanel();
                 stackPanel.Orientation = Orientation.Vertical;
-                //stackPanel.HorizontalAlignment = HorizontalAlignment.Center;
+                stackPanel.HorizontalAlignment = System.Windows.HorizontalAlignment.Center;
                 stackPanel.VerticalAlignment = VerticalAlignment.Top;
 
                 stackPanel.Children.Add(imgProduit);
                 stackPanel.Children.Add(descriptionProduit);
-                //stackPanel.Children.Add(vendeurProduit); // Affichage du vendeur
+                stackPanel.Children.Add(vendeurProduit); // Affichage du vendeur
                 stackPanel.Children.Add(prixProduit);
+                stackPanel.Children.Add(buttonPanel);
+
+                Separator separator1 = new Separator();
+                string nom = produit.Nom;
+                TextBlock nomblock = new TextBlock();
+                nomblock.Text = nom;
+                nomblock.FontSize = 12;
+                nomblock.FontWeight = FontWeights.Bold;
+                nomblock.TextAlignment = TextAlignment.Center;
+                string quantite = produit.Quantite.ToString();
+                TextBlock quantiteBlocK = new TextBlock();
+                quantiteBlocK.Text = quantite;
+                Separator separator2 = new Separator();
+                BitmapImage bibtn = new BitmapImage();
+                bibtn.BeginInit();
+                string cheminIcon = System.Configuration.ConfigurationManager.AppSettings["icons"];
+
+                bibtn.UriSource = new Uri(cheminIcon + "plus.png", UriKind.Relative);
+                bibtn.CacheOption = BitmapCacheOption.OnLoad;
+                bibtn.CreateOptions = BitmapCreateOptions.IgnoreImageCache;
+                bibtn.EndInit();
+                Image btnImageAjout = new Image();
+                btnImageAjout.Source = bibtn;
+                btnImageAjout.HorizontalAlignment = System.Windows.HorizontalAlignment.Center;
+                btnImageAjout.VerticalAlignment = VerticalAlignment.Center;
+                btnImageAjout.Width = 20;
+                btnImageAjout.Height = btnImageAjout.Width;
+
+
+                btnImageAjout.MouseLeftButtonDown += new MouseButtonEventHandler(ImageAjout_MouseLeftButtonDown);
+                btnImageAjout.Tag = produit;
 
                 border.Child = stackPanel;
                 wpProduit.Children.Add(border);
             }
         }
 
+
         private void ImageProduit_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-            // Ajouter des actions au clic sur l'image si nécessaire
+
         }
 
         /// <summary>
         /// permet d'ajouter un article a la liste d'article de voeux d'un article
         /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ImageAjout_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             Image btnImageAjout = sender as Image;
@@ -205,6 +237,8 @@ namespace ApplicationGestionProduitCosmetique.Views
                         if (listePanier.Items[i].LstProduit == items.LstProduit)
                         {
                             listePanier.Items[i].NbItem++;
+                            // InitialiserlstArticleChoisir();
+                            // afficherToast("L'article a été rajouté avec succès", "succes");
                             articleExiste = true;
                             break; // Sortie de la boucle dès qu'on trouve l'article
                         }
@@ -214,14 +248,16 @@ namespace ApplicationGestionProduitCosmetique.Views
                     {
                         listePanier.AjouterArticle(items);
                         SharedResources.MaListe = listePanier;
+                        // afficherToast("L'article a été ajouté avec succès", "succes");
                     }
                 }
             }
         }
-
         /// <summary>
         /// Permet de diminuer la taille de la fenetre de l'application
         /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnMinFenetrer_Click(object sender, RoutedEventArgs e)
         {
             this.WindowState = WindowState.Minimized;
@@ -230,6 +266,8 @@ namespace ApplicationGestionProduitCosmetique.Views
         /// <summary>
         /// Permet d'augmenter la taille de la fenetre de l'application au max
         /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnMaxFenetrer_Click(object sender, RoutedEventArgs e)
         {
             if (this.WindowState == WindowState.Normal)
@@ -247,12 +285,13 @@ namespace ApplicationGestionProduitCosmetique.Views
         /// <summary>
         /// Permet de fermer l'application
         /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnFermer_Click(object sender, RoutedEventArgs e)
         {
             this.Close();
         }
+
+       
     }
-
-
 }
-
