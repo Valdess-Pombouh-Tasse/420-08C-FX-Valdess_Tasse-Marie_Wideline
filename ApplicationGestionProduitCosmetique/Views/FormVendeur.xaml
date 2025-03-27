@@ -25,7 +25,8 @@
 
                 <!-- Boutons d'action -->
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="10">
-                    <Button Name="btnModifier" Content="Modifier" Background="#FFD700" Foreground="Black" Width="120" Height="35" Margin="5"/>
+                    <Button Name="btnAjouter" Content="Ajouter" Background="#4169e1" Foreground="Black" Width="120" Height="35" Margin="5"/>
+                    <Button Name="btnModifier" Content="Modifier" Background="#FFD700"  Foreground="White" Width="120" Height="35" Margin="5"/>
                     <Button Name="btnSupprimer" Content="Supprimer" Background="#FF6347" Foreground="White" Width="120" Height="35" Margin="5"/>
                 </StackPanel>
             </StackPanel>
@@ -42,7 +43,7 @@
         </Border>
 
         <!-- Formulaire d'Ajout/Modification -->
-        <Border Grid.Row="2" Grid.ColumnSpan="2" Background="#e6e6e6" Padding="15" BorderBrush="Gray" BorderThickness="1" CornerRadius="10" Margin="0,10,0,0">
+        <!--<Border Grid.Row="2" Grid.ColumnSpan="2" Background="#e6e6e6" Padding="15" BorderBrush="Gray" BorderThickness="1" CornerRadius="10" Margin="0,10,0,0">
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                 <StackPanel Margin="5">
                     <TextBlock Text="Nom du produit"/>
@@ -62,6 +63,6 @@
                 </StackPanel>
                 <Button Name="btnAjouter" Content="Ajouter" Background="#4169e1" Foreground="White" Width="120" Height="35" Margin="5" Click="btnAjouter_Click"/>
             </StackPanel>
-        </Border>
+        </Border>-->
     </Grid>
 </Window>
