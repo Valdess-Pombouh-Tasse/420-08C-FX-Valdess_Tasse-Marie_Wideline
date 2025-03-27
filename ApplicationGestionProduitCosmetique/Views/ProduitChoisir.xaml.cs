@@ -88,7 +88,8 @@ namespace ApplicationGestionProduitCosmetique.Views
                 stackPanelCodeDescrip.Children.Add(codeProduit);
 
                 System.Windows.Controls.TextBox qteProduit = new System.Windows.Controls.TextBox();
-                qteProduit.Text = prodF.Quantite.ToString();
+                qteProduit.Text = "1";
+                //qteProduit.Text = prodF.Quantite.ToString();
                 qteProduit.FontSize = 10;
                 qteProduit.Width = 40;
                 qteProduit.Height = 20;
@@ -109,7 +110,7 @@ namespace ApplicationGestionProduitCosmetique.Views
                 btnReduction.Click += new RoutedEventHandler(btnDimunuerProduit_Click);
 
                 Image imgBtnReduire = new Image();
-                imgBtnReduire.Source = new BitmapImage(new Uri("/Resources/minus.png", UriKind.Relative));
+                imgBtnReduire.Source = new BitmapImage(new Uri("/Resources/Images/ImagesIcons/minus.png", UriKind.Relative));
                 imgBtnReduire.Width = 15;
                 imgBtnReduire.Height = 15;
                 imgBtnReduire.HorizontalAlignment = System.Windows.HorizontalAlignment.Center;
@@ -130,7 +131,7 @@ namespace ApplicationGestionProduitCosmetique.Views
                 btnAjouter.Click += new RoutedEventHandler(btnAugmenterProduit_Click);
 
                 Image imgBtnAjout = new Image();
-                imgBtnAjout.Source = new BitmapImage(new Uri("/Resources/plus.png", UriKind.Relative));
+                imgBtnAjout.Source = new BitmapImage(new Uri("/Resources/Images/ImagesIcons/plus.png", UriKind.Relative));
                 imgBtnAjout.Width = 15;
                 imgBtnAjout.Height = 15;
                 imgBtnAjout.HorizontalAlignment = System.Windows.HorizontalAlignment.Center;
@@ -181,14 +182,14 @@ namespace ApplicationGestionProduitCosmetique.Views
             //Button button = (Button)sender;
             //Produit produit = (Produit)button.Tag;
 
-            //ProduitFacture produitExist = null;
-            //foreach (var prodF in nouvelleFacture.ProduitsFacture)
-            //{
-            //    if (prodF.Produit.Equals(produit))
-            //    {
-            //        produitExist = prodF;
-            //    }
-            //}
+            ProduitFacture produitExist = null;
+            foreach (Produit prodF in produits)
+            {
+                if (prodF.Equals(produit))
+                {
+                    //produitExist = prodF;
+                }
+            }
 
 
             //if (produitExist != null)
@@ -200,27 +201,28 @@ namespace ApplicationGestionProduitCosmetique.Views
 
         private void btnDimunuerProduit_Click(object sender, RoutedEventArgs e)
         {
-            //Button button = (Button)sender;
-            //Produit produit = (Produit)button.Tag;
+            Button button = (Button)sender;
+            Produit produit = (Produit)button.Tag;
 
-            //bool produitExist = false;
-            //foreach (var prodF in nouveauPanier.ProduitsFacture)
-            //{
-            //    if (prodF.Produit.Equals(produit))
-            //    {
-            //        produitExist = true;
-            //    }
-            //}
+            bool produitExist = false;
+            foreach (Produit prodF in produits)
+            {
+                if (prodF.Equals(produits))
+                {
+                    produitExist = true;
+                }
+            }
 
-            //if (produitExist)
-            //    nouveauPanier.RetirerArticle(produit);
+            if (produitExist)
+                //nouveauPanier.RetirerArticle(produit);
 
-            //AfficherProduitDansFacture(nouvelleFacture);
+            AfficherProduitDansPanier(Produits);
+            
         }
 
 
 
-        
+
         /// <summary>
         /// permet d'initialiser la liste des articles choisir
         /// </summary>

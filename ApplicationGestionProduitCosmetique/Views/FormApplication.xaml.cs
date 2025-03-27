@@ -347,6 +347,7 @@ namespace ApplicationGestionProduitCosmetique.Views
                     //}
                     panierProduits.Add(produit);
                     // List<Produit> p =  panierProduits.Add(produit);
+                    FenetreErreur.Afficher("Produit ajouté au panier");
                    
                 }
             }
