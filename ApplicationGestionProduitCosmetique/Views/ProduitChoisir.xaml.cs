@@ -93,7 +93,7 @@ namespace ApplicationGestionProduitCosmetique.Views
                 qteProduit.FontSize = 10;
                 qteProduit.Width = 40;
                 qteProduit.Height = 20;
-                qteProduit.TextAlignment = TextAlignment.Center;
+                qteProduit.TextAlignment = System.Windows.TextAlignment.Center;
                 qteProduit.HorizontalAlignment = System.Windows.HorizontalAlignment.Center;
                 qteProduit.VerticalAlignment = VerticalAlignment.Center;
 

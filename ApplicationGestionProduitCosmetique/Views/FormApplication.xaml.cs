@@ -22,6 +22,9 @@ using System.Text.RegularExpressions;
 using Orientation = System.Windows.Controls.Orientation;
 using static ApplicationGestionProduitCosmetique.Views.ProduitChoisir;
 using System.Windows.Interop;
+using Syncfusion.Pdf.Graphics;
+using System.Diagnostics;
+using Syncfusion.Pdf;
 
 
 namespace ApplicationGestionProduitCosmetique.Views
@@ -104,108 +107,6 @@ namespace ApplicationGestionProduitCosmetique.Views
             SendMessage(helper.Handle, 161, 2, 0);
         }
 
-        /// <summary>
-        /// Fonction qui permet d'afficher la liste des produits
-        /// </summary>
-        /// <summary>
-        /// Fonction qui permet d'afficher la liste des produits
-        /// </summary>
-        //private void AfficherListeProduit(List<Produit> produits = null)
-        //{
-        //    List<Produit> listeProduits = new List<Produit>();
-
-        //    if (produits == null)
-        //    {
-        //        listeProduits = GestionCompteUtilisateur.ObtenirListeProduits();
-        //    }
-        //    else
-        //    {
-        //        listeProduits = produits;
-        //    }
-
-        //    wpProduit.Children.Clear();
-        //    lblTitre.Content = $"Liste des ({listeProduits.Count}) produits ";
-
-        //    foreach (Produit produit in listeProduits)
-        //    {
-        //        Border border = new Border();
-        //        border.BorderBrush = new SolidColorBrush(Colors.LightGray);
-        //        border.BorderThickness = new Thickness(2);
-        //        border.CornerRadius = new CornerRadius(10);
-        //        border.Margin = new Thickness(5);
-        //        border.Padding = new Thickness(1);
-        //        border.Width = 200;
-        //        border.Height = 280; // Augmenté pour inclure l'ID du vendeur
-
-        //        BitmapImage biProduit = new BitmapImage();
-        //        biProduit.BeginInit();
-        //        biProduit.UriSource = new Uri(produit.Image);
-        //        biProduit.CacheOption = BitmapCacheOption.OnLoad;
-        //        biProduit.CreateOptions = BitmapCreateOptions.IgnoreImageCache;
-        //        biProduit.EndInit();
-
-        //        Image imgProduit = new Image();
-        //        imgProduit.Source = biProduit;
-        //        imgProduit.Margin = new Thickness(2);
-        //        imgProduit.HorizontalAlignment = System.Windows.HorizontalAlignment.Center;
-        //        imgProduit.VerticalAlignment = VerticalAlignment.Top;
-        //        imgProduit.Width = 125;
-        //        imgProduit.Height = 125;
-        //        imgProduit.Tag = produit;
-        //        imgProduit.MouseLeftButtonDown += new MouseButtonEventHandler(ImageProduit_MouseLeftButtonUp);
-
-        //        TextBlock descriptionProduit = new TextBlock();
-        //        descriptionProduit.Text = produit.Nom;
-        //        descriptionProduit.FontSize = 12;
-        //        descriptionProduit.HorizontalAlignment = System.Windows.HorizontalAlignment.Center;
-        //        descriptionProduit.TextWrapping = TextWrapping.Wrap;
-        //        descriptionProduit.MaxWidth = 85;
-
-        //        TextBlock prixProduit = new TextBlock();
-        //        prixProduit.Text = produit.Prix.ToString("c");
-        //        prixProduit.FontSize = 13;
-        //        prixProduit.Foreground = new SolidColorBrush(Colors.Green);
-        //        prixProduit.FontWeight = FontWeights.Bold;
-        //        prixProduit.HorizontalAlignment = System.Windows.HorizontalAlignment.Right;
-        //        prixProduit.VerticalAlignment = VerticalAlignment.Bottom;
-        //        prixProduit.MaxWidth = 80;
-        //        prixProduit.Margin = new Thickness(4);
-
-        //        Separator separator1 = new Separator();
-        //        string nom = produit.Nom;
-        //        TextBlock nomblock = new TextBlock();
-        //        nomblock.Text = nom;
-        //        nomblock.FontSize = 12;
-        //        nomblock.FontWeight = FontWeights.Bold;
-        //        nomblock.TextAlignment = TextAlignment.Center;
-        //        string quantite = produit.Quantite.ToString();
-        //        TextBlock quantiteBlocK = new TextBlock();
-        //        quantiteBlocK.Text = quantite;
-        //        Separator separator2 = new Separator();
-        //        BitmapImage bibtn = new BitmapImage();
-        //        bibtn.BeginInit();
-
-        //        bibtn = new BitmapImage(new Uri("/Resources/plus.png", UriKind.Relative));
-        //        bibtn.CacheOption = BitmapCacheOption.OnLoad;
-        //        bibtn.CreateOptions = BitmapCreateOptions.IgnoreImageCache;
-        //        Image imgBtnAjout = new Image();
-
-        //        Image btnImageAjout = new Image();
-        //        btnImageAjout.Source = bibtn;
-        //        btnImageAjout.HorizontalAlignment = System.Windows.HorizontalAlignment.Center;
-        //        btnImageAjout.VerticalAlignment = VerticalAlignment.Center;
-        //        btnImageAjout.Width = 20;
-        //        btnImageAjout.Height = btnImageAjout.Width;
-
-
-        //        btnImageAjout.MouseLeftButtonDown += new MouseButtonEventHandler(ImageAjout_MouseLeftButtonDown);
-        //        btnImageAjout.Tag = produit;
-
-        //        border.Child = stackPanel;
-        //        wpProduit.Children.Add(border);
-        //    }
-        //}
-
         private void AfficherListeProduit(List<Produit> produits = null)
         {
             HashSet<int> idsProduitsAjoutes = new HashSet<int>(); // Stocker les IDs déjà affichés
@@ -219,7 +120,7 @@ namespace ApplicationGestionProduitCosmetique.Views
                 // Vérifier si l'ID du produit a déjà été ajouté
                 if (idsProduitsAjoutes.Contains((int)produit.Id))
                 {
-                    continue; // Passer au produit suivant
+                    continue;
                 }
 
                 // Ajouter l'ID du produit à la liste des produits affichés
@@ -447,5 +348,32 @@ namespace ApplicationGestionProduitCosmetique.Views
             produitChoisir.Show();
             this.Close();
         }
+
+        private void RadioButton_Checked_1(object sender, RoutedEventArgs e)
+        {
+           // Créer un document PDF
+            using (Syncfusion.Pdf.PdfDocument document = new Syncfusion.Pdf.PdfDocument())
+            {
+                // Ajouter une page au document
+                PdfPage page = document.Pages.Add();
+
+                // Créer des graphiques PDF pour la page
+                PdfGraphics graphics = page.Graphics;
+
+                // Définir la police standard
+                PdfFont font = new PdfStandardFont(PdfFontFamily.Helvetica, 20);
+
+                // Dessiner le texte
+                //graphics.DrawString("Contenu de la facture", font, PdfBrushes.Black, new PointF(0, 0));
+
+                // Enregistrer le document
+                string filePath = "MesFactures.pdf";
+                document.Save(filePath);
+
+                // Ouvrir le PDF généré
+                Process.Start(new ProcessStartInfo(filePath) { UseShellExecute = true });
+            }
+        }
+
     }
 }
