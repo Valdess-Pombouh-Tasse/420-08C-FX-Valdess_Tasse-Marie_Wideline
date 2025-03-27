@@ -444,7 +444,7 @@ namespace ApplicationGestionProduitCosmetique.Views
         {
             ProduitChoisir produitChoisir = new ProduitChoisir(panierProduits);
             produitChoisir.Show();
-            this.Close();
+           
         }
     }
 }

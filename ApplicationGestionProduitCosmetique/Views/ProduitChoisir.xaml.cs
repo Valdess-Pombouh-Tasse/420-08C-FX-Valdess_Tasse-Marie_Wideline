@@ -178,24 +178,24 @@ namespace ApplicationGestionProduitCosmetique.Views
         Facture nouvelleFacture = null;
         private void btnAugmenterProduit_Click(object sender, RoutedEventArgs e)
         {
-            Button button = (Button)sender;
-            Produit produit = (Produit)button.Tag;
+            //Button button = (Button)sender;
+            //Produit produit = (Produit)button.Tag;
 
-            ProduitFacture produitExist = null;
-            foreach (var prodF in nouvelleFacture.ProduitsFacture)
-            {
-                if (prodF.Produit.Equals(produit))
-                {
-                    produitExist = prodF;
-                }
-            }
+            //ProduitFacture produitExist = null;
+            //foreach (var prodF in nouvelleFacture.ProduitsFacture)
+            //{
+            //    if (prodF.Produit.Equals(produit))
+            //    {
+            //        produitExist = prodF;
+            //    }
+            //}
 
 
-            if (produitExist != null)
-            {
-                produitExist.Quantite++;
-            }
-            AfficherProduitDansPanier(Produits);
+            //if (produitExist != null)
+            //{
+            //    produitExist.Quantite++;
+            //}
+            //AfficherProduitDansPanier(Produits);
         }
 
         private void btnDimunuerProduit_Click(object sender, RoutedEventArgs e)
