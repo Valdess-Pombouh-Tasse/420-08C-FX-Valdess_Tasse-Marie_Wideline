@@ -363,7 +363,7 @@ namespace ApplicationGestionProduitCosmetique.Views
                 // Définir la police standard
                 PdfFont font = new PdfStandardFont(PdfFontFamily.Helvetica, 20);
 
-                // Dessiner le texte
+                
                 //graphics.DrawString("Contenu de la facture", font, PdfBrushes.Black, new PointF(0, 0));
 
                 // Enregistrer le document
