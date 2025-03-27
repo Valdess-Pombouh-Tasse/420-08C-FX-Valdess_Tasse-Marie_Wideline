@@ -346,7 +346,7 @@ namespace ApplicationGestionProduitCosmetique.Views
         {
             ProduitChoisir produitChoisir = new ProduitChoisir(panierProduits);
             produitChoisir.Show();
-            this.Close();
+           
         }
 
         private void RadioButton_Checked_1(object sender, RoutedEventArgs e)
