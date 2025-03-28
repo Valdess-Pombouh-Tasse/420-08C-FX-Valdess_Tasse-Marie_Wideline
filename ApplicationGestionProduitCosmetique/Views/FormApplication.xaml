@@ -9,7 +9,6 @@
         Title="FormApplication" Height="570" Width="800" Loaded="Window_Loaded">
     <Border>
         <Grid>
-
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="7*"/>
                 <ColumnDefinition Width="0*"/>
@@ -44,7 +43,7 @@
                     <StackPanel Grid.Row="1">
                         <RadioButton Style="{StaticResource menuButton}" Tag="{StaticResource Color1}" Command="{Binding ShowAccueilViewModel}">
                             <StackPanel Orientation="Horizontal">
-                                <fa:IconImage Icon="Home" Style="{StaticResource menuButtonIcon}"/>
+                                <fa:IconImage Icon="Home" Style="{StaticResource menuButtonIcon}" RenderTransformOrigin="0.5,0.552"/>
                                 <TextBlock Text="Catalogue" Foreground="Black" Style="{StaticResource menuButtonText}"/>
                             </StackPanel>
                         </RadioButton>
@@ -57,8 +56,14 @@
                         </RadioButton>
                         <RadioButton Style="{StaticResource menuButton}" Tag="{StaticResource Color7}" Command="{Binding ShowArticleChoisirViewModel}">
                             <StackPanel Orientation="Horizontal">
-                                <fa:IconImage Icon="ShoppingCart" Style="{StaticResource menuButtonIcon}"/>
-                                <TextBlock Text="Articles Commandé" Foreground="Black" Style="{StaticResource menuButtonText}"/>
+                                <fa:IconImage Icon="ShoppingCart" Style="{StaticResource menuButtonIcon}" RenderTransformOrigin="0.5,0.546"/>
+                                <TextBlock Text="Articles Commandés" Foreground="Black" Style="{StaticResource menuButtonText}"/>
+                            </StackPanel>
+                        </RadioButton>
+                        <RadioButton Style="{StaticResource menuButton}" Tag="{StaticResource Color8}" Command="{Binding ShowFactureViewModel}" Checked="RadioButton_Checked_1">
+                            <StackPanel Orientation="Horizontal">
+                                <fa:IconImage Icon="FileInvoice" Style="{StaticResource menuButtonIcon}" RenderTransformOrigin="0.617,0.5"/>
+                                <TextBlock Text="Mes factures" Foreground="Black" Style="{StaticResource menuButtonText}"/>
                             </StackPanel>
                         </RadioButton>
                     </StackPanel>
