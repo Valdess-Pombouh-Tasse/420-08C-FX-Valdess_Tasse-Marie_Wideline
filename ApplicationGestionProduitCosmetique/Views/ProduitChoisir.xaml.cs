@@ -67,6 +67,31 @@ namespace ApplicationGestionProduitCosmetique.Views
 
             foreach (Produit prodF in produits)
             {
+                Border border = new Border();
+                border.BorderBrush = new SolidColorBrush(Colors.LightGray);
+                border.BorderThickness = new Thickness(2);
+                border.CornerRadius = new CornerRadius(10);
+                border.Margin = new Thickness(5);
+                border.Padding = new Thickness(1);
+                border.Width = 100;
+                border.Height = 250;
+
+                BitmapImage biProduit = new BitmapImage();
+                biProduit.BeginInit();
+                biProduit.UriSource = new Uri(prodF.Image);
+                biProduit.CacheOption = BitmapCacheOption.OnLoad;
+                biProduit.CreateOptions = BitmapCreateOptions.IgnoreImageCache;
+                biProduit.EndInit();
+
+                Image imgProduit = new Image();
+                imgProduit.Source = biProduit;
+                imgProduit.Margin = new Thickness(2);
+                imgProduit.HorizontalAlignment = System.Windows.HorizontalAlignment.Center;
+                imgProduit.VerticalAlignment = VerticalAlignment.Top;
+                imgProduit.Width = 90;
+                imgProduit.Height = 100;
+                imgProduit.Tag = prodF;
+
                 TextBlock descriptionProduit = new TextBlock();
                 descriptionProduit.Text = prodF.Nom;
                 descriptionProduit.FontSize = 15;
@@ -161,6 +186,7 @@ namespace ApplicationGestionProduitCosmetique.Views
                 borderLigne.HorizontalAlignment = System.Windows.HorizontalAlignment.Left;
                 borderLigne.VerticalAlignment = VerticalAlignment.Center;
 
+                stackPanel.Children.Add(imgProduit);
                 stackPanel.Children.Add(stackPanelCodeDescrip);
                 stackPanel.Children.Add(btnReduction);
                 stackPanel.Children.Add(qteProduit);
@@ -177,19 +203,20 @@ namespace ApplicationGestionProduitCosmetique.Views
 
 
         Facture nouvelleFacture = null;
+        
         private void btnAugmenterProduit_Click(object sender, RoutedEventArgs e)
         {
-            //Button button = (Button)sender;
-            //Produit produit = (Produit)button.Tag;
+            ////Button button = (Button)sender;
+            ////Produit produit = (Produit)button.Tag;
 
-            ProduitFacture produitExist = null;
-            foreach (Produit prodF in produits)
-            {
-                if (prodF.Equals(produit))
-                {
-                    //produitExist = prodF;
-                }
-            }
+            //ProduitFacture produitExist = null;
+            //foreach (Produit prodF in produits)
+            //{
+            //    if (prodF.Equals(produit))
+            //    {
+            //        //produitExist = prodF;
+            //    }
+            //}
 
 
             //if (produitExist != null)
