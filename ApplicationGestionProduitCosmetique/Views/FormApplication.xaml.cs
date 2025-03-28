@@ -357,14 +357,21 @@ namespace ApplicationGestionProduitCosmetique.Views
                 // Ajouter une page au document
                 PdfPage page = document.Pages.Add();
 
-                // Créer des graphiques PDF pour la page
+                // Créer des graphiques pour la page
                 PdfGraphics graphics = page.Graphics;
 
-                // Définir la police standard
-                PdfFont font = new PdfStandardFont(PdfFontFamily.Helvetica, 20);
+                // Définir une police pour le titre
+                PdfFont titleFont = new PdfStandardFont(PdfFontFamily.Helvetica, 24, PdfFontStyle.Bold);
 
-                
-                //graphics.DrawString("Contenu de la facture", font, PdfBrushes.Black, new PointF(0, 0));
+                // Définir le titre de l'application
+                string titreApplication = "Cometic Shop";
+
+                // Mesurer la largeur du texte pour le centrer
+                System.Drawing.SizeF textSize = titleFont.MeasureString(titreApplication);
+                float xPosition = (page.GetClientSize().Width - textSize.Width) / 2;
+
+                // Dessiner le titre centré en haut de la page
+                graphics.DrawString(titreApplication, titleFont, PdfBrushes.Black, new System.Drawing.PointF(xPosition, 20));
 
                 // Enregistrer le document
                 string filePath = "MesFactures.pdf";
