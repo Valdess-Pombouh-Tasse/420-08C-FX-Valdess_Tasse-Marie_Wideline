@@ -12,7 +12,6 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Forms;
-using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
@@ -32,20 +31,39 @@ namespace ApplicationGestionProduitCosmetique.Views
     /// </summary>
     public partial class ProduitChoisir : Window
     {
-        List<Produit> produits;
-        ListePanier listePanier = SharedResources.MaListe;
-        Facture facture = new Facture();
-
+        private List<Produit> produits;
+        private ListePanier listePanier = SharedResources.MaListe;
+        private Facture _factureCourante;
 
         public List<Produit> Produits
         {
             get { return produits; }
             set { produits = value; }
         }
-        public ProduitChoisir(List<Produit> produits)
+
+
+        public Facture FactureCourante
+        {
+            get { return _factureCourante; }
+            set { _factureCourante = value; }
+        }
+
+
+        public ProduitChoisir(List<Produit> produits, Facture facture)
         {
             InitializeComponent();
+            InitialiserlstArticleChoisir();
+            if (listePanier != null)
+            {
+                lblTPS.Text = $"le prix total de vos Articles: {listePanier.PrixSousTotal.ToString()}$";
+            }
+            else
+            {
+                lblTPS.Text = $"le prix total de vos Articles: 0$";
+            }
             Produits = produits;
+            FactureCourante = facture ?? new Facture();
+            //AfficherProduitDansFacture(FactureCourante);
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -74,6 +92,31 @@ namespace ApplicationGestionProduitCosmetique.Views
 
             foreach (Produit prodF in produits)
             {
+                Border border = new Border();
+                border.BorderBrush = new SolidColorBrush(Colors.LightGray);
+                border.BorderThickness = new Thickness(2);
+                border.CornerRadius = new CornerRadius(10);
+                border.Margin = new Thickness(5);
+                border.Padding = new Thickness(1);
+                border.Width = 100;
+                border.Height = 250;
+
+                BitmapImage biProduit = new BitmapImage();
+                biProduit.BeginInit();
+                biProduit.UriSource = new Uri(prodF.Image);
+                biProduit.CacheOption = BitmapCacheOption.OnLoad;
+                biProduit.CreateOptions = BitmapCreateOptions.IgnoreImageCache;
+                biProduit.EndInit();
+
+                Image imgProduit = new Image();
+                imgProduit.Source = biProduit;
+                imgProduit.Margin = new Thickness(2);
+                imgProduit.HorizontalAlignment = System.Windows.HorizontalAlignment.Center;
+                imgProduit.VerticalAlignment = VerticalAlignment.Top;
+                imgProduit.Width = 90;
+                imgProduit.Height = 100;
+                imgProduit.Tag = prodF;
+
                 TextBlock descriptionProduit = new TextBlock();
                 descriptionProduit.Text = prodF.Nom;
                 descriptionProduit.FontSize = 15;
@@ -95,8 +138,7 @@ namespace ApplicationGestionProduitCosmetique.Views
                 stackPanelCodeDescrip.Children.Add(codeProduit);
 
                 System.Windows.Controls.TextBox qteProduit = new System.Windows.Controls.TextBox();
-                qteProduit.Text = "1";
-                //qteProduit.Text = prodF.Quantite.ToString();
+                qteProduit.Text = prodF.Quantite.ToString();
                 qteProduit.FontSize = 10;
                 qteProduit.Width = 40;
                 qteProduit.Height = 20;
@@ -168,6 +210,7 @@ namespace ApplicationGestionProduitCosmetique.Views
                 borderLigne.HorizontalAlignment = System.Windows.HorizontalAlignment.Left;
                 borderLigne.VerticalAlignment = VerticalAlignment.Center;
 
+                stackPanel.Children.Add(imgProduit);
                 stackPanel.Children.Add(stackPanelCodeDescrip);
                 stackPanel.Children.Add(btnReduction);
                 stackPanel.Children.Add(qteProduit);
@@ -178,32 +221,45 @@ namespace ApplicationGestionProduitCosmetique.Views
 
                 wpProduitPanier.Children.Add(borderLigne);
             }
-
            
         }
 
 
         Facture nouvelleFacture = null;
+        
         private void btnAugmenterProduit_Click(object sender, RoutedEventArgs e)
         {
-            //Button button = (Button)sender;
-            //Produit produit = (Produit)button.Tag;
+            Button button = (Button)sender;
+            Produit produit = (Produit)button.Tag;
 
-            ProduitFacture produitExist = null;
-            foreach (Produit prodF in produits)
+            if (FactureCourante == null)
             {
+                FactureCourante = new Facture();
+            }
+
+            ProduitFacture produitExist = FactureCourante.ProduitsFacture
+                .FirstOrDefault(pf => pf.Produit.Code == produit.Code);
+
+            if (produitExist != null)
+            {
+                produitExist.Quantite++;
+            }
+            else
+            {
+                FactureCourante.ProduitsFacture.Add(new ProduitFacture
+                {
+                    Code = produit.Code,
+                    Nom = produit.Nom,
+                    Quantite = 1,
+                    Prix = produit.Prix
+                });
                 if (prodF.Equals(produits))
                 {
                     //produitExist = prodF;
                 }
             }
 
-
-            //if (produitExist != null)
-            //{
-            //    produitExist.Quantite++;
-            //}
-            //AfficherProduitDansPanier(Produits);
+            AfficherProduitDansPanier(Produits);
         }
 
         private void btnDimunuerProduit_Click(object sender, RoutedEventArgs e)
@@ -221,7 +277,7 @@ namespace ApplicationGestionProduitCosmetique.Views
             }
 
             if (produitExist)
-                //nouveauPanier.RetirerArticle(produit);
+                //nouvelleFacture.reti
 
             AfficherProduitDansPanier(Produits);
             
@@ -229,20 +285,7 @@ namespace ApplicationGestionProduitCosmetique.Views
 
 
 
-
-        /// <summary>
-        /// permet d'initialiser la liste des articles choisir
-        /// </summary>
-        //public void InitialiserlstArticleChoisir()
-        //{
-
-        //    //if (listePanier != null)
-        //    //{
-        //    //    lblPrixSansTaxe.Text = $"le prix total de vos Articles: {listePanier.PrixSousTotal.ToString()}$";
-        //    //    lvListeVoeux.Items.Refresh();
-        //    //}
-        //}
-
+       
 
         /// <summary>
         private void btnEnreigistrerLst_Click(object sender, RoutedEventArgs e)
@@ -250,6 +293,12 @@ namespace ApplicationGestionProduitCosmetique.Views
 
         }
 
+        private void btnPayer_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+    }
+}
         private void btnPayer_Click(object sender, RoutedEventArgs e)
         {
             // Créer un document PDF

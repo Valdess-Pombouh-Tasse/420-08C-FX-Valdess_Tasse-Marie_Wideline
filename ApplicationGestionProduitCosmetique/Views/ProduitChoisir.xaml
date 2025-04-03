@@ -4,66 +4,124 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ApplicationGestionProduitCosmetique.Views"
+        xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
         mc:Ignorable="d"
         Title="ProduitChoisir" Height="650" Width="1000" Loaded="Window_Loaded">
 
-    <Border>
-        <Grid>
-            
-            <StackPanel>
-                
+    <Window.Resources>
+        <!-- Animation FadeIn pour les éléments -->
+        <Storyboard x:Key="FadeIn">
+            <DoubleAnimation Storyboard.TargetProperty="Opacity" To="1" Duration="0:0:1" />
+        </Storyboard>
+
+        <!-- Animation Hover pour les boutons -->
+        <Storyboard x:Key="HoverButton">
+            <DoubleAnimation Storyboard.TargetProperty="Opacity" To="0.8" Duration="0:0:0.2" AutoReverse="True"/>
+        </Storyboard>
+    </Window.Resources>
+
+    <Grid Margin="10">
+        <!-- Définition des colonnes -->
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="3*"/>
+            <ColumnDefinition Width="7*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Menu latéral -->
+        <Border Grid.Column="0" Grid.Row="0" Background="AliceBlue" CornerRadius="10,0,0,10">
+            <StackPanel Margin="10">
+                <TextBlock FontSize="30" FontWeight="Bold" Text="Cosmetic Shop" Foreground="Indigo" Margin="0,0,0,20"/>
+
+                <RadioButton Command="{Binding ShowAccueilViewModel}" Tag="{StaticResource Color1}">
+                    <StackPanel Orientation="Horizontal">
+                        <fa:IconImage Icon="Home" Width="20" Height="20" Style="{StaticResource menuButtonIcon}" RenderTransformOrigin="0.5,0.552"/>
+                        <TextBlock Text="Catalogue" Margin="10" Style="{StaticResource menuButtonText}"/>
+                    </StackPanel>
+                </RadioButton>
+
+                <RadioButton Command="{Binding ShowArticleChoisirViewModel}" Tag="{StaticResource Color2}">
+                    <StackPanel Orientation="Horizontal">
+                        <fa:IconImage Icon="ShoppingCart" Width="20" Height="20" Style="{StaticResource menuButtonIcon}" RenderTransformOrigin="0.5,0.552"/>
+                        <TextBlock Text="Articles Choisis" Margin="10" Style="{StaticResource menuButtonText}"/>
+                    </StackPanel>
+                </RadioButton>
+
+                <RadioButton Command="{Binding ShowFactureViewModel}" Tag="{StaticResource Color7}">
+                    <StackPanel Orientation="Horizontal">
+                        <fa:IconImage Icon="FileInvoice" Width="20" Height="20" Style="{StaticResource menuButtonIcon}" RenderTransformOrigin="0.5,0.552"/>
+                        <TextBlock Text="Mes factures" Margin="10" Style="{StaticResource menuButtonText}"/>
+                    </StackPanel>
+                </RadioButton>
+
+                <RadioButton Grid.Row="2" Style="{StaticResource menuButton}" Tag="black" Margin="15,1,195,20" Background="AliceBlue">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Foreground="Black" Text="Deconnexion" Style="{StaticResource menuButtonText}"/>
+                        <fa:IconImage Icon="SignOut"  Style="{StaticResource menuButtonIcon}"/>
+                    </StackPanel>
+                </RadioButton>
             </StackPanel>
+        </Border>
 
+        <!-- Contenu principal -->
+        <Border Grid.Column="1" Grid.Row="0" Margin="10">
+            <StackPanel Margin="20">
+                <TextBlock Text="Panier" FontWeight="Bold" Foreground="#4169e1" FontSize="20" Margin="10"/>
 
-            <StackPanel Margin="5">
-                <TextBlock Text="Panier" FontWeight="Bold" Foreground="#4169e1" FontSize="20"/>
-                <Border Width="520" Height="550" BorderBrush="Black" BorderThickness="1" CornerRadius="5">
+                <Border Width="520" Height="550" BorderBrush="Black" BorderThickness="1" CornerRadius="5" Margin="0,0,0,20">
                     <StackPanel Margin="5">
+                        <!-- Date et recherche facture -->
                         <TextBlock x:Name="lblDateFacture" Text="Date" HorizontalAlignment="Left" Margin="5" />
                         <StackPanel Orientation="Horizontal" Margin="5">
-                            <TextBox  x:Name="txtNoFacture" Width="200" Height="25" />
-                            <Button x:Name="btnRechercherFacture" BorderThickness="0" Background="White" >
-                                <Image  Source="/Resources/Images/ImagesIcons/search.png"  Width="25" Margin="5"/>
-
+                            <TextBox x:Name="txtNoFacture" Width="200" Height="25" />
+                            <Button x:Name="btnRechercherFacture" BorderThickness="0" Background="White" MouseEnter="btnRechercherFacture_MouseEnter" MouseLeave="btnRechercherFacture_MouseLeave">
+                                <Image Source="/Resources/Images/ImagesIcons/search.png" Width="25" Margin="5"/>
                             </Button>
                         </StackPanel>
-                        <!--Affichage des items de la facture-->
+
+                        <!-- Affichage des items de la facture -->
                         <Border Height="250" BorderBrush="LightGray" BorderThickness="1" CornerRadius="5" Margin="5">
                             <ScrollViewer VerticalScrollBarVisibility="Auto" Height="230" Margin="2">
-                                <WrapPanel Name="wpProduitPanier" Orientation="Horizontal">
-
+                                <WrapPanel Name="wpProduitPanier" Orientation="Horizontal" Loaded="wpProduitPanier_Loaded">
+                                    <!-- Produits ajoutés dynamiquement -->
                                 </WrapPanel>
                             </ScrollViewer>
-
                         </Border>
-                        <StackPanel>
-                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,5,0">
-                                <Label  Content="Sous-Total"  HorizontalAlignment="Right" Margin="0,0,5,0"/>
-                                <TextBlock x:Name="lblSousTotal" Width="100" VerticalAlignment="Center"  TextAlignment="Right" Margin="0,0,5,0"/>
+
+                        <!-- Totaux -->
+                        <StackPanel Margin="5">
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                                <Label Content="Sous-Total" HorizontalAlignment="Right" Margin="0,0,5,0"/>
+                                <TextBlock x:Name="lblSousTotal" Width="100" VerticalAlignment="Center" TextAlignment="Right"/>
                             </StackPanel>
-                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,5,0">
-                                <Label  Content="TPS" HorizontalAlignment="Right" Margin="0,0,5,0"/>
-                                <TextBlock x:Name="lblTPS" Width="100" VerticalAlignment="Center"  TextAlignment="Right" Margin="0,0,5,0"/>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                                <Label Content="TPS" HorizontalAlignment="Right" Margin="0,0,5,0"/>
+                                <TextBlock x:Name="lblTPS" Width="100" VerticalAlignment="Center" TextAlignment="Right"/>
                             </StackPanel>
-                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,5,0">
-                                <Label  Content="TVQ" HorizontalAlignment="Right" Margin="0,0,5,0"/>
-                                <TextBlock x:Name="lblTVQ" Width="100" VerticalAlignment="Center" TextAlignment="Right" Margin="0,0,5,0"/>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                                <Label Content="TVQ" HorizontalAlignment="Right" Margin="0,0,5,0"/>
+                                <TextBlock x:Name="lblTVQ" Width="100" VerticalAlignment="Center" TextAlignment="Right"/>
                             </StackPanel>
-                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,5,0">
-                                <Label  Content="Total" HorizontalAlignment="Right" Margin="0,0,5,0"/>
-                                <TextBlock x:Name="lblTotal" Width="100" VerticalAlignment="Center" TextAlignment="Right" Margin="0,0,5,0"/>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                                <Label Content="Total" HorizontalAlignment="Right" Margin="0,0,5,0"/>
+                                <TextBlock x:Name="lblTotal" Width="100" VerticalAlignment="Center" TextAlignment="Right"/>
                             </StackPanel>
                         </StackPanel>
                     </StackPanel>
                 </Border>
+
+                <!-- Boutons de contrôle -->
                 <DockPanel>
-                    <Button x:Name="btnNouvelleFacture" Background="White" BorderThickness="0" DockPanel.Dock="left" >
+                    <Button x:Name="btnNouvelleFacture" Background="White" BorderThickness="0" DockPanel.Dock="Left" MouseEnter="btnNouvelleFacture_MouseEnter" MouseLeave="btnNouvelleFacture_MouseLeave">
                         <Image Source="/Resources/Images/ImagesIcons/new.png" Width="25" Margin="5"/>
                     </Button>
+                    <Button x:Name="btnPayer" Content="Payer" Width="80" Background="#4169e1" Foreground="White" HorizontalAlignment="Right" Margin="5" Click="btnPayer_Click" MouseEnter="btnPayer_MouseEnter" MouseLeave="btnPayer_MouseLeave"/>
                     <Button x:Name="btnPayer"  Content="Payer" Width="50" Background="#4169e1" Foreground="White" HorizontalAlignment="Right" Margin="5" Click="btnPayer_Click" />
                 </DockPanel>
             </StackPanel>
-
-        </Grid>
-    </Border>
+        </Border>
+    </Grid>
 </Window>

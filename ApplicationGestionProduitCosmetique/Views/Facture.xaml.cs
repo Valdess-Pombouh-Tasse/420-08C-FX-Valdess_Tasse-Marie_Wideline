@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ApplicationGestionProduitCosmetique.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,5 +24,7 @@ namespace ApplicationGestionProduitCosmetique.Views
         {
             InitializeComponent();
         }
+
+        public IEnumerable<ProduitFacture> ProduitsFacture { get; internal set; }
     }
 }

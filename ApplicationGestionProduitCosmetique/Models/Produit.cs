@@ -241,7 +241,7 @@ namespace ApplicationGestionProduitCosmetique.Models
 
             Produit produit = obj as Produit;
 
-            if (string.Compare(Code, produit.Code, CultureInfo.InvariantCulture, CompareOptions.IgnoreCase | CompareOptions.IgnoreNonSpace) == 0)
+            if (string.Compare(this.Code, produit.Code, CultureInfo.InvariantCulture, CompareOptions.IgnoreCase | CompareOptions.IgnoreNonSpace) == 0)
                 return true;
 
             return false;
@@ -256,7 +256,7 @@ namespace ApplicationGestionProduitCosmetique.Models
         /// @author Valdess
         public static bool operator ==(Produit a, Produit b)
         {
-            if (ReferenceEquals(a, b))
+            if (object.ReferenceEquals(a, b))
                 return true;
 
             if ((object)a == null || (object)b == null)

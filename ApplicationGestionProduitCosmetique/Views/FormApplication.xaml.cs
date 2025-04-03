@@ -34,6 +34,7 @@ namespace ApplicationGestionProduitCosmetique.Views
         List<Produit> _produits;
         public ListePanier listePanier = new ListePanier();
         public List<Produit> panierProduits = new List<Produit>();
+        public Facture facture = new Facture();
 
 
         public List<Produit> Produits
@@ -49,6 +50,8 @@ namespace ApplicationGestionProduitCosmetique.Views
         public FormApplication()
         {
             InitializeComponent();
+            RetournerListePanier();
+            AfficherListeProduit();
 
             List<Categorie> listCategories = GestionCompteUtilisateur.ObtenirListeCategories();
             listCategories.Add(new Categorie(0, "Toutes"));
@@ -56,8 +59,8 @@ namespace ApplicationGestionProduitCosmetique.Views
             cboCategories.SelectedIndex = listCategories.Count - 1;
 
             if (accueil.utilisateur == null)
-            {              
-                lblErreurUtilisateur.Visibility = Visibility.Visible; 
+            {
+                lblErreurUtilisateur.Visibility = Visibility.Visible;
                 lblErreurUtilisateur.Content = "Aucun utilisateur connecté.";
 
                 return;
@@ -68,17 +71,12 @@ namespace ApplicationGestionProduitCosmetique.Views
             this.Utilisateur = utilisateur;
             accueil.utilisateur = utilisateur;
             this.MaxHeight = SystemParameters.MaximizedPrimaryScreenHeight;
-            //Utilisateur utilisateur = accueil.utilisateur;
-            //txtUtilisateurClient.Text = utilisateur.NomUtilisateur;
-            //this.Utilisateur = utilisateur;
-            //accueil.utilisateur = utilisateur;
-            //this.MaxHeight = SystemParameters.MaximizedPrimaryScreenHeight;
+
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             AfficherListeProduit();
-            RetournerListeVoeux();
         }
 
         public Utilisateur ObtenirUtilisateur()
@@ -91,21 +89,21 @@ namespace ApplicationGestionProduitCosmetique.Views
             public static ListePanier MaListe { get; set; }
         }
 
-        public ListePanier RetournerListeVoeux()
+        public ListePanier RetournerListePanier()
         {
             return listePanier;
         }
 
-        public static extern IntPtr SendMessage(IntPtr hWnd, int wMsg, int wParam, int lParam);
-        private void pnlbar_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            WindowInteropHelper helper = new WindowInteropHelper(this);
-            SendMessage(helper.Handle, 161, 2, 0);
-        }
+        //public static extern IntPtr SendMessage(IntPtr hWnd, int wMsg, int wParam, int lParam);
+        //private void pnlbar_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        //{
+        //    WindowInteropHelper helper = new WindowInteropHelper(this);
+        //    SendMessage(helper.Handle, 161, 2, 0);
+        //}
 
         private void AfficherListeProduit(List<Produit> produits = null)
         {
-            HashSet<int> idsProduitsAjoutes = new HashSet<int>(); // Stocker les IDs déjà affichés
+            HashSet<int> idsProduitsAjoutes = new HashSet<int>();
             List<Produit> listeProduits = produits ?? GestionCompteUtilisateur.ObtenirListeProduits();
 
             wpProduit.Children.Clear();
@@ -130,12 +128,13 @@ namespace ApplicationGestionProduitCosmetique.Views
                     Margin = new Thickness(5),
                     Padding = new Thickness(1),
                     Width = 200,
-                    Height = 280
+                    Height = 280,
+                    Background = new SolidColorBrush(Colors.AliceBlue)
                 };
 
                 BitmapImage biProduit = new BitmapImage();
                 biProduit.BeginInit();
-                biProduit.UriSource = new Uri(produit.Image);
+                biProduit.UriSource = new Uri(produit.Image, UriKind.Relative);
                 biProduit.CacheOption = BitmapCacheOption.OnLoad;
                 biProduit.CreateOptions = BitmapCreateOptions.IgnoreImageCache;
                 biProduit.EndInit();
@@ -145,16 +144,18 @@ namespace ApplicationGestionProduitCosmetique.Views
                     Source = biProduit,
                     Margin = new Thickness(2),
                     HorizontalAlignment = System.Windows.HorizontalAlignment.Center,
-                    VerticalAlignment = VerticalAlignment.Top,
+                    VerticalAlignment = VerticalAlignment.Center,
                     Width = 125,
                     Height = 125,
                     Tag = produit
                 };
                 imgProduit.MouseLeftButtonDown += ImageProduit_MouseLeftButtonUp;
+                Separator separator1 = new Separator();
+                string nom = produit.Nom;
 
                 TextBlock descriptionProduit = new TextBlock
                 {
-                    Text = produit.Nom,
+                    Text = produit.Description,
                     FontSize = 12,
                     HorizontalAlignment = System.Windows.HorizontalAlignment.Center,
                     TextWrapping = TextWrapping.Wrap,
@@ -172,30 +173,18 @@ namespace ApplicationGestionProduitCosmetique.Views
                     MaxWidth = 80,
                     Margin = new Thickness(4)
                 };
-
-                
-
-                StackPanel stackPanel = new StackPanel
-                {
-                    Orientation = Orientation.Vertical,
-                    HorizontalAlignment = System.Windows.HorizontalAlignment.Center,
-                    VerticalAlignment = VerticalAlignment.Top
-                };
-
-                stackPanel.Children.Add(imgProduit);
-                stackPanel.Children.Add(descriptionProduit);
-                stackPanel.Children.Add(prixProduit);
+                Separator separator2 = new Separator();
 
                 BitmapImage bibtn = new BitmapImage();
                 bibtn.BeginInit();
-                bibtn.UriSource = new Uri("/Resources/Images/ImagesIcons/plus.png", UriKind.Relative);
+                bibtn.UriSource = new Uri(produit.Image, UriKind.Relative);
                 bibtn.CacheOption = BitmapCacheOption.OnLoad;
                 bibtn.CreateOptions = BitmapCreateOptions.IgnoreImageCache;
-               
+                bibtn.EndInit();
 
                 Image btnImageAjout = new Image
                 {
-                    Source = bibtn,
+                    Source = new BitmapImage(new Uri("/Resources/Images/ImagesIcons/plus.png", UriKind.Relative)),
                     HorizontalAlignment = System.Windows.HorizontalAlignment.Center,
                     VerticalAlignment = VerticalAlignment.Center,
                     Width = 20,
@@ -204,6 +193,14 @@ namespace ApplicationGestionProduitCosmetique.Views
                 };
                 btnImageAjout.MouseLeftButtonDown += ImageAjout_MouseLeftButtonDown;
 
+
+                StackPanel stackPanel = new StackPanel();
+
+                stackPanel.Children.Add(imgProduit);
+                stackPanel.Children.Add(separator1);
+                stackPanel.Children.Add(descriptionProduit);
+                stackPanel.Children.Add(prixProduit);
+                stackPanel.Children.Add(separator2);
                 stackPanel.Children.Add(btnImageAjout);
 
                 border.Child = stackPanel;
@@ -224,26 +221,8 @@ namespace ApplicationGestionProduitCosmetique.Views
                 Produit produit = imageProduit.Tag as Produit;
                 if (produit != null)
                 {
-                    //Items items = new Items();
-                    //items.LstProduit = produit;
-                    //items.NbItem = 1;
-                    //items.NomItem = System.Configuration.ConfigurationManager.AppSettings["images"] + produit.Nom;
-                    //bool articleExiste = false;
-                    //for (int i = 0; i < listePanier.Items.Count; i++)
-                    //{
-                    //    if (listePanier.Items[i].LstProduit == items.LstProduit)
-                    //    {
-                    //        listePanier.Items[i].NbItem++;
-                    //        articleExiste = true;
-                    //    }
-                    //}
-                    //if (!articleExiste)
-                    //{
-                    //    listePanier.AjouterArticle(items);
-                    //    SharedResources.MaListe = listePanier;
-                    //}
+                    
                     panierProduits.Add(produit);
-                    // List<Produit> p =  panierProduits.Add(produit);
                     FenetreErreur.Afficher("Produit ajouté au panier");
                    
                 }
@@ -259,43 +238,22 @@ namespace ApplicationGestionProduitCosmetique.Views
         /// <param name="e"></param>
         private void ImageAjout_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            Image btnImageAjout = sender as Image;
-            if (btnImageAjout != null)
+            List<Produit> prod = new List<Produit>();
+            uint quantite = 1;
+            Image imageProduit = sender as Image;
+
+            if (imageProduit != null)
             {
-                Produit pArticle = btnImageAjout.Tag as Produit;
-                if (pArticle != null)
+                Produit produit = imageProduit.Tag as Produit;
+                if (produit != null)
                 {
-                    // Vérifier si listePanier est bien initialisée
-                    if (listePanier == null)
-                    {
-                        listePanier = new ListePanier();
-                    }
 
-                    Items items = new Items();
-                    items.LstProduit = pArticle;
-                    items.NbItem = 1;
-                    items.NomItem = System.Configuration.ConfigurationManager.AppSettings["images"] + pArticle.Nom;
-                    bool articleExiste = false;
+                    panierProduits.Add(produit);
+                    FenetreErreur.Afficher("Produit ajouté au panier");
 
-                    for (int i = 0; i < listePanier.Items.Count; i++)
-                    {
-                        if (listePanier.Items[i].LstProduit == items.LstProduit)
-                        {
-                            listePanier.Items[i].NbItem++;
-                            
-                            articleExiste = true;
-                            break; // Sortie de la boucle dès qu'on trouve l'article
-                        }
-                    }
-
-                    if (!articleExiste)
-                    {
-                        listePanier.AjouterArticle(items);
-                        SharedResources.MaListe = listePanier;
-                        
-                    }
                 }
             }
+            prod = panierProduits;
         }
 
        
@@ -340,7 +298,7 @@ namespace ApplicationGestionProduitCosmetique.Views
 
         private void RadioButton_Checked(object sender, RoutedEventArgs e)
         {
-            ProduitChoisir produitChoisir = new ProduitChoisir(panierProduits);
+            ProduitChoisir produitChoisir = new ProduitChoisir(panierProduits, facture);
             produitChoisir.Show();
            
         }
@@ -352,5 +310,45 @@ namespace ApplicationGestionProduitCosmetique.Views
             
         }
 
+        private void btnRechercherProduit_Click(object sender, RoutedEventArgs e)
+        {
+            List<Produit> produits = new List<Produit>();
+            string recherche = txtRechercher.Text;
+            Categorie categorie = (Categorie)cboCategories.SelectedItem;
+
+            if (!string.IsNullOrWhiteSpace(recherche) && (categorie == null || categorie.Nom == "Toutes"))
+            {
+                produits = GestionCompteUtilisateur.ObtenirListeProduits(recherche);
+
+            }
+            else if ((categorie != null && categorie.Nom != "Toutes") && string.IsNullOrWhiteSpace(recherche))
+            {
+                produits = GestionCompteUtilisateur.ObtenirListeProduits("", categorie);
+            }
+            else if (!string.IsNullOrWhiteSpace(recherche) && categorie != null && categorie.Nom != "Toutes")
+            {
+                produits = GestionCompteUtilisateur.ObtenirListeProduits(recherche, categorie);
+            }
+            else
+            {
+                produits = GestionCompteUtilisateur.ObtenirListeProduits();
+            }
+            AfficherListeProduit(produits);
+        }
+
+        private void txtRechercher_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            string motCle = txtRechercher.Text;
+            List<Produit> produits = GestionCompteUtilisateur.ObtenirListeProduits(motCle);
+
+            if(produits.Count != 0)
+            {
+                AfficherListeProduit(produits);
+            }
+            else
+            {
+                AfficherListeProduit();
+            }
+        }
     }
 }
