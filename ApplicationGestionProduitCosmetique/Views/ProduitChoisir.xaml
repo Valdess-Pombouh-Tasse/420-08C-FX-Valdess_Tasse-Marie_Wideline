@@ -60,7 +60,7 @@
                     <Button x:Name="btnNouvelleFacture" Background="White" BorderThickness="0" DockPanel.Dock="left" >
                         <Image Source="/Resources/Images/ImagesIcons/new.png" Width="25" Margin="5"/>
                     </Button>
-                    <Button x:Name="btnPayer"  Content="Payer" Width="50" Background="#4169e1" Foreground="White" HorizontalAlignment="Right" Margin="5" />
+                    <Button x:Name="btnPayer"  Content="Payer" Width="50" Background="#4169e1" Foreground="White" HorizontalAlignment="Right" Margin="5" Click="btnPayer_Click" />
                 </DockPanel>
             </StackPanel>
 
