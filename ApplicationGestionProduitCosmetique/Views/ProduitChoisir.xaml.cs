@@ -282,6 +282,20 @@ namespace ApplicationGestionProduitCosmetique.Views
 
         }
 
+        private void CalculerTotaux()
+        {
+            double sousTotal = 0;
+            foreach (var produit in Produits)
+            {
+                sousTotal += double.Parse(produit.Prix.ToString(0, produit.Prix - 2)); // Simule le calcul du sous-total
+            }
+
+            lblSousTotal.Text = sousTotal.ToString("C");
+            lblTPS.Text = (sousTotal * 0.05).ToString("C");
+            lblTVQ.Text = (sousTotal * 0.09975).ToString("C");
+            lblTotal.Text = (sousTotal + (sousTotal * 0.05) + (sousTotal * 0.09975)).ToString("C");
+        }
+
         private void btnPayer_Click(object sender, RoutedEventArgs e)
         {
 
