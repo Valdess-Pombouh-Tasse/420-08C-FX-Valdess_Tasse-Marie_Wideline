@@ -1,7 +1,9 @@
 ﻿using ApplicationGestionProduitCosmetique.enums;
 using ApplicationGestionProduitCosmetique.Models;
+using Syncfusion.Pdf.Graphics;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,6 +18,11 @@ using System.Windows.Shapes;
 using static ApplicationGestionProduitCosmetique.Views.FormApplication;
 using Button = System.Windows.Controls.Button;
 using Orientation = System.Windows.Controls.Orientation;
+using Syncfusion.Pdf.Graphics;
+using System.Diagnostics;
+using Syncfusion.Pdf;
+using System.IO;
+
 
 namespace ApplicationGestionProduitCosmetique.Views
 {
@@ -246,6 +253,10 @@ namespace ApplicationGestionProduitCosmetique.Views
                     Quantite = 1,
                     Prix = produit.Prix
                 });
+                if (prodF.Equals(produits))
+                {
+                    //produitExist = prodF;
+                }
             }
 
             AfficherProduitDansPanier(Produits);
@@ -299,6 +310,40 @@ namespace ApplicationGestionProduitCosmetique.Views
         private void btnPayer_Click(object sender, RoutedEventArgs e)
         {
 
+        }
+    }
+}
+        private void btnPayer_Click(object sender, RoutedEventArgs e)
+        {
+            // Créer un document PDF
+            using (Syncfusion.Pdf.PdfDocument document = new Syncfusion.Pdf.PdfDocument())
+            {
+                // Ajouter une page au document
+                PdfPage page = document.Pages.Add();
+
+                // Créer des graphiques pour la page
+                PdfGraphics graphics = page.Graphics;
+
+                // Définir une police pour le titre
+                PdfFont titleFont = new PdfStandardFont(PdfFontFamily.Helvetica, 24, PdfFontStyle.Bold);
+
+                // Définir le titre de l'application
+                string titreApplication = "Cometic Shop";
+
+                // Mesurer la largeur du texte pour le centrer
+                System.Drawing.SizeF textSize = titleFont.MeasureString(titreApplication);
+                float xPosition = (page.GetClientSize().Width - textSize.Width) / 2;
+
+                // Dessiner le titre centré en haut de la page
+                graphics.DrawString(titreApplication, titleFont, PdfBrushes.Black, new System.Drawing.PointF(xPosition, 20));
+
+                // Enregistrer le document
+                string filePath = "MesFactures.pdf";
+                document.Save(filePath);
+
+                // Ouvrir le PDF généré
+                Process.Start(new ProcessStartInfo(filePath) { UseShellExecute = true });
+            }
         }
     }
 }
