@@ -237,27 +237,27 @@ namespace ApplicationGestionProduitCosmetique.Views
                 FactureCourante = new Facture();
             }
 
-            ProduitFacture produitExist = FactureCourante.ProduitsFacture
-                .FirstOrDefault(pf => pf.Produit.Code == produit.Code);
+            //ProduitFacture? produitExist = FactureCourante.ProduitsFacture
+            //    .FirstOrDefault(pf => pf.Produit.Code == produit.Code);
 
-            if (produitExist != null)
-            {
-                produitExist.Quantite++;
-            }
-            else
-            {
-                FactureCourante.ProduitsFacture.Add(new ProduitFacture
-                {
-                    Code = produit.Code,
-                    Nom = produit.Nom,
-                    Quantite = 1,
-                    Prix = produit.Prix
-                });
-                if (prodF.Equals(produits))
-                {
-                    //produitExist = prodF;
-                }
-            }
+            //if (produitExist != null)
+            //{
+            //    produitExist.Quantite++;
+            //}
+            //else
+            //{
+            //    FactureCourante.ProduitsFacture.Add(new ProduitFacture
+            //    {
+            //        Code = produit.Code,
+            //        Nom = produit.Nom,
+            //        Quantite = 1,
+            //        Prix = produit.Prix
+            //    });
+            //    if (prodF.Equals(produits))
+            //    {
+            //        //produitExist = prodF;
+            //    }
+            //}
 
             AfficherProduitDansPanier(Produits);
         }
@@ -284,9 +284,6 @@ namespace ApplicationGestionProduitCosmetique.Views
         }
 
 
-
-       
-
         /// <summary>
         private void btnEnreigistrerLst_Click(object sender, RoutedEventArgs e)
         {
@@ -310,40 +307,6 @@ namespace ApplicationGestionProduitCosmetique.Views
         private void btnPayer_Click(object sender, RoutedEventArgs e)
         {
 
-        }
-    }
-}
-        private void btnPayer_Click(object sender, RoutedEventArgs e)
-        {
-            // Créer un document PDF
-            using (Syncfusion.Pdf.PdfDocument document = new Syncfusion.Pdf.PdfDocument())
-            {
-                // Ajouter une page au document
-                PdfPage page = document.Pages.Add();
-
-                // Créer des graphiques pour la page
-                PdfGraphics graphics = page.Graphics;
-
-                // Définir une police pour le titre
-                PdfFont titleFont = new PdfStandardFont(PdfFontFamily.Helvetica, 24, PdfFontStyle.Bold);
-
-                // Définir le titre de l'application
-                string titreApplication = "Cometic Shop";
-
-                // Mesurer la largeur du texte pour le centrer
-                System.Drawing.SizeF textSize = titleFont.MeasureString(titreApplication);
-                float xPosition = (page.GetClientSize().Width - textSize.Width) / 2;
-
-                // Dessiner le titre centré en haut de la page
-                graphics.DrawString(titreApplication, titleFont, PdfBrushes.Black, new System.Drawing.PointF(xPosition, 20));
-
-                // Enregistrer le document
-                string filePath = "MesFactures.pdf";
-                document.Save(filePath);
-
-                // Ouvrir le PDF généré
-                Process.Start(new ProcessStartInfo(filePath) { UseShellExecute = true });
-            }
         }
     }
 }
