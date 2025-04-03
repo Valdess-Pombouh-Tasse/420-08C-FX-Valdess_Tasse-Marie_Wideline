@@ -118,7 +118,6 @@
                     <Button x:Name="btnNouvelleFacture" Background="White" BorderThickness="0" DockPanel.Dock="Left" MouseEnter="btnNouvelleFacture_MouseEnter" MouseLeave="btnNouvelleFacture_MouseLeave">
                         <Image Source="/Resources/Images/ImagesIcons/new.png" Width="25" Margin="5"/>
                     </Button>
-                    <Button x:Name="btnPayer" Content="Payer" Width="80" Background="#4169e1" Foreground="White" HorizontalAlignment="Right" Margin="5" Click="btnPayer_Click" MouseEnter="btnPayer_MouseEnter" MouseLeave="btnPayer_MouseLeave"/>
                     <Button x:Name="btnPayer"  Content="Payer" Width="50" Background="#4169e1" Foreground="White" HorizontalAlignment="Right" Margin="5" Click="btnPayer_Click" />
                 </DockPanel>
             </StackPanel>
