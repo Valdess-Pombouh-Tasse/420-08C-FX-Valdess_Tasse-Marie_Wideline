@@ -507,5 +507,77 @@ namespace ApplicationGestionProduitCosmetique.Models
             }
         }
 
+        /// <summary>
+        /// Autohor Amadou
+        /// Permet d'ajouter une facture dans la base de données
+        /// </summary>
+        /// <param name="facture">facture à ajouter</param>
+        /// <exception cref="System.ArgumentNullException">Lancée si la facture est nulle.</exception>
+        /// <exception cref="System.ArgumentNullException">Lancée si la liste des produitsFacture est nulle ou vide.</exception>
+        public static void AjouterFacture(Facture facture)
+        {
+            if (facture == null)
+                throw new ArgumentNullException(nameof(facture), "La facture ne doit pas être nulle.");
+
+            if (facture.ProduitsFacture == null || facture.ProduitsFacture.Count == 0)
+                throw new ArgumentNullException(nameof(facture), "Cette facture ne contient aucun produit.");
+
+            MySqlConnection cn = CreerConnection();
+
+            try
+            {
+                cn.Open();
+                string requeteAddFacture = @"INSERT INTO factures 
+                       (Id,Date,MontantSousTotal,MontantTPS,MontantTVQ,MontantTotal)
+                            VALUES (null,@date,@montantSousTotal,@montantTPS,@montantTVQ,@montantTotal)";
+
+                MySqlCommand cmdInsertFacture = new MySqlCommand(requeteAddFacture, cn);
+                cmdInsertFacture.Parameters.AddWithValue("@date", facture.DateCreation);
+                cmdInsertFacture.Parameters.AddWithValue("@montantSousTotal", facture.MontantSousTotal);
+                cmdInsertFacture.Parameters.AddWithValue("@montantTPS", facture.MontantTPS);
+                cmdInsertFacture.Parameters.AddWithValue("@montantTVQ", facture.MontantTVQ);
+                cmdInsertFacture.Parameters.AddWithValue("@montantTotal", facture.MontantTotal);
+
+                if (cmdInsertFacture.ExecuteNonQuery() > 0)
+                {
+                    uint idLastFacture = (uint)cmdInsertFacture.LastInsertedId;
+
+                    string requeteAjoutProduits = @"INSERT INTO produitsfactures 
+                                        (IdFacture, IdProduit,PrixUnitaire,Quantite)
+                                            VALUES(@idFacture, @idProduit,@prixUnitaire,@quantite)";
+
+                    MySqlCommand cmdAjoutProduits = new MySqlCommand(requeteAjoutProduits, cn);
+
+                    cmdAjoutProduits.Parameters.Add("@idFacture ", MySqlDbType.UInt32);
+                    cmdAjoutProduits.Parameters.Add("@idProduit ", MySqlDbType.UInt32);
+                    cmdAjoutProduits.Parameters.Add("@prixUnitaire ", MySqlDbType.Decimal);
+                    cmdAjoutProduits.Parameters.Add("@quantite ", MySqlDbType.UInt32);
+
+                    cmdAjoutProduits.Prepare();
+
+                    foreach (ProduitFacture prodF in facture.ProduitsFacture)
+                    {
+                        cmdAjoutProduits.Parameters["@idFacture"].Value = idLastFacture;
+                        cmdAjoutProduits.Parameters["@idProduit"].Value = prodF.Produit.Id;
+                        cmdAjoutProduits.Parameters["@prixUnitaire"].Value = prodF.PrixUnitaire;
+                        cmdAjoutProduits.Parameters["@quantite"].Value = prodF.Quantite;
+
+                        cmdAjoutProduits.ExecuteNonQuery();
+                    }
+
+                    facture.Id = idLastFacture;
+                }
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                FermerConnexion(cn);
+            }
+        }
+
     }
 }

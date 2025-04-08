@@ -94,7 +94,7 @@
                         <RowDefinition Height="*"/>
                         <RowDefinition Height="10*"/>
                     </Grid.RowDefinitions>
-                    <StackPanel x:Name="pnlbar" Grid.Row="0" Orientation="Horizontal" FlowDirection="RightToLeft" Background="Transparent" Margin="0,0,5,0" MouseLeftButtonDown="pnlbar_MouseLeftButtonDown">
+                    <StackPanel x:Name="pnlbar" Grid.Row="0" Orientation="Horizontal" FlowDirection="RightToLeft" Background="Transparent" Margin="0,0,5,0">
                         <Button x:Name="btnFermer" Style="{StaticResource controlButton}" Tag="{StaticResource Color4}" Click="btnFermer_Click">
                             <fa:IconImage Icon="Xmark" Style="{StaticResource controlButtonIcon}"/>
 

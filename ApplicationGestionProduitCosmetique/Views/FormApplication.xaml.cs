@@ -18,10 +18,9 @@ using System.Windows.Shapes;
 using Microsoft.Extensions.Configuration;
 using System.Xml;
 using static System.Runtime.InteropServices.JavaScript.JSType;
-using System.Text.RegularExpressions;
 using Orientation = System.Windows.Controls.Orientation;
 using static ApplicationGestionProduitCosmetique.Views.ProduitChoisir;
-using System.Windows.Interop;
+
 
 namespace ApplicationGestionProduitCosmetique.Views
 {
@@ -93,13 +92,6 @@ namespace ApplicationGestionProduitCosmetique.Views
         {
             return listePanier;
         }
-
-        //public static extern IntPtr SendMessage(IntPtr hWnd, int wMsg, int wParam, int lParam);
-        //private void pnlbar_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        //{
-        //    WindowInteropHelper helper = new WindowInteropHelper(this);
-        //    SendMessage(helper.Handle, 161, 2, 0);
-        //}
 
         private void AfficherListeProduit(List<Produit> produits = null)
         {
@@ -236,22 +228,59 @@ namespace ApplicationGestionProduitCosmetique.Views
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
+        private Facture nouvelleFacture = null;
         private void ImageAjout_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            List<Produit> prod = new List<Produit>();
+            //List<Produit> prod = new List<Produit>();
+            //uint quantite = 1;
+            //Image imageProduit = sender as Image;
+
+            //if (imageProduit != null)
+            //{
+            //    Produit produit = imageProduit.Tag as Produit;
+            //    if (produit != null)
+            //    {
+
+            //        panierProduits.Add(produit);
+            //        FenetreErreur.Afficher("Produit ajouté au panier");
+
+            //    }
+            //}
             uint quantite = 1;
-            Image imageProduit = sender as Image;
+            Image imgProduit = (Image)sender;
+            List<Produit> prod = new List<Produit>();
 
-            if (imageProduit != null)
+            if (nouvelleFacture == null)
             {
-                Produit produit = imageProduit.Tag as Produit;
-                if (produit != null)
+                
+                ProduitChoisir frm = new ProduitChoisir(panierProduits);
+                nouvelleFacture = new Facture(1, DateTime.Now);
+
+                frm.wpProduitPanier.IsEnabled = true;  
+                frm.btnPayer.IsEnabled = true;
+                frm.txtNoFacture.Text = "";
+                frm.lblDateFacture.Text = $"Date : {nouvelleFacture.DateCreation.ToString()}";
+            }
+
+            ProduitFacture produitExist = null;
+            foreach (var prodF in nouvelleFacture.ProduitsFacture)
+            {
+                if (prodF.Produit.Equals(prod))
                 {
-
-                    panierProduits.Add(produit);
-                    FenetreErreur.Afficher("Produit ajouté au panier");
-
+                    produitExist = prodF;
                 }
+            }
+
+
+            if (produitExist != null)
+            {
+                produitExist.Quantite++;
+                quantite = produitExist.Quantite;
+            }
+            else 
+            {
+                nouvelleFacture.AjouterProduit((Produit)imgProduit.Tag, ((Produit)imgProduit.Tag).Prix, quantite);
+                FenetreErreur.Afficher("Produit ajouté au panier");
             }
             prod = panierProduits;
         }
@@ -298,14 +327,14 @@ namespace ApplicationGestionProduitCosmetique.Views
 
         private void RadioButton_Checked(object sender, RoutedEventArgs e)
         {
-            ProduitChoisir produitChoisir = new ProduitChoisir(panierProduits, facture);
+            ProduitChoisir produitChoisir = new ProduitChoisir(panierProduits);
             produitChoisir.Show();
            
         }
 
         private void RadioButton_Checked_1(object sender, RoutedEventArgs e)
         {
-            Facture facture = new Facture();
+            Factures facture = new Factures();
             facture.Show();
             
         }

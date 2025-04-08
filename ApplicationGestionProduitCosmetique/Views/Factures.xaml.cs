@@ -1,5 +1,4 @@
-﻿using ApplicationGestionProduitCosmetique.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -16,15 +15,13 @@ using System.Windows.Shapes;
 namespace ApplicationGestionProduitCosmetique.Views
 {
     /// <summary>
-    /// Logique d'interaction pour Facture.xaml
+    /// Logique d'interaction pour Factures.xaml
     /// </summary>
-    public partial class Facture : Window
+    public partial class Factures : Window
     {
-        public Facture()
+        public Factures()
         {
             InitializeComponent();
         }
-
-        public IEnumerable<ProduitFacture> ProduitsFacture { get; internal set; }
     }
 }
