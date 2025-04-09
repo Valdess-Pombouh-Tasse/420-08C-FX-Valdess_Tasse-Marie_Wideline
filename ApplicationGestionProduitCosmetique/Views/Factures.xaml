@@ -5,8 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ApplicationGestionProduitCosmetique.Views"
         mc:Ignorable="d"
-        Title="Factures" Height="450" Width="800">
-    <Grid>
-        
+        Title="Historique des Factures" Height="450" Width="800">
+    <Grid Margin="10">
+        <ListBox x:Name="lstFactures" Margin="0,0,0,40"/>
+        <Button Content="Télécharger / Ouvrir" VerticalAlignment="Bottom" Height="30" Click="BtnOuvrir_Click"/>
     </Grid>
 </Window>

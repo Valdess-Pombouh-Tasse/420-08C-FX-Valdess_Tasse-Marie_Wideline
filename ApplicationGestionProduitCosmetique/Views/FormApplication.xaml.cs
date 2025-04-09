@@ -231,21 +231,6 @@ namespace ApplicationGestionProduitCosmetique.Views
         private Facture nouvelleFacture = null;
         private void ImageAjout_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            //List<Produit> prod = new List<Produit>();
-            //uint quantite = 1;
-            //Image imageProduit = sender as Image;
-
-            //if (imageProduit != null)
-            //{
-            //    Produit produit = imageProduit.Tag as Produit;
-            //    if (produit != null)
-            //    {
-
-            //        panierProduits.Add(produit);
-            //        FenetreErreur.Afficher("Produit ajouté au panier");
-
-            //    }
-            //}
             uint quantite = 1;
             Image imgProduit = (Image)sender;
             List<Produit> prod = new List<Produit>();
