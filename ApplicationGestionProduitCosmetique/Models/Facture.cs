@@ -33,7 +33,7 @@ namespace ApplicationGestionProduitCosmetique.Models
         /// </summary>
         private List<ProduitFacture> _produitsFacture;
 
-        public decimal? MontantTotalFixe { get; private set; }
+        public decimal? MontantTotalFixe { get; set; }
 
         /// <summary>
         ///  Obtient ou définit l'identifiant unique de la facture
@@ -63,7 +63,7 @@ namespace ApplicationGestionProduitCosmetique.Models
             {
                 if (value > DateTime.Now)
                     throw new ArgumentOutOfRangeException($"La date de création ne peut pas être supérieure à la date du jour {DateTime.Now}", nameof(DateCreation));
-
+                
                 _dateCreation = value;
             }
         }
