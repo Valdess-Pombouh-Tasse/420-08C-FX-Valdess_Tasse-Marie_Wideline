@@ -651,6 +651,15 @@ namespace ApplicationGestionProduitCosmetique.Classes
             }
         }
 
+        //public static void EnvoyerFactureParEmail(Facture facture, string email)
+        //{
+        //    // Génère un PDF ou texte avec les infos de la facture
+        //    string contenuFacture = facture.GenererContenuFacture(); // À implémenter
+        //    string cheminPDF = PDFHelper.CreerPDF(contenuFacture);   // Crée un PDF
+
+        ////    MailService.EnvoyerEmailAvecPieceJointe(email, "Votre facture", "Merci pour votre achat !", cheminPDF);
+        //}
+
 
         /// <summary>
         /// Hashage sécurisé du mot de passe.

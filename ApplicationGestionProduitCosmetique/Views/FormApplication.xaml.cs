@@ -22,6 +22,7 @@ using Orientation = System.Windows.Controls.Orientation;
 using Button = System.Windows.Controls.Button;
 using MessageBox = System.Windows.MessageBox;
 using TextBox = System.Windows.Controls.TextBox;
+using PdfSharp.Drawing;
 
 
 namespace ApplicationGestionProduitCosmetique.Views
@@ -425,30 +426,78 @@ namespace ApplicationGestionProduitCosmetique.Views
         }
 
         private void btnPayer_Click(object sender, RoutedEventArgs e)
-        { 
+        {
+            if (nouvelleFacture == null || nouvelleFacture.ProduitsFacture.Count == 0)
+            {
+                MessageBox.Show("Aucune facture à envoyer. Veuillez ajouter des articles au panier.",
+                                "Cosmetic Shop", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
             try
             {
-                if (nouvelleFacture.ProduitsFacture.Count() > 0)
+                // Créer un dossier pour enregistrer la facture PDF
+                string dossierFactures = System.IO.Path.Combine(
+                    Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
+                    "FacturesCosmetiques");
+                Directory.CreateDirectory(dossierFactures);
+
+                // Générer le fichier PDF de la facture
+                string nomFichier = $"Facture_{nouvelleFacture.Id}.pdf";
+                string cheminComplet = System.IO.Path.Combine(dossierFactures, nomFichier);
+
+                using (PdfSharp.Pdf.PdfDocument document = new PdfSharp.Pdf.PdfDocument())
                 {
-                    GestionCompteUtilisateur.AjouterFacture(nouvelleFacture); 
-                    btnPayer.IsEnabled = false;
-                    wpProduitPanier.IsEnabled = false;
-                    FenetreErreur.Afficher("Merci de votre achat");
+                    document.Info.Title = $"Facture {nouvelleFacture.Id}";
+                    PdfSharp.Pdf.PdfPage page = document.AddPage();
+                    XGraphics gfx = XGraphics.FromPdfPage(page);
+
+                    var fontTitre = new XFont("Verdana", 16);
+                    var fontCorps = new XFont("Verdana", 12);
+
+                    int y = 40;
+                    gfx.DrawString($"Facture No : {nouvelleFacture.Id}", fontTitre, XBrushes.Black,
+                        new XRect(0, y, page.Width, 0), XStringFormats.TopCenter);
+                    y += 30;
+
+                    gfx.DrawString($"Date : {nouvelleFacture.DateCreation}", fontCorps, XBrushes.Black, 40, y);
+                    y += 30;
+
+                    gfx.DrawString("Produits achetés :", fontCorps, XBrushes.Black, 40, y);
+                    y += 25;
+
+                    for (int i = 0; i < nouvelleFacture.ProduitsFacture.Count; i++)
+                    {
+                        ProduitFacture item = nouvelleFacture.ProduitsFacture[i];
+                        string ligne = $"{item.Produit.Nom} - Qté: {item.Quantite} - Prix: {item.Produit.Prix * item.Quantite}$";
+                        gfx.DrawString(ligne, fontCorps, XBrushes.Black, 40, y);
+                        y += 20;
+                    }
+
+                    y += 30;
+                    gfx.DrawString($"Total: {nouvelleFacture.MontantTotal} $", fontTitre, XBrushes.DarkBlue, 40, y);
+
+                    document.Save(cheminComplet);
                 }
-                else
-                {
-                    FenetreErreur.Afficher("La facture ne contient aucun produit.Ajout de facture");
-                }
-            }
-            catch (ArgumentNullException ane)
-            {
-                MessageBox.Show(ane.Message, "Ajout de facture");
+
+                // ✅ Paiement confirmé
+                MessageBox.Show("Paiement effectué avec succès !", "Cosmetic Shop", MessageBoxButton.OK, MessageBoxImage.Information);
+
+                // ✅ Ouvre la fenêtre des factures avec les produits de la facture
+                Views.Factures fenetreFactures = new Views.Factures(nouvelleFacture);
+                fenetreFactures.ShowDialog();
+
+                // ✅ Désactive les contrôles après paiement
+                wpProduitPanier.IsEnabled = false;
+                btnPayer.IsEnabled = false;
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "Ajout de facture", MessageBoxButton.OK, MessageBoxImage.Error);
+                FenetreErreur.Afficher($"Erreur lors du paiement.\nDétails : {ex.Message}");
             }
         }
+
+        
 
         private void btnNouvelleFacture_Click_1(object sender, RoutedEventArgs e)
         {
