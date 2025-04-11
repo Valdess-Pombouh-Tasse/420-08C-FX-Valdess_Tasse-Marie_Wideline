@@ -509,6 +509,9 @@ namespace ApplicationGestionProduitCosmetique.Views
                 // Enregistrer la facture dans la base de données
                 GestionCompteUtilisateur.EnregistrerFacture(nouvelleFacture);
 
+                // Fixer le montant total (avec taxes) une fois pour toute
+                nouvelleFacture.MontantTotalFixe = nouvelleFacture.MontantTotal;
+
                 // Générer le fichier PDF de la facture
                 string dossierFactures = System.IO.Path.Combine(
                     Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
@@ -547,7 +550,7 @@ namespace ApplicationGestionProduitCosmetique.Views
                     }
 
                     y += 30;
-                    gfx.DrawString($"Total: {nouvelleFacture.MontantTotal} $", fontTitre, XBrushes.DarkBlue, 40, y);
+                    gfx.DrawString($"Total: {nouvelleFacture.MontantTotalFixe} $", fontTitre, XBrushes.DarkBlue, 40, y);
 
                     document.Save(cheminComplet);
                 }

@@ -100,7 +100,7 @@
                                 <TextBlock FontWeight="Bold" FontSize="16" Text="{Binding NumeroFacture}" Foreground="DarkSlateBlue"/>
                                 <TextBlock Text="{Binding DateFacture, StringFormat='Date : {0:dd/MM/yyyy}'}" FontSize="12" Foreground="Gray"/>
                                 <TextBlock Text="{Binding NomClient}" FontSize="13" Foreground="Black"/>
-                                <TextBlock Text="{Binding MontantTotal, StringFormat='Total : {0:C2}'}" FontSize="13" Foreground="DarkGreen"/>
+                                <TextBlock Text="{Binding MontantTotalFixe, StringFormat='Total : {0:C2}'}" FontSize="13" Foreground="DarkGreen"/>
                             </StackPanel>
                         </Border>
                     </DataTemplate>
