@@ -425,6 +425,9 @@ namespace ApplicationGestionProduitCosmetique.Views
         
         private void btnPayer_Click(object sender, RoutedEventArgs e)
         {
+
+            SoundPlayer player = new SoundPlayer("Resources/sons/son.wav");
+            player.Play();
             if (nouvelleFacture == null || nouvelleFacture.ProduitsFacture.Count == 0)
             {
                 MessageBox.Show("Aucune facture à envoyer. Veuillez ajouter des articles au panier.",
@@ -481,22 +484,13 @@ namespace ApplicationGestionProduitCosmetique.Views
                 }
 
                 // ✅ Paiement confirmé
-                FenetreErreur.Afficher("Paiement effectué avec succès !");
-
-                // 🔊 Joue le son de succès
-                try
-                {
-                    SoundPlayer player = new SoundPlayer("Resources/Sons/success.wav");
-                    player.Load();
-                    player.Play();
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine($"Erreur de lecture du son : {ex.Message}");
-                }
+                FenetreErreur.Afficher("Paiement effectué avec succès !");              
 
                  Factures fenetreFactures = new Factures(nouvelleFacture);
                 fenetreFactures.ShowDialog();
+
+                ArticleCommandes fenetreArticleCommandes = new ArticleCommandes(nouvelleFacture);
+                fenetreArticleCommandes.ShowDialog();
 
                 // ✅ Désactive les contrôles après paiement
                 wpProduitPanier.IsEnabled = false;
