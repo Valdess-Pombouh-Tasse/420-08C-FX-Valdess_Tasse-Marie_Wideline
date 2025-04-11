@@ -6,155 +6,121 @@
         xmlns:local="clr-namespace:ApplicationGestionProduitCosmetique.Views"
         xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
         mc:Ignorable="d"
-        Title="FormApplication" Height="570" Width="800" Loaded="Window_Loaded">
-    <Border>
-        <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="7*"/>
-                <ColumnDefinition Width="0*"/>
-                <ColumnDefinition Width="0*"/>
-                <ColumnDefinition Width="393*"/>
-                <ColumnDefinition Width="0*"/>
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
-            <Border CornerRadius="10,0,0,10"
-                 Grid.Column="0" Grid.Row="0" Margin="0,0,351,0" Grid.ColumnSpan="4">
-                <Border.Background>
-                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,0.7">
-                        <GradientStop Color="AliceBlue" Offset="0"/>
-                        <GradientStop Color="AliceBlue" Offset="1"/>
-                    </LinearGradientBrush>
-                </Border.Background>
+       Title="Cosmétique Shop" Height="700" Width="1000">
+    <Grid Margin="0,0,-20,0">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="200"/>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="332"/>
+        </Grid.ColumnDefinitions>
 
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="*"/>
-                        <RowDefinition Height="5*" />
-                        <RowDefinition Height="*"/>
-                    </Grid.RowDefinitions>
+        <!-- Menu latéral -->
+        <Border Background="AliceBlue" Grid.Column="0" CornerRadius="10,0,0,10"  Margin="-18,0,0,0">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
 
-                    <StackPanel Orientation="Horizontal"
-                        Height="60" Grid.Row="0">
-                        <TextBlock FontWeight="ExtraBold" Foreground="Indigo" FontSize="30" FontFamily="Cooper Black" Margin="10"><Run Text="Cosmetic"/><Run Text=" Shop"/></TextBlock>
-                    </StackPanel>
+                <!-- Titre -->
+                <StackPanel Orientation="Horizontal" Margin="10" Grid.Row="0">
+                    <TextBlock  FontWeight="ExtraBold" Foreground="Indigo" FontSize="21" FontFamily="Cooper Black" Margin="0 0 0 20"><Run Text="🧴 Cosmetic"/><Run Text=" Shop"/></TextBlock>
+                </StackPanel>
 
-                    <StackPanel Grid.Row="1">
-                        <RadioButton Style="{StaticResource menuButton}" Tag="{StaticResource Color1}" Command="{Binding ShowAccueilViewModel}">
-                            <StackPanel Orientation="Horizontal">
-                                <fa:IconImage Icon="Home" Style="{StaticResource menuButtonIcon}" RenderTransformOrigin="0.5,0.552"/>
-                                <TextBlock Text="Catalogue" Foreground="Black" Style="{StaticResource menuButtonText}"/>
-                            </StackPanel>
-                        </RadioButton>
-                        <RadioButton Style="{StaticResource menuButton}" Tag="{StaticResource Color2}" Command="{Binding ShowArticleChoisirViewModel}" Checked="RadioButton_Checked">
-                            <StackPanel Orientation="Horizontal">
-                                <fa:IconImage Icon="ShoppingCart" Style="{StaticResource menuButtonIcon}" RenderTransformOrigin="0.5,0.546"/>
-                                <TextBlock Text="Articles Choisis" Foreground="Black" Style="{StaticResource menuButtonText}"/>
-
-                            </StackPanel>
-                        </RadioButton>
-                        <RadioButton Style="{StaticResource menuButton}" Tag="{StaticResource Color7}" Command="{Binding ShowArticleChoisirViewModel}">
-                            <StackPanel Orientation="Horizontal">
-                                <fa:IconImage Icon="ShoppingCart" Style="{StaticResource menuButtonIcon}" RenderTransformOrigin="0.5,0.546"/>
-                                <TextBlock Text="Articles Commandés" Foreground="Black" Style="{StaticResource menuButtonText}"/>
-                            </StackPanel>
-                        </RadioButton>
-                        <RadioButton Style="{StaticResource menuButton}" Tag="{StaticResource Color8}" Command="{Binding ShowFactureViewModel}" Checked="RadioButton_Checked_1">
-                            <StackPanel Orientation="Horizontal">
-                                <fa:IconImage Icon="FileInvoice" Style="{StaticResource menuButtonIcon}" RenderTransformOrigin="0.617,0.5"/>
-                                <TextBlock Text="Mes factures" Foreground="Black" Style="{StaticResource menuButtonText}"/>
-                            </StackPanel>
-                        </RadioButton>
-                    </StackPanel>
-
-                    <RadioButton Grid.Row="2" Style="{StaticResource menuButton}" Tag="black" Margin="15,1,195,20" Background="AliceBlue">
+                <!-- Menu -->
+                <StackPanel Grid.Row="1" Margin="0,20,0,0">
+                    <RadioButton Style="{StaticResource menuButton}" Tag="{StaticResource Color1}" Command="{Binding ShowAccueilViewModel}">
                         <StackPanel Orientation="Horizontal">
-                            <TextBlock Foreground="Black" Text="Deconnexion" Style="{StaticResource menuButtonText}"/>
-                            <fa:IconImage Icon="SignOut"  Style="{StaticResource menuButtonIcon}"/>
+                            <fa:IconImage Icon="Home" Style="{StaticResource menuButtonIcon}" />
+                            <TextBlock Text="Catalogue" Style="{StaticResource menuButtonText}" Foreground="Black"/>
                         </StackPanel>
                     </RadioButton>
-                    <Label x:Name="lblErreurUtilisateur" Visibility="Collapsed" Foreground="Red" />
-                </Grid>
 
-            </Border>
-
-            <Border CornerRadius="0,10,10,0" Grid.Row="0" Margin="260,0,0,0" Grid.Column="3">
-                <Border.Background>
-                    <LinearGradientBrush StartPoint="1,1" EndPoint="0,0">
-                        <GradientStop Color="AliceBlue" Offset="0"/>
-                        <GradientStop Color="AliceBlue" Offset="1"/>
-                    </LinearGradientBrush>
-                </Border.Background>
-
-                <Grid Margin="0,0,0,10">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="*"/>
-                        <RowDefinition Height="*"/>
-                        <RowDefinition Height="*"/>
-                        <RowDefinition Height="10*"/>
-                    </Grid.RowDefinitions>
-                    <StackPanel x:Name="pnlbar" Grid.Row="0" Orientation="Horizontal" FlowDirection="RightToLeft" Background="Transparent" Margin="0,0,5,0">
-                        <Button x:Name="btnFermer" Style="{StaticResource controlButton}" Tag="{StaticResource Color4}" Click="btnFermer_Click">
-                            <fa:IconImage Icon="Xmark" Style="{StaticResource controlButtonIcon}"/>
-
-                        </Button>
-                        <Button x:Name="btnMaxFenetrer" Style="{StaticResource controlButton}" Tag="{StaticResource Color6}" Click="btnMaxFenetrer_Click">
-                            <fa:IconImage Icon="Square" Style="{StaticResource controlButtonIcon}"/>
-
-                        </Button>
-                        <Button x:Name="btnMinFenetrer" Style="{StaticResource controlButton}" Tag="{StaticResource Color8}" Click="btnMinFenetrer_Click">
-                            <fa:IconImage Icon="WindowMinimize" Width="12" Style="{StaticResource controlButtonIcon}"/>
-
-                        </Button>
-                    </StackPanel>
-
-                    <Grid Grid.Row="1">
-                        <StackPanel Grid.Row="0" Orientation="Horizontal" VerticalAlignment="Center">
-                            <fa:IconImage Icon="Home" Height="20" Width="20" Foreground="Black" Margin="35,0,10,0"/>
-                            <TextBlock Text="{Binding Titre}" Foreground="Black" FontSize="16" FontFamily="Montserrat" FontWeight="Medium" VerticalAlignment="Center"/>
-                        </StackPanel>
-                        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Stretch"  FlowDirection="RightToLeft" Margin="10,0,30,0">
-
-                            <TextBlock x:Name="txtUtilisateurClient" Text="Utilisateur" Foreground="Black" FontFamily="Montserrat" FontSize="14" VerticalAlignment="Center"/>
-
-                            <Ellipse Height="35" Width="35" Stroke="White" StrokeThickness="2" Margin="10,0,10,0">
-                                <Ellipse.Fill>
-                                    <ImageBrush ImageSource="/Resources/Images/ImagesIcons/iconUtilisateur.jpeg"/>
-                                </Ellipse.Fill>
-                            </Ellipse>
-                        </StackPanel>
-                    </Grid>
-                    <Grid Grid.Row="2">
+                    <RadioButton Style="{StaticResource menuButton}" Tag="{StaticResource Color7}" Command="{Binding ShowArticleCommandesViewModel}">
                         <StackPanel Orientation="Horizontal">
-                            <StackPanel Margin="0,0,75,0" x:Name="spAjouterProduit" Orientation="Horizontal" >
-                                <TextBox x:Name="txtRechercher" Width="250" Height="25" Margin="0,0,5,0"/>
-                                <ComboBox Name="cboCategories" Width="150" Margin="5,5,5,5">
-
-                                </ComboBox>
-                                <Button x:Name="btnRechercherProduit" BorderThickness="0" Background="White">
-                                    <Image Source="/Resources/Images/ImagesIcons/search.png" Width="25" Margin="5"/>
-                                </Button>
-                            </StackPanel>
+                            <fa:IconImage Icon="ClipboardList" Style="{StaticResource menuButtonIcon}"/>
+                            <TextBlock Text="Articles Commandés" Style="{StaticResource menuButtonText}" Foreground="Black"/>
                         </StackPanel>
-                    </Grid>
-                    <Grid Grid.Row="3">
-                        <StackPanel Margin="15">
-                            <Label Name="lblTitre" FontSize="10" FontWeight="Bold" HorizontalAlignment="Center" Margin="5"/>
-                            <ScrollViewer VerticalScrollBarVisibility="Auto" Height="380" Margin="2">
-                                <WrapPanel Name="wpProduit" Orientation="Horizontal">
+                    </RadioButton>
 
-                                </WrapPanel>
-                            </ScrollViewer>
+                    <RadioButton Style="{StaticResource menuButton}" Tag="{StaticResource Color8}" Command="{Binding ShowFactureViewModel}">
+                        <StackPanel Orientation="Horizontal">
+                            <fa:IconImage Icon="FileInvoice" Style="{StaticResource menuButtonIcon}"/>
+                            <TextBlock Text="Mes factures" Style="{StaticResource menuButtonText}" Foreground="Black"/>
                         </StackPanel>
-                    </Grid>
+                    </RadioButton>
+                </StackPanel>
 
-                </Grid>
+                <!-- Déconnexion -->
+                <RadioButton Grid.Row="2" Style="{StaticResource menuButton}" Tag="black" Background="AliceBlue" Margin="15,10,20,10">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Déconnexion" Style="{StaticResource menuButtonText}" Foreground="Black"/>
+                        <fa:IconImage Icon="SignOut" Style="{StaticResource menuButtonIcon}"/>
+                    </StackPanel>
+                </RadioButton>
+            </Grid>
+        </Border>
 
+
+
+        <!-- Liste des produits -->
+        <StackPanel Grid.Column="1" Margin="20">
+            <StackPanel Margin="0,10,30,3" x:Name="spAjouterProduit" Orientation="Horizontal" Grid.Row="0">
+                <TextBox x:Name="txtRechercher" Width="200" Height="34" Margin="5,0" TextChanged="txtRechercher_TextChanged"/>
+                <ComboBox Name="cboCategories" Width="150" Margin="5,0" >
+                    <!-- Tu peux ajouter tes catégories ici si tu veux -->
+                </ComboBox>
+                <Button x:Name="btnRechercherProduit" BorderThickness="0" Background="White" Click="btnRechercherProduit_Click">
+                    <Image Source="/Resources/Images/ImagesIcons/search.png" Width="25" Margin="5"/>
+                </Button>
+            </StackPanel>
+            <ScrollViewer VerticalScrollBarVisibility="Auto" Height="525" Margin="2" Width="465">
+                <WrapPanel x:Name="wpProduits" Orientation="Horizontal">
+
+                </WrapPanel>
+            </ScrollViewer>
+
+        </StackPanel>
+
+        <!-- Panier -->
+        <StackPanel Grid.Column="2" Background="#FFF4F4F4" Margin="10,0,0,0">
+            <TextBlock Text="🛒 Mon Panier" FontSize="18" FontWeight="Bold" Margin="0 0 0 10"/>
+            <Border Height="346" BorderBrush="LightGray" BorderThickness="1" CornerRadius="6" Margin="10" Width="321">
+                <ScrollViewer VerticalScrollBarVisibility="Auto" Height="290" Margin="2">
+                    <WrapPanel Name="wpProduitPanier" Orientation="Horizontal">
+                        <!-- Produits ajoutés dynamiquement -->
+                    </WrapPanel>
+                </ScrollViewer>
             </Border>
 
-        </Grid>
+            <!-- Totaux -->
+            <StackPanel Margin="5">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                    <Label Content="Sous-Total" HorizontalAlignment="Right" Margin="0,0,5,0"/>
+                    <TextBlock x:Name="lblSousTotal" Width="100" VerticalAlignment="Center" TextAlignment="Right"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                    <Label Content="TPS" HorizontalAlignment="Right" Margin="0,0,5,0"/>
+                    <TextBlock x:Name="lblTPS" Width="100" VerticalAlignment="Center" TextAlignment="Right"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                    <Label Content="TVQ" HorizontalAlignment="Right" Margin="0,0,5,0"/>
+                    <TextBlock x:Name="lblTVQ" Width="100" VerticalAlignment="Center" TextAlignment="Right"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                    <Label Content="Total" HorizontalAlignment="Right" Margin="0,0,5,0"/>
+                    <TextBlock x:Name="lblTotal" Width="100" VerticalAlignment="Center" TextAlignment="Right"/>
+                </StackPanel>
 
-    </Border>
-
+            </StackPanel>
+            <!-- Boutons de contrôle -->
+            <DockPanel>
+                <Button x:Name="btnNouvelleFacture" Background="White" BorderThickness="0" DockPanel.Dock="Left" Click="btnNouvelleFacture_Click_1">
+                    <Image Source="/Resources/Images/ImagesIcons/new.png" Width="25" Margin="5"/>
+                </Button>
+                <Button x:Name="btnPayer"  Content="Payer" Width="106" Background="#FF4CAF50" Foreground="White" Margin="5" Click="btnPayer_Click" Height="33" />
+            </DockPanel>
+        </StackPanel>
+    </Grid>
 </Window>

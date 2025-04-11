@@ -4,10 +4,97 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ApplicationGestionProduitCosmetique.Views"
+        xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
         mc:Ignorable="d"
-        Title="Historique des Factures" Height="450" Width="800">
-    <Grid Margin="10">
-        <ListBox x:Name="lstFactures" Margin="0,0,0,40"/>
-        <Button Content="Télécharger / Ouvrir" VerticalAlignment="Bottom" Height="30" Click="BtnOuvrir_Click"/>
+        Title="Mes Factures" Height="550" Width="1000"
+        WindowStartupLocation="CenterScreen" ResizeMode="NoResize">
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="250"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- Menu latéral -->
+        <Border Background="AliceBlue" Grid.Column="0" CornerRadius="10,0,0,10" Padding="10">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <!-- Titre -->
+                <StackPanel Orientation="Horizontal" Margin="10" Grid.Row="0">
+                    <TextBlock FontWeight="Bold" Foreground="Indigo" FontSize="24" FontFamily="Cooper Black">
+                        <Run Text="Cosmetic"/><Run Text=" Shop"/>
+                    </TextBlock>
+                </StackPanel>
+
+                <!-- Menu -->
+                <StackPanel Grid.Row="1" Margin="0,20,0,0">
+                    <RadioButton Style="{StaticResource menuButton}" Tag="{StaticResource Color1}" Command="{Binding ShowAccueilViewModel}">
+                        <StackPanel Orientation="Horizontal">
+                            <fa:IconImage Icon="Home" Style="{StaticResource menuButtonIcon}" />
+                            <TextBlock Text="Catalogue" Style="{StaticResource menuButtonText}" Foreground="Black"/>
+                        </StackPanel>
+                    </RadioButton>
+
+                    <RadioButton Style="{StaticResource menuButton}" Tag="{StaticResource Color2}" Command="{Binding ShowArticleChoisirViewModel}">
+                        <StackPanel Orientation="Horizontal">
+                            <fa:IconImage Icon="ShoppingCart" Style="{StaticResource menuButtonIcon}"/>
+                            <TextBlock Text="Articles Choisis" Style="{StaticResource menuButtonText}" Foreground="Black"/>
+                        </StackPanel>
+                    </RadioButton>
+
+                    <RadioButton Style="{StaticResource menuButton}" Tag="{StaticResource Color7}" Command="{Binding ShowArticleCommandesViewModel}">
+                        <StackPanel Orientation="Horizontal">
+                            <fa:IconImage Icon="ClipboardList" Style="{StaticResource menuButtonIcon}"/>
+                            <TextBlock Text="Articles Commandés" Style="{StaticResource menuButtonText}" Foreground="Black"/>
+                        </StackPanel>
+                    </RadioButton>
+
+                    <RadioButton Style="{StaticResource menuButton}" Tag="{StaticResource Color8}" Command="{Binding ShowFactureViewModel}">
+                        <StackPanel Orientation="Horizontal">
+                            <fa:IconImage Icon="FileInvoice" Style="{StaticResource menuButtonIcon}"/>
+                            <TextBlock Text="Mes factures" Style="{StaticResource menuButtonText}" Foreground="Black"/>
+                        </StackPanel>
+                    </RadioButton>
+                </StackPanel>
+
+                <!-- Déconnexion -->
+                <RadioButton Grid.Row="2" Style="{StaticResource menuButton}" Tag="black" Background="AliceBlue" Margin="15,10,20,10">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Déconnexion" Style="{StaticResource menuButtonText}" Foreground="Black"/>
+                        <fa:IconImage Icon="SignOut" Style="{StaticResource menuButtonIcon}"/>
+                    </StackPanel>
+                </RadioButton>
+            </Grid>
+        </Border>
+
+        <!-- Contenu principal -->
+        <Grid Grid.Column="1" Margin="20">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <!-- Titre -->
+            <TextBlock Text="Historique des factures"
+                       FontSize="22"
+                       FontWeight="Bold"
+                       Foreground="#2E2E2E"
+                       Margin="0,0,0,15"/>
+
+            <!-- Tableau des factures -->
+            <ListBox x:Name="lstFactures" Grid.Row="1" Margin="0,0,0,40" Background="Transparent" BorderThickness="0"
+            ItemsSource="{Binding ListeFactures}"></ListBox>
+
+            <!-- Bouton en bas -->
+            <StackPanel Grid.Row="2">
+                <Button Content="Télécharger / Ouvrir" VerticalAlignment="Bottom" Height="30" Click="BtnOuvrir_Click"/>
+            </StackPanel>
+        </Grid>
     </Grid>
 </Window>
