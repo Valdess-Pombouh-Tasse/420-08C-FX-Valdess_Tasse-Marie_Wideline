@@ -72,10 +72,9 @@
                           AlternatingRowBackground="#FFE4E1"
                           GridLinesVisibility="Horizontal"
                           BorderBrush="#FF69B4"
-                          BorderThickness="1" SelectionChanged="dgFactures_SelectionChanged">
+                          BorderThickness="1">
                     <DataGrid.Columns>
-                        <DataGridTextColumn Header="Nom du Client" Binding="{Binding NomUtilisateur}" Width="*"/>
-                        <DataGridTextColumn Header="Montant Total" Binding="{Binding MontantTotal}" Width="*"/>
+                        <DataGridTextColumn Header="Montant Total" Binding="{Binding MontantTotalFixe, StringFormat={}{0:C}}" Width="*"/>
                         <DataGridTextColumn Header="Date de Facture" Binding="{Binding DateCreation, StringFormat='{}{0:dd/MM/yyyy}'}" Width="*"/>
                     </DataGrid.Columns>
                 </DataGrid>

@@ -731,24 +731,20 @@ namespace ApplicationGestionProduitCosmetique.Classes
         {
             List<Facture> factures = new List<Facture>();
 
-            using (MySqlConnection connexion = new MySqlConnection(CONNECTION_STRING))
+            using (MySqlConnection cn = CreerConnection()) // <--- cn et non connexion
             {
-                string requete = "SELECT Id, NomClient, DateFacture FROM Factures";
-                MySqlCommand commande = new MySqlCommand(requete, connexion);
-                connexion.Open();
+                string requete = "SELECT Id, DateCreation, MontantTotal FROM Factures ORDER BY DateCreation DESC";
+                MySqlCommand commande = new MySqlCommand(requete, cn); // <--- cn ici aussi
+                cn.Open();
                 MySqlDataReader lecteur = commande.ExecuteReader();
 
                 while (lecteur.Read())
                 {
                     uint id = Convert.ToUInt32(lecteur["Id"]);
-                    string nomClient = lecteur["NomClient"].ToString();
-                    DateTime dateCreation = Convert.ToDateTime(lecteur["DateFacture"]);
+                    DateTime dateCreation = Convert.ToDateTime(lecteur["DateCreation"]);
+                    decimal montantTotal = Convert.ToDecimal(lecteur["MontantTotal"]);
 
-                    Facture f = new Facture(id, dateCreation)
-                    {
-                        NomClient = nomClient
-                    };
-
+                    Facture f = new Facture(id, dateCreation, montantTotal);
                     factures.Add(f);
                 }
 
@@ -757,6 +753,8 @@ namespace ApplicationGestionProduitCosmetique.Classes
 
             return factures;
         }
+
+
 
 
 
