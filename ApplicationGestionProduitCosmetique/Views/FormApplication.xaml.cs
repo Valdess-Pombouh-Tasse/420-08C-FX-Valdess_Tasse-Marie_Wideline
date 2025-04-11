@@ -211,8 +211,8 @@ namespace ApplicationGestionProduitCosmetique.Views
 
         private void RadioButton_Checked_1(object sender, RoutedEventArgs e)
         {
-        //    Factures facture = new Factures();
-        //    facture.Show();
+            //Factures facture = new Factures();
+            //facture.Show();
 
         }
 

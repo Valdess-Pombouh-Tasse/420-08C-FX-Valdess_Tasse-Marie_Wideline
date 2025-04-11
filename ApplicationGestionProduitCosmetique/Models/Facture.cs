@@ -33,6 +33,7 @@ namespace ApplicationGestionProduitCosmetique.Models
         /// </summary>
         private List<ProduitFacture> _produitsFacture;
 
+        public decimal? MontantTotalFixe { get; private set; }
 
         /// <summary>
         ///  Obtient ou définit l'identifiant unique de la facture
@@ -139,16 +140,22 @@ namespace ApplicationGestionProduitCosmetique.Models
         {
             ProduitsFacture = new List<ProduitFacture>();
         }
+        public Facture(uint id, DateTime dateCreation) : this()
+        {
+            Id = id;
+            DateCreation = dateCreation;
+        }
 
         /// <summary>
         /// Constructeur avec paramètere
         /// </summary>
         /// <param name="id">Identifiant de la facture</param>
         /// <param name="dateCreation">Date de créatoin de la facture</param>
-        public Facture(uint id, DateTime dateCreation) : this()
+        public Facture(uint id, DateTime dateCreation, decimal montantTotal) : this()
         {
             Id = id;
             DateCreation = dateCreation;
+            MontantTotalFixe = montantTotal;
         }
 
         /// <summary>

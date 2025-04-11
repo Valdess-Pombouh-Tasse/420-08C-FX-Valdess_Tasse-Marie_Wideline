@@ -49,7 +49,7 @@ namespace ApplicationGestionProduitCosmetique
         {
             try
             {
-                List<Facture> factures = GestionCompteUtilisateur.ObtenirToutesLesFactures(); 
+                List<Facture> factures = GestionCompteUtilisateur.ObtenirToutesLesFactures();
                 dgFactures.ItemsSource = null;
                 dgFactures.ItemsSource = factures;
             }
