@@ -425,23 +425,96 @@ namespace ApplicationGestionProduitCosmetique.Views
             AfficherProduitDansFacture(nouvelleFacture);
         }
 
+        //private void btnPayer_Click(object sender, RoutedEventArgs e)
+        //{
+        //    if (nouvelleFacture == null || nouvelleFacture.ProduitsFacture.Count == 0)
+        //    {
+        //        FenetreErreur.Afficher("Aucune facture à envoyer. Veuillez ajouter des articles au panier.");
+        //        return;
+        //    }
+
+        //    try
+        //    {
+        //        // Créer un dossier pour enregistrer la facture PDF
+        //        string dossierFactures = System.IO.Path.Combine(
+        //            Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
+        //            "FacturesCosmetiques");
+        //        Directory.CreateDirectory(dossierFactures);
+
+        //        // Générer le fichier PDF de la facture
+        //        string nomFichier = $"Facture_{nouvelleFacture.Id}.pdf";
+        //        string cheminComplet = System.IO.Path.Combine(dossierFactures, nomFichier);
+
+        //        using (PdfSharp.Pdf.PdfDocument document = new PdfSharp.Pdf.PdfDocument())
+        //        {
+        //            document.Info.Title = $"Facture {nouvelleFacture.Id}";
+        //            PdfSharp.Pdf.PdfPage page = document.AddPage();
+        //            XGraphics gfx = XGraphics.FromPdfPage(page);
+
+        //            var fontTitre = new XFont("Verdana", 16);
+        //            var fontCorps = new XFont("Verdana", 12);
+
+        //            int y = 40;
+        //            gfx.DrawString($"Facture No : {nouvelleFacture.Id}", fontTitre, XBrushes.Black,
+        //                new XRect(0, y, page.Width, 0), XStringFormats.TopCenter);
+        //            y += 30;
+
+        //            gfx.DrawString($"Date : {nouvelleFacture.DateCreation}", fontCorps, XBrushes.Black, 40, y);
+        //            y += 30;
+
+        //            gfx.DrawString("Produits achetés :", fontCorps, XBrushes.Black, 40, y);
+        //            y += 25;
+
+        //            for (int i = 0; i < nouvelleFacture.ProduitsFacture.Count; i++)
+        //            {
+        //                ProduitFacture item = nouvelleFacture.ProduitsFacture[i];
+        //                string ligne = $"{item.Produit.Nom} - Qté: {item.Quantite} - Prix: {item.Produit.Prix * item.Quantite}$";
+        //                gfx.DrawString(ligne, fontCorps, XBrushes.Black, 40, y);
+        //                y += 20;
+        //            }
+
+        //            y += 30;
+        //            gfx.DrawString($"Total: {nouvelleFacture.MontantTotal} $", fontTitre, XBrushes.DarkBlue, 40, y);
+
+        //            document.Save(cheminComplet);
+        //        }
+
+        //        // Paiement confirmé
+        //        FenetreErreur.Afficher("Paiement effectué avec succès !");
+
+        //        //Ouvre la fenêtre des factures avec les produits de la facture
+        //        Views.Factures fenetreFactures = new Views.Factures(nouvelleFacture);
+        //        fenetreFactures.ShowDialog();
+
+        //        // Désactive les contrôles après paiement
+        //        wpProduitPanier.IsEnabled = false;
+        //        btnPayer.IsEnabled = false;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        FenetreErreur.Afficher($"Erreur lors du paiement.\nDétails : {ex.Message}");
+        //    }
+        //}
         private void btnPayer_Click(object sender, RoutedEventArgs e)
         {
             if (nouvelleFacture == null || nouvelleFacture.ProduitsFacture.Count == 0)
             {
-                FenetreErreur.Afficher("Aucune facture à envoyer. Veuillez ajouter des articles au panier.");
+                MessageBox.Show("Aucune facture à envoyer. Veuillez ajouter des articles au panier.",
+                                 "Cosmetic Shop", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
 
             try
             {
-                // Créer un dossier pour enregistrer la facture PDF
+                // Enregistrer la facture dans la base de données
+                GestionCompteUtilisateur.EnregistrerFacture(nouvelleFacture);
+
+                // Générer le fichier PDF de la facture
                 string dossierFactures = System.IO.Path.Combine(
                     Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
                     "FacturesCosmetiques");
                 Directory.CreateDirectory(dossierFactures);
 
-                // Générer le fichier PDF de la facture
                 string nomFichier = $"Facture_{nouvelleFacture.Id}.pdf";
                 string cheminComplet = System.IO.Path.Combine(dossierFactures, nomFichier);
 
@@ -483,7 +556,7 @@ namespace ApplicationGestionProduitCosmetique.Views
                 FenetreErreur.Afficher("Paiement effectué avec succès !");
 
                 // ✅ Ouvre la fenêtre des factures avec les produits de la facture
-                Views.Factures fenetreFactures = new Views.Factures(nouvelleFacture);
+                Factures fenetreFactures = new Factures(nouvelleFacture);
                 fenetreFactures.ShowDialog();
 
                 // ✅ Désactive les contrôles après paiement
@@ -496,7 +569,8 @@ namespace ApplicationGestionProduitCosmetique.Views
             }
         }
 
-        
+
+
 
         private void btnNouvelleFacture_Click_1(object sender, RoutedEventArgs e)
         {

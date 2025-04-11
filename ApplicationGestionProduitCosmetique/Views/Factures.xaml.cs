@@ -15,6 +15,7 @@ using System.Diagnostics;
 using System.IO;
 using Path = System.IO.Path;
 using ApplicationGestionProduitCosmetique.Models;
+using ApplicationGestionProduitCosmetique.Classes;
 
 namespace ApplicationGestionProduitCosmetique.Views
 {
@@ -25,21 +26,38 @@ namespace ApplicationGestionProduitCosmetique.Views
     {
 
         private Facture factureActuelle;
-
-        public Factures(Facture facture)
+        public Factures(Facture nouvelleFacture)
         {
             InitializeComponent();
-            factureActuelle = facture;
-            MessageBox.Show($"Produits dans la facture : {factureActuelle.ProduitsFacture.Count}");
-            AfficherFacture();
+            ChargerFacturesDepuisBD();
         }
 
-        private void AfficherFacture()
+        private void ChargerFacturesDepuisBD()
         {
-            List<Facture> liste = new List<Facture>();
-            liste.Add(factureActuelle);
-            lstFactures.ItemsSource = liste;
+            try
+            {
+                List<Facture> factures = GestionCompteUtilisateur.ObtenirToutesLesFactures(); // ← méthode DAL à créer
+                lstFactures.ItemsSource = factures;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Erreur lors du chargement des factures : " + ex.Message);
+            }
         }
+
+      //public Factures(Facture facture)
+        //{
+        //    InitializeComponent();
+        //    factureActuelle = facture;
+        //    AfficherFacture();
+        //}
+
+        //private void AfficherFacture()
+        //{
+        //    List<Facture> liste = new List<Facture>();
+        //    liste.Add(factureActuelle);
+        //    lstFactures.ItemsSource = liste;
+        //}
 
         private void BtnEnvoyerEmail_Click(object sender, RoutedEventArgs e)
         {

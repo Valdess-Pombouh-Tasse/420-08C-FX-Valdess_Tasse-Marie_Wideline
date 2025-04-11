@@ -9,6 +9,7 @@ namespace ApplicationGestionProduitCosmetique.Models
 {
     public class Facture
     {
+        public string NomClient { get; set; }
 
         /// <summary>
         /// Déclaration des constantes

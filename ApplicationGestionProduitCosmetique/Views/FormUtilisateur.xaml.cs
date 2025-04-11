@@ -45,6 +45,19 @@ namespace ApplicationGestionProduitCosmetique
             Etat = etat;
         }
 
+        private void AfficherFactures()
+        {
+            try
+            {
+                List<Facture> factures = GestionCompteUtilisateur.ObtenirToutesLesFactures(); 
+                dgFactures.ItemsSource = null;
+                dgFactures.ItemsSource = factures;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Erreur lors du chargement des factures : " + ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
         public void AfficherUtilisateur()
         {
             Utilisateurs = GestionCompteUtilisateur.ChargerUtilisateurs();
@@ -56,11 +69,7 @@ namespace ApplicationGestionProduitCosmetique
         {
             Utilisateurs = GestionCompteUtilisateur.ChargerUtilisateurs();
             AfficherUtilisateur();
-            Utilisateurs = GestionCompteUtilisateur.ChargerUtilisateurs();
-            AfficherUtilisateur();
-
-            var factures = GestionCompteUtilisateur.GetFactures();
-            dgFactures.ItemsSource = factures;
+            AfficherFactures();
         }
 
         private void btnAjouter_Click(object sender, RoutedEventArgs e)
@@ -167,24 +176,6 @@ namespace ApplicationGestionProduitCosmetique
             else
             {
                 MessageBox.Show("Veuillez sélectionner un utilisateur à supprimer.", "Information", MessageBoxButton.OK, MessageBoxImage.Warning);
-            }
-        }
-
-        private void dgFactures_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (dgFactures.SelectedItem != null)
-            {
-                var facture = (Facture)dgFactures.SelectedItem;
-
-                // Affichez les détails de la facture
-                string details = $"Facture {facture.Id}\nMontant Total: {facture.MontantTotal}";
-
-                foreach (var prodFacture in facture.ProduitsFacture)
-                {
-                    details += $"\nProduit: {prodFacture.Produit.Nom}, Quantité: {prodFacture.Quantite}, Prix Unitaire: {prodFacture.PrixUnitaire}";
-                }
-
-                MessageBox.Show(details, "Détails de la Facture", MessageBoxButton.OK, MessageBoxImage.Information);
             }
         }
     }
