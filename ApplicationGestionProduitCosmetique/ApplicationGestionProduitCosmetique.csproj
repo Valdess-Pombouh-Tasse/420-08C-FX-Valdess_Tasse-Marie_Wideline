@@ -34,6 +34,7 @@
     <None Remove="Resources\Images\img8.jpg" />
     <None Remove="Resources\Images\img9.jpg" />
     <None Remove="Resources\Images\photoAccueil-3810832.webp" />
+    <None Remove="Resources\sons\son.mp3" />
     <None Remove="Resources\Videos\video.png" />
     <None Remove="Resources\Videos\video1.mp4" />
     <None Remove="Resources\Videos\video2.png" />
@@ -114,6 +115,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Resources\Images\photoAccueil-3810832.webp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\sons\son.mp3">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Resources\Videos\video1.mp4">
