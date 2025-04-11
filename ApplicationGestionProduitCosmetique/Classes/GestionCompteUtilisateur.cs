@@ -618,6 +618,7 @@ namespace ApplicationGestionProduitCosmetique.Classes
                                         (IdFacture, IdProduit,PrixUnitaire,Quantite)
                                             VALUES(@idFacture, @idProduit,@prixUnitaire,@quantite)";
 
+
                     MySqlCommand cmdAjoutProduits = new MySqlCommand(requeteAjoutProduits, cn);
 
                     cmdAjoutProduits.Parameters.Add("@idFacture ", MySqlDbType.UInt32);
@@ -651,14 +652,104 @@ namespace ApplicationGestionProduitCosmetique.Classes
             }
         }
 
-        //public static void EnvoyerFactureParEmail(Facture facture, string email)
-        //{
-        //    // Génère un PDF ou texte avec les infos de la facture
-        //    string contenuFacture = facture.GenererContenuFacture(); // À implémenter
-        //    string cheminPDF = PDFHelper.CreerPDF(contenuFacture);   // Crée un PDF
+        public static List<Facture> GetFactures()
+        {
+            List<Facture> factures = new List<Facture>();
 
-        ////    MailService.EnvoyerEmailAvecPieceJointe(email, "Votre facture", "Merci pour votre achat !", cheminPDF);
+            using (MySqlConnection cn = CreerConnection())
+            {
+                cn.Open();
+
+                string requeteFactures = "SELECT Id, DateCreation FROM factures";
+
+                using (MySqlCommand cmd = new MySqlCommand(requeteFactures, cn))
+                using (MySqlDataReader reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        uint id = reader.GetUInt32(0);
+                        DateTime dateCreation = reader.GetDateTime(1);
+
+                        Facture facture = new Facture(id, dateCreation);
+                        factures.Add(facture);
+                    }
+                }
+
+                // Pour chaque facture, on récupère ses produits
+                for (int i = 0; i < factures.Count; i++)
+                {
+                    Facture facture = factures[i];
+
+                    string requeteProduits = @"
+                SELECT pf.IdProduit, p.NomProduit, pf.PrixUnitaire, pf.Quantite
+                FROM produitsfactures pf
+                INNER JOIN produits p ON pf.IdProduit = p.Id
+                WHERE pf.IdFacture = @idFacture";
+
+                    using (MySqlCommand cmdProduits = new MySqlCommand(requeteProduits, cn))
+                    {
+                        cmdProduits.Parameters.AddWithValue("@idFacture", facture.Id);
+
+                        using (MySqlDataReader readerProduits = cmdProduits.ExecuteReader())
+                        {
+                            while (readerProduits.Read())
+                            {
+                                uint idProduit = readerProduits.GetUInt32("IdProduit");
+                                string nomProduit = readerProduits.GetString("NomProduit");
+                                decimal prixUnitaire = readerProduits.GetDecimal("PrixUnitaire");
+                                uint quantite = readerProduits.GetUInt32("Quantite");
+
+                                Produit produit = new Produit(
+                                    idProduit,
+                                    code: "N/A", // Code manquant dans la requête SQL
+                                    nom: nomProduit,
+                                    prix: prixUnitaire,
+                                    image: "N/A", // Image non récupérée ici
+                                    categorie: new Categorie(0, "Inconnue"), // À adapter si tu veux charger la vraie catégorie
+                                    description: "",
+                                    quantite: 0 // Non pertinent ici
+                                );
+
+                                ProduitFacture produitFacture = new ProduitFacture(produit, prixUnitaire, quantite);
+                                facture.ProduitsFacture.Add(produitFacture);
+                            }
+                        }
+                    }
+                }
+
+                cn.Close();
+            }
+
+            return factures;
+        }
+
+        //public static List<Facture> GetToutesLesFactures()
+        //{
+        //    List<Facture> factures = new List<Facture>();
+
+        //    using (MySqlConnection connection = new MySqlConnection(Connexion.ConnexionString))
+        //    {
+        //        connection.Open();
+
+        //        MySqlCommand command = new MySqlCommand("SELECT * FROM Factures", connection);
+        //        MySqlDataReader reader = command.ExecuteReader();
+
+        //        while (reader.Read())
+        //        {
+        //            Facture f = new Facture();
+        //            f.Id = (int)reader["Id"];
+        //            f.DateCreation = (DateTime)reader["DateCreation"];
+        //            f.MontantTotal = (decimal)reader["MontantTotal"];
+
+        //            // Tu peux aussi charger les produits de la facture ici si besoin
+
+        //            factures.Add(f);
+        //        }
+        //    }
+
+        //    return factures;
         //}
+
 
 
         /// <summary>

@@ -40,12 +40,12 @@
                         </StackPanel>
                     </RadioButton>
 
-                    <RadioButton Style="{StaticResource menuButton}" Tag="{StaticResource Color2}" Command="{Binding ShowArticleChoisirViewModel}">
+                    <!--<RadioButton Style="{StaticResource menuButton}" Tag="{StaticResource Color2}" Command="{Binding ShowArticleChoisirViewModel}">
                         <StackPanel Orientation="Horizontal">
-                            <fa:IconImage Icon="ShoppingCart" Style="{StaticResource menuButtonIcon}"/>
+                            <fa:IconImage Icon="ShoppingCart" Style="{StaticResource }"/>
                             <TextBlock Text="Articles Choisis" Style="{StaticResource menuButtonText}" Foreground="Black"/>
                         </StackPanel>
-                    </RadioButton>
+                    </RadioButton>-->
 
                     <RadioButton Style="{StaticResource menuButton}" Tag="{StaticResource Color7}" Command="{Binding ShowArticleCommandesViewModel}">
                         <StackPanel Orientation="Horizontal">
@@ -115,7 +115,7 @@
                     <Button Content="Non" Click="BtnFermer_Click"/>
                 </StackPanel>
 
-                <Button Content="Télécharger / Ouvrir" Width="160" Height="30" Click="BtnOuvrir_Click"/>
+                <Button Content="Télécharger / Ouvrir" Width="160" Height="30" Click="Button_Click"/>
             </StackPanel>
         </Grid>
     </Grid>

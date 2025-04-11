@@ -24,94 +24,80 @@ namespace ApplicationGestionProduitCosmetique.Views
     public partial class Factures : Window
     {
 
-        private Facture factureReçue;
+        private Facture factureActuelle;
 
         public Factures(Facture facture)
         {
             InitializeComponent();
-            factureReçue = facture;
-            lstFactures.ItemsSource = new List<Facture> { factureReçue }; // pour afficher une seule facture
+            factureActuelle = facture;
+            MessageBox.Show($"Produits dans la facture : {factureActuelle.ProduitsFacture.Count}");
+            AfficherFacture();
         }
+
+        private void AfficherFacture()
+        {
+            List<Facture> liste = new List<Facture>();
+            liste.Add(factureActuelle);
+            lstFactures.ItemsSource = liste;
+        }
+
         private void BtnEnvoyerEmail_Click(object sender, RoutedEventArgs e)
         {
-            string emailClient = Microsoft.VisualBasic.Interaction.InputBox(
-                "Entrez votre adresse email :", "Envoi de facture", "client@email.com");
+            if (factureActuelle == null)
+            {
+                MessageBox.Show("Aucune facture sélectionnée.", "Cosmetic Shop", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
 
-            if (string.IsNullOrWhiteSpace(emailClient) || !emailClient.Contains("@"))
+            string email = Microsoft.VisualBasic.Interaction.InputBox(
+                "Entrez votre adresse email pour recevoir la facture :", "Envoi de la facture");
+
+            if (string.IsNullOrWhiteSpace(email))
             {
                 MessageBox.Show("Adresse email invalide.", "Cosmetic Shop", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
 
-            try
+            string cheminPDF = System.IO.Path.Combine(
+                Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
+                "FacturesCosmetiques",
+                $"Facture_{factureActuelle.Id}.pdf");
+
+            if (File.Exists(cheminPDF))
             {
-                string dossierFactures = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "FacturesCosmetiques");
-                Directory.CreateDirectory(dossierFactures);
-                string nomFichier = $"Facture_{factureReçue.Id}.pdf";
-                string cheminComplet = System.IO.Path.Combine(dossierFactures, nomFichier);
-
-                FacturePdf.GenererFacturePDF(factureReçue, cheminComplet);
-                Mail.EnvoyerFacture(emailClient, cheminComplet);
-
-                MessageBox.Show("Facture envoyée avec succès !", "Cosmetic Shop", MessageBoxButton.OK, MessageBoxImage.Information);
-                this.Close();
+                Mail.EnvoyerFacture(email, cheminPDF);
+                MessageBox.Show("Facture envoyée par email avec succès !", "Cosmetic Shop", MessageBoxButton.OK, MessageBoxImage.Information);
             }
-            catch (Exception ex)
+            else
             {
-                MessageBox.Show($"Erreur lors de l'envoi : {ex.Message}", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("La facture n'a pas été trouvée.", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
+
 
         private void BtnFermer_Click(object sender, RoutedEventArgs e)
         {
             this.Close();
         }
 
-        ///// <summary>
-        ///// Dossier contenant les factures
-        ///// </summary>
-        //string dossierFactures;
-        //public Factures()
-        //{
-        //    InitializeComponent();
-        //}
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                string cheminPDF = Path.Combine(
+                    Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
+                    "FacturesCosmetiques",
+                    $"Facture_{factureActuelle.Id}.pdf");
 
-        ///// <summary>
-        ///// Charge les factures à partir du dossier spécifié
-        ///// </summary>
-        //private void ChargerFactures()
-        //{
-        //    if (Directory.Exists(dossierFactures))
-        //    {
-        //        var fichiers = Directory.GetFiles(dossierFactures, "*.pdf");
-        //        lstFactures.ItemsSource = fichiers.Select(Path.GetFileName).ToList();
-        //    }
-        //}
-
-        ///// <summary>
-        ///// Événement déclenché lorsque la fenêtre est chargée
-        ///// </summary>
-        ///// <param name="sender"></param>
-        ///// <param name="e"></param>
-        //private void Window_Loaded(object sender, RoutedEventArgs e)
-        //{
-        //    dossierFactures = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Factures");
-        //    ChargerFactures();
-        //}
-
-        ///// <summary>
-        ///// Événement déclenché lorsque le bouton "Ouvrir" est cliqué
-        ///// </summary>
-        ///// <param name="sender"></param>
-        ///// <param name="e"></param>
-        //private void BtnOuvrir_Click(object sender, RoutedEventArgs e)
-        //{
-        //    if (lstFactures.SelectedItem != null)
-        //    {
-        //        string fichier = Path.Combine(dossierFactures, lstFactures.SelectedItem.ToString());
-        //        Process.Start("explorer", fichier); 
-        //    }
-        //}
-
+                if (File.Exists(cheminPDF))
+                    System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo(cheminPDF) { UseShellExecute = true });
+                else
+                    MessageBox.Show("Le fichier PDF n'existe pas.", "Erreur", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Erreur lors de l'ouverture du PDF : " + ex.Message);
+            }
+        }
     }
 }

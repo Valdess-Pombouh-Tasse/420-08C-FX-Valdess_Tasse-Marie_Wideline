@@ -211,9 +211,9 @@ namespace ApplicationGestionProduitCosmetique.Views
 
         private void RadioButton_Checked_1(object sender, RoutedEventArgs e)
         {
-            Factures facture = new Factures();
-            facture.Show();
-            
+        //    Factures facture = new Factures();
+        //    facture.Show();
+
         }
 
         private void btnRechercherProduit_Click(object sender, RoutedEventArgs e)
@@ -429,8 +429,7 @@ namespace ApplicationGestionProduitCosmetique.Views
         {
             if (nouvelleFacture == null || nouvelleFacture.ProduitsFacture.Count == 0)
             {
-                MessageBox.Show("Aucune facture à envoyer. Veuillez ajouter des articles au panier.",
-                                "Cosmetic Shop", MessageBoxButton.OK, MessageBoxImage.Warning);
+                FenetreErreur.Afficher("Aucune facture à envoyer. Veuillez ajouter des articles au panier.");
                 return;
             }
 
@@ -481,7 +480,7 @@ namespace ApplicationGestionProduitCosmetique.Views
                 }
 
                 // ✅ Paiement confirmé
-                MessageBox.Show("Paiement effectué avec succès !", "Cosmetic Shop", MessageBoxButton.OK, MessageBoxImage.Information);
+                FenetreErreur.Afficher("Paiement effectué avec succès !");
 
                 // ✅ Ouvre la fenêtre des factures avec les produits de la facture
                 Views.Factures fenetreFactures = new Views.Factures(nouvelleFacture);
