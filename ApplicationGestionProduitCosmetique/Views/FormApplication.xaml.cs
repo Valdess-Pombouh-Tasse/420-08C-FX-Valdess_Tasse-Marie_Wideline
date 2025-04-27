@@ -422,12 +422,9 @@ namespace ApplicationGestionProduitCosmetique.Views
             AfficherProduitDansFacture(nouvelleFacture);
         }
 
-        
+
         private void btnPayer_Click(object sender, RoutedEventArgs e)
         {
-
-            SoundPlayer player = new SoundPlayer("Resources/sons/son.wav");
-            player.Play();
             if (nouvelleFacture == null || nouvelleFacture.ProduitsFacture.Count == 0)
             {
                 MessageBox.Show("Aucune facture à envoyer. Veuillez ajouter des articles au panier.",
@@ -439,9 +436,6 @@ namespace ApplicationGestionProduitCosmetique.Views
             {
                 // Enregistrer la facture dans la base de données
                 GestionCompteUtilisateur.EnregistrerFacture(nouvelleFacture);
-
-                // Fixer le montant total (avec taxes) une fois pour toute
-                nouvelleFacture.MontantTotalFixe = nouvelleFacture.MontantTotal;
 
                 // Générer le fichier PDF de la facture
                 string dossierFactures = System.IO.Path.Combine(
@@ -481,19 +475,17 @@ namespace ApplicationGestionProduitCosmetique.Views
                     }
 
                     y += 30;
-                    gfx.DrawString($"Total: {nouvelleFacture.MontantTotalFixe} $", fontTitre, XBrushes.DarkBlue, 40, y);
+                    gfx.DrawString($"Total: {nouvelleFacture.MontantTotal} $", fontTitre, XBrushes.DarkBlue, 40, y);
 
                     document.Save(cheminComplet);
                 }
 
                 // ✅ Paiement confirmé
-                FenetreErreur.Afficher("Paiement effectué avec succès !");              
+                FenetreErreur.Afficher("Paiement effectué avec succès !");
 
-                 Factures fenetreFactures = new Factures(nouvelleFacture);
+                // ✅ Ouvre la fenêtre des factures avec les produits de la facture
+                Factures fenetreFactures = new Factures(nouvelleFacture);
                 fenetreFactures.ShowDialog();
-
-                ArticleCommandes fenetreArticleCommandes = new ArticleCommandes(nouvelleFacture);
-                fenetreArticleCommandes.ShowDialog();
 
                 // ✅ Désactive les contrôles après paiement
                 wpProduitPanier.IsEnabled = false;
