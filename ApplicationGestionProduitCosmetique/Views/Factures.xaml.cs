@@ -1,5 +1,8 @@
-﻿using System;
+﻿using ApplicationGestionProduitCosmetique.Classes;
+using ApplicationGestionProduitCosmetique.Models;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,21 +13,16 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 using System.Windows.Shapes;
-using System.Diagnostics;
-using System.IO;
-using Path = System.IO.Path;
-using ApplicationGestionProduitCosmetique.Models;
-using ApplicationGestionProduitCosmetique.Classes;
 
 namespace ApplicationGestionProduitCosmetique.Views
 {
     /// <summary>
     /// Logique d'interaction pour Factures.xaml
     /// </summary>
-    public partial class Factures : Window
+    public partial class Factures : UserControl
     {
-
         private Facture factureActuelle;
         public Factures(Facture nouvelleFacture)
         {
@@ -45,7 +43,7 @@ namespace ApplicationGestionProduitCosmetique.Views
             }
         }
 
-      //public Factures(Facture facture)
+        //public Factures(Facture facture)
         //{
         //    InitializeComponent();
         //    factureActuelle = facture;
@@ -93,16 +91,11 @@ namespace ApplicationGestionProduitCosmetique.Views
         }
 
 
-        private void BtnFermer_Click(object sender, RoutedEventArgs e)
-        {
-            this.Close();
-        }
-
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             try
             {
-                string cheminPDF = Path.Combine(
+                string cheminPDF = System.IO.Path.Combine(
                     Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
                     "FacturesCosmetiques",
                     $"Facture_{factureActuelle.Id}.pdf");

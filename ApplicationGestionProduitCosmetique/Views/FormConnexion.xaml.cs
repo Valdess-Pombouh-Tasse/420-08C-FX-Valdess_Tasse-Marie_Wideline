@@ -1,7 +1,5 @@
 ﻿using ApplicationGestionProduitCosmetique.Classes;
 using ApplicationGestionProduitCosmetique.enums;
-using ApplicationGestionProduitCosmetique.Models;
-using ApplicationGestionProduitCosmetique.Views;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,20 +12,26 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace ApplicationGestionProduitCosmetique
+namespace ApplicationGestionProduitCosmetique.Views
 {
     /// <summary>
     /// Logique d'interaction pour FormConnexion.xaml
     /// </summary>
-    public partial class FormConnexion : Window
+    public partial class FormConnexion : UserControl
     {
         public FormConnexion()
         {
             InitializeComponent();
         }
 
+        public void LoadUserControl(UserControl control)
+        {
+            MainGrid.Children.Clear();
+            MainGrid.Children.Add(control);
+        }
         private bool ValidationFormulaire()
         {
             bool valide = true;
@@ -78,12 +82,13 @@ namespace ApplicationGestionProduitCosmetique
                         return;
                     }
 
-                    
+
                     Window form = null;
+                    UserControl control = null;
 
                     if (role == RoleUtilisateur.Client)
                     {
-                        form = new FormApplication();
+                        form = new Base();
                     }
                     else if (role == RoleUtilisateur.Vendeur)
                     {
@@ -94,11 +99,25 @@ namespace ApplicationGestionProduitCosmetique
                         form = new FormUtilisateur();
                     }
 
+                    if(control != null)
+                    {
+                        var containerWindow = new MainWindow();
+                        containerWindow.monContentControl.Content = control; // MainContent est un ContentControl
+                        containerWindow.WindowState = WindowState.Maximized;
+                        containerWindow.Show();
+                        Window.GetWindow(this)?.Close();
+                    }
+                    else
+                    {
+                        lblMessageErreur.Text = "Une erreur s'est produite lors de l'initialisation de la fenêtre.";
+                        lblMessageErreur.Visibility = Visibility.Visible;
+                    }
+
                     if (form != null)
                     {
                         form.WindowState = WindowState.Maximized;
                         form.Show();
-                        this.Close();
+                        Window.GetWindow(this).Close();                    
                     }
                     else
                     {
@@ -111,6 +130,8 @@ namespace ApplicationGestionProduitCosmetique
                     lblMessageErreur.Text = "Nom ou mot de passe invalide.";
                     lblMessageErreur.Visibility = Visibility.Visible;
                 }
+
+
             }
             catch (Exception ex)
             {

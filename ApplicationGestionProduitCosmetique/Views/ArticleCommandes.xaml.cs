@@ -1,6 +1,4 @@
-﻿using ApplicationGestionProduitCosmetique.Classes;
-using ApplicationGestionProduitCosmetique.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,6 +10,7 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 namespace ApplicationGestionProduitCosmetique.Views
@@ -19,30 +18,11 @@ namespace ApplicationGestionProduitCosmetique.Views
     /// <summary>
     /// Logique d'interaction pour ArticleCommandes.xaml
     /// </summary>
-    public partial class ArticleCommandes : Window
+    public partial class ArticleCommandes : UserControl
     {
-        private Facture factureActuelle;
-        public ArticleCommandes(Facture nouvelleFacture)
+        public ArticleCommandes()
         {
             InitializeComponent();
-            this.DataContext = this;
-            ChargerFacturesDepuisBD();
         }
-
-        
-
-        private void ChargerFacturesDepuisBD()
-        {
-            try
-            {
-                List<Facture> factures = GestionCompteUtilisateur.ObtenirToutesLesFactures(); // ← méthode DAL à créer
-                lstFactures.ItemsSource = factures;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Erreur lors du chargement des factures : " + ex.Message);
-            }
-        }
-
     }
 }

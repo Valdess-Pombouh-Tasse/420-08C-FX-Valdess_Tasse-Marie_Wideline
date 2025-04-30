@@ -3,11 +3,11 @@ using ApplicationGestionProduitCosmetique.Models;
 using ApplicationGestionProduitCosmetique.Views;
 using System.Text;
 using System.Windows;
+using System.Windows.Media;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
@@ -28,17 +28,14 @@ namespace ApplicationGestionProduitCosmetique
         
         private void btnConnexion_Click(object sender, RoutedEventArgs e)
         {
-            
-            FormConnexion frmConnexion = new FormConnexion();
-            frmConnexion.WindowState = WindowState.Maximized;
-            frmConnexion.Show();
-            this.Close();
+            monContentControl.Content = new FormConnexion();
+
         }
 
         private void btnCreation_Click(object sender, RoutedEventArgs e)
         {
-            FormCreationcompte formCreationcompte = new FormCreationcompte();
-            formCreationcompte.ShowDialog();
+            monContentControl.Content = new FormCreationcompte();
+
             Close();
             txtCreerCompte.Text = "Vous n'avez pas de Compte";
             btnCreation.Visibility = Visibility.Visible;

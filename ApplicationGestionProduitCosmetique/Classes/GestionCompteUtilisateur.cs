@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -581,7 +582,6 @@ namespace ApplicationGestionProduitCosmetique.Classes
         }
 
         /// <summary>
-        /// Autohor Amadou
         /// Permet d'ajouter une facture dans la base de données
         /// </summary>
         /// <param name="facture">facture à ajouter</param>
@@ -754,21 +754,86 @@ namespace ApplicationGestionProduitCosmetique.Classes
             return factures;
         }
 
-
-
-
-
-        /// <summary>
-        /// Hashage sécurisé du mot de passe.
-        /// </summary>
-        private static string HasherMotDePasse(string motDePasse)
+        public static bool CreerCompte(string nom, string motDePasse, string code, RoleUtilisateur role, out string messageErreur)
         {
-            using (var sha256 = System.Security.Cryptography.SHA256.Create())
+            MySqlConnection cn = CreerConnection();
+            try
             {
-                byte[] bytes = sha256.ComputeHash(System.Text.Encoding.UTF8.GetBytes(motDePasse));
-                return Convert.ToBase64String(bytes);
+                cn.Open();
+
+ 
+                // Vérifier si le compte existe déjà
+                if (CompteExiste(nom))
+                {
+                    messageErreur = "Un compte avec ce nom existe déjà.";
+                    return false;
+                }
+
+                // Si Vendeur/Manager → vérifier le code spécial
+                if ((role == RoleUtilisateur.Vendeur || role == RoleUtilisateur.Manager) && code != "SECRET123")
+                {
+                    messageErreur = $"Code invalide pour la création d'un compte {role.ToString().ToLower()}.";
+                    return false;
+                }
+
+                // Hachage du mot de passe
+                string motDePasseHache = HacherMotDePasse(motDePasse);
+
+                // Insertion dans la base de données SQLite
+                using (MySqlConnection connection = CreerConnection())
+                {
+                    connection.Open();
+                    MySqlCommand cmd = new MySqlCommand("INSERT INTO utilisateurs (nom, mot_de_passe, role, code) VALUES (@nom, @motDePasse, @role, @code)", connection);
+                    cmd.Parameters.AddWithValue("@nom", nom);
+                    cmd.Parameters.AddWithValue("@motDePasse", motDePasseHache);
+                    cmd.Parameters.AddWithValue("@role", role.ToString());
+                    cmd.Parameters.AddWithValue("@code", (role == RoleUtilisateur.Vendeur || role == RoleUtilisateur.Manager) ? code : DBNull.Value);
+                    cmd.ExecuteNonQuery();
+                }
+
+                messageErreur = null;
+                return true;
+            }
+            catch (Exception ex)
+            {
+                messageErreur = $"Erreur lors de la création du compte : {ex.Message}";
+                Console.WriteLine(ex);
+                return false;
             }
         }
+
+        private static bool CompteExiste(string nom)
+        {
+            using (MySqlConnection connection = CreerConnection())
+            {
+                connection.Open();
+                MySqlCommand cmd = new MySqlCommand("SELECT COUNT(*) FROM utilisateurs WHERE nom = @nom", connection);
+                cmd.Parameters.AddWithValue("@nom", nom);
+                long compteExistant = (long)cmd.ExecuteScalar();
+                return compteExistant > 0;
+            }
+        }
+        private static string HacherMotDePasse(string motDePasse)
+        {
+            using (var sha256 = SHA256.Create())
+            {
+                var bytes = Encoding.UTF8.GetBytes(motDePasse);
+                var hash = sha256.ComputeHash(bytes);
+                return Convert.ToBase64String(hash);
+            }
+        }
+
+        ///// <summary>
+        ///// Hashage sécurisé du mot de passe.
+        ///// </summary>
+        //private static string HasherMotDePasse(string motDePasse)
+        //{
+        //    using (var sha256 = System.Security.Cryptography.SHA256.Create())
+        //    {
+        //        byte[] bytes = sha256.ComputeHash(System.Text.Encoding.UTF8.GetBytes(motDePasse));
+        //        return Convert.ToBase64String(bytes);
+        //    }
+        //}
     }
 }
 

@@ -28,7 +28,7 @@
         <DockPanel Grid.Row="0" Background="#FFDDDDDD" Height="70" Grid.ColumnSpan="8">
             <TextBlock Text="Cosmetic Shop" FontSize="30" FontWeight="ExtraBold"
                        Foreground="Indigo" VerticalAlignment="Center"
-                        Margin="20"/>
+                       Margin="20"/>
         </DockPanel>
 
         <!-- Contenu principal -->
@@ -44,7 +44,7 @@
                     CornerRadius="15" Margin="20">
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                     <StackPanel Width="350">
-                        <TextBlock FontSize="24" FontWeight="Bold"  Text="Bienvenue sur Cosmetic Shop"
+                        <TextBlock FontSize="24" FontWeight="Bold" Text="Bienvenue sur Cosmetic Shop"
                                    Margin="0,0,0,15" Foreground="#333"/>
                         <TextBlock TextWrapping="Wrap"
                                    Text="Votre boutique dédiée aux produits cosmétiques adaptés à chaque type de peau. Découvrez nos gammes variées et prenez soin de vous avec des produits de qualité."
@@ -69,21 +69,20 @@
 
             <!-- Boutons en dessous -->
             <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" Margin="15">
-
                 <Button Name="btnConnexion" Content="Se connecter" Width="95" Height="50"
-        Foreground="White" FontWeight="Bold" Background="#2196F3" 
-        Padding="10" Click="btnConnexion_Click">
+                        Foreground="White" FontWeight="Bold" Background="#2196F3" 
+                        Padding="10" Click="btnConnexion_Click">
                     <Button.Style>
                         <Style TargetType="Button">
                             <Setter Property="Template">
                                 <Setter.Value>
                                     <ControlTemplate TargetType="Button">
                                         <Border Background="{TemplateBinding Background}" 
-                                BorderBrush="{TemplateBinding BorderBrush}"
-                                BorderThickness="2" CornerRadius="25"  Width="{TemplateBinding Width}"
-                                Height="{TemplateBinding Height}">
+                                                BorderBrush="{TemplateBinding BorderBrush}"
+                                                BorderThickness="2" CornerRadius="25" Width="{TemplateBinding Width}"
+                                                Height="{TemplateBinding Height}">
                                             <ContentPresenter HorizontalAlignment="Center"
-                                              VerticalAlignment="Center"/>
+                                                              VerticalAlignment="Center"/>
                                         </Border>
                                     </ControlTemplate>
                                 </Setter.Value>
@@ -94,20 +93,19 @@
             </StackPanel>
 
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center"
-                Margin="10,36,0,18"   Width="280" Grid.Row="2">
-
+                        Margin="10,36,0,18" Width="280" Grid.Row="2">
                 <TextBlock x:Name="txtCreerCompte" Text="Vous n'avez pas de Compte?"
-                   Foreground="DarkGray"  FontSize="12" FontWeight="Medium" FontFamily="Montserrat"/>
+                           Foreground="DarkGray" FontSize="12" FontWeight="Medium" FontFamily="Montserrat"/>
 
-                <Button x:Name="btnCreation" Cursor="Hand"  Background="Transparent"  BorderBrush="Transparent" FontFamily="Montserrat"
-                Click="btnCreation_Click" Command="{Binding ShowFormCreerCompteViewModel}">
+                <Button x:Name="btnCreation" Cursor="Hand" Background="Transparent" BorderBrush="Transparent" FontFamily="Montserrat"
+                        Click="btnCreation_Click">
                     <Button.Template>
                         <ControlTemplate TargetType="Button">
                             <ContentPresenter Content="{TemplateBinding Content}"/>
                         </ControlTemplate>
                     </Button.Template>
                     <TextBlock x:Name="txtbtnCreation" Text="Créer un Compte" FontSize="13" FontWeight="Medium"
-                                     FontFamily="Montserrat" Margin="9,0,0,0" >
+                               FontFamily="Montserrat" Margin="9,0,0,0">
                         <TextBlock.Style>
                             <Style TargetType="TextBlock">
                                 <Setter Property="Foreground" Value="White"/>
@@ -119,9 +117,11 @@
                             </Style>
                         </TextBlock.Style>
                     </TextBlock>
-
                 </Button>
             </StackPanel>
         </Grid>
+
+        <!-- Ajout du ContentControl pour afficher les UserControls -->
+        <ContentControl x:Name="monContentControl" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="7" Margin="0"/>
     </Grid>
 </Window>
