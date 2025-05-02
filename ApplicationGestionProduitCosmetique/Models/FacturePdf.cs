@@ -2,88 +2,65 @@
 using PdfSharp.Pdf;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace ApplicationGestionProduitCosmetique.Models
 {
-   public class FacturePdf
+    public class FacturePdf
     {
-        public static void GenererFacturePDF(Facture factureActuelle, string cheminComplet)
+        public static string GenererPDF(Facture facture, string dossierDestination)
         {
-            if (factureActuelle == null || factureActuelle.ProduitsFacture == null || factureActuelle.ProduitsFacture.Count == 0)
-                throw new ArgumentException("La facture est vide ou invalide.");
+            string cheminFichier = Path.Combine(dossierDestination, $"{facture.NumeroFacture}.pdf");
 
-            //using (PdfSharp.Pdf.PdfDocument document = new PdfSharp.Pdf.PdfDocument())
-            //{
-            //    document.Info.Title = $"Facture {facture.Id}";
-            //    PdfPage page = document.AddPage();
-            //    XGraphics gfx = XGraphics.FromPdfPage(page);
+            PdfSharp.Pdf.PdfDocument document = new PdfSharp.Pdf.PdfDocument();
+            document.Info.Title = "Facture Cosmetic Shop";
 
-            //    XFont titreFont = new XFont("Verdana", 16);
-            //    XFont corpsFont = new XFont("Verdana", 12);
-            //    XFont totalFont = new XFont("Verdana", 14);
+            PdfPage page = document.AddPage();
+            XGraphics gfx = XGraphics.FromPdfPage(page);
 
-            //    int y = 40;
+            XFont titreFont = new XFont("Arial", 18);
+            XFont textFont = new XFont("Arial", 12);
 
-            //    gfx.DrawString("Cosmetic Shop - Facture", titreFont, XBrushes.MediumVioletRed,
-            //        new XRect(0, y, page.Width, 0), XStringFormats.TopCenter);
-            //    y += 40;
+            int y = 40;
 
-            //    gfx.DrawString($"Facture No : {facture.Id}", corpsFont, XBrushes.Black, 40, y); y += 25;
-            //    gfx.DrawString($"Date : {facture.DateCreation}", corpsFont, XBrushes.Black, 40, y); y += 25;
-            //    //gfx.DrawString($"Client : {facture.}", corpsFont, XBrushes.Black, 40, y); y += 30;
+            gfx.DrawString("COSMETIC SHOP", titreFont, XBrushes.DarkViolet, new XPoint(40, y));
+            y += 40;
 
-            //    gfx.DrawString("Produits :", corpsFont, XBrushes.Black, 40, y); y += 20;
+            gfx.DrawString($"Facture No : {facture.NumeroFacture}", textFont, XBrushes.Black, new XPoint(40, y));
+            y += 20;
 
-            //    for (int i = 0; i < facture.ProduitsFacture.Count; i++)
-            //    {
-            //        var item = facture.ProduitsFacture[i];
-            //        string ligne = $"{item.Produit.Nom} | Qté: {item.Quantite} | Prix: {item.Produit.Prix:C2} | Total: {(item.Produit.Prix * item.Quantite):C2}";
-            //        gfx.DrawString(ligne, corpsFont, XBrushes.Black, 50, y);
-            //        y += 20;
-            //    }
+            gfx.DrawString($"Client : {facture.NomClient}", textFont, XBrushes.Black, new XPoint(40, y));
+            y += 20;
 
-            //    y += 30;
-            //    gfx.DrawString($"Total TTC : {facture.MontantTotal:C2}", totalFont, XBrushes.DarkGreen, 40, y);
+            gfx.DrawString($"Date : {facture.DateCreation.ToShortDateString()}", textFont, XBrushes.Black, new XPoint(40, y));
+            y += 40;
 
-            //    // Enregistre le PDF
-            //    document.Save(cheminComplet);
-            //}
+            gfx.DrawString("Détails des produits :", textFont, XBrushes.DarkBlue, new XPoint(40, y));
+            y += 20;
 
-            using (PdfSharp.Pdf.PdfDocument document = new PdfSharp.Pdf.PdfDocument())
+            foreach (var p in facture.ProduitsFacture)
             {
-                document.Info.Title = $"Facture {factureActuelle.Id}";
-                PdfSharp.Pdf.PdfPage page = document.AddPage();
-                XGraphics gfx = XGraphics.FromPdfPage(page);
-
-                var fontTitre = new XFont("Verdana", 16);
-                var fontCorps = new XFont("Verdana", 12);
-
-                int y = 40;
-                gfx.DrawString($"Facture No : {factureActuelle.Id}", fontTitre, XBrushes.Black,
-                    new XRect(0, y, page.Width, 0), XStringFormats.TopCenter);
-                y += 30;
-
-                gfx.DrawString($"Date : {factureActuelle.DateCreation}", fontCorps, XBrushes.Black, 40, y);
-                y += 30;
-
-                gfx.DrawString("Produits achetés :", fontCorps, XBrushes.Black, 40, y);
-                y += 25;
-
-                foreach (var item in factureActuelle.ProduitsFacture)
-                {
-                    string ligne = $"{item.Produit.Nom} - Qté: {item.Quantite} - Prix: {item.Produit.Prix * item.Quantite}$";
-                    gfx.DrawString(ligne, fontCorps, XBrushes.Black, 40, y);
-                    y += 20;
-                }
-
-                y += 30;
-                gfx.DrawString($"Total: {factureActuelle.MontantTotal} $", fontTitre, XBrushes.DarkBlue, 40, y);
-
-                document.Save(cheminComplet);
+                gfx.DrawString($"{p.Produit.Nom} x {p.Quantite} @ {p.PrixUnitaire:C2} = {p.SousTotal:C2}", textFont, XBrushes.Black, new XPoint(60, y));
+                y += 20;
             }
+
+            y += 20;
+            gfx.DrawString($"Sous-total : {facture.MontantSousTotal:C2}", textFont, XBrushes.Black, new XPoint(40, y)); y += 20;
+            gfx.DrawString($"TPS (5%) : {facture.MontantTPS:C2}", textFont, XBrushes.Black, new XPoint(40, y)); y += 20;
+            gfx.DrawString($"TVQ (9.975%) : {facture.MontantTVQ:C2}", textFont, XBrushes.Black, new XPoint(40, y)); y += 20;
+            gfx.DrawString($"Total à payer : {facture.MontantTotal:C2}", textFont, XBrushes.DarkGreen, new XPoint(40, y)); y += 40;
+
+            gfx.DrawString("Merci pour votre achat !", textFont, XBrushes.DarkViolet, new XPoint(40, y));
+            y += 20;
+            gfx.DrawString(Facture.AdresseMagasin, textFont, XBrushes.Gray, new XPoint(40, y));
+            y += 20;
+            gfx.DrawString(Facture.EmailContact, textFont, XBrushes.Gray, new XPoint(40, y));
+
+            document.Save(cheminFichier);
+            return cheminFichier;
         }
     }
 

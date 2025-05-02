@@ -232,6 +232,28 @@ namespace ApplicationGestionProduitCosmetique.Models
                 ProduitsFacture.Remove(produitTrouve);
             }
         }
+
+        /// <summary>
+        /// Retourne le numéro unique de la facture au format CS-YYYYMMDD-XXXX
+        /// </summary>
+        public string NumeroFacture
+        {
+            get
+            {
+                return $"CS-{DateCreation:yyyyMMdd}-{Id:D4}";
+            }
+        }
+
+        /// <summary>
+        /// Adresse courriel du magasin
+        /// </summary>
+        public static string EmailContact => "contact@cosmeticshop.com";
+
+        /// <summary>
+        /// Adresse physique du magasin
+        /// </summary>
+        public static string AdresseMagasin => "123 Avenue Beauté, Montréal, QC H1A 2B3";
+
     }
 }
 
