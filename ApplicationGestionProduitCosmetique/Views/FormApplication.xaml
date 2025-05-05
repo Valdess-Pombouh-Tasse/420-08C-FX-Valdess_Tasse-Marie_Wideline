@@ -4,12 +4,10 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:ApplicationGestionProduitCosmetique.Views" xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
-             mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             mc:Ignorable="d" Height="577" Width="900">
 
-    <!-- Zone centrale d'affichage -->
-    <Grid Grid.Column="1" Margin="10" x:Name="MainContentGrid">
-        <!-- Le UserControl sélectionné s'affichera ici -->
+    <!--<Grid Grid.Column="1" Margin="10" x:Name="MainContentGrid">
+
         <Border Margin="-12,-10,0,-13">
             <Border.Background>
                 <LinearGradientBrush StartPoint="1,1" EndPoint="0,0">
@@ -65,5 +63,137 @@
             </Grid>
 
         </Border>
+    </Grid>-->
+    <!--<Grid Margin="-20,-10,0,-19">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            --><!-- Liste des produits --><!--
+            <ColumnDefinition Width="*"/>
+            --><!-- Panier --><!--
+        </Grid.ColumnDefinitions>
+
+        --><!-- Liste des produits --><!--
+        <StackPanel Grid.Column="0" Margin="20" VerticalAlignment="Stretch">
+
+            --><!-- Barre de recherche --><!--
+            <StackPanel Margin="0,10,0,3" x:Name="spAjouterProduit" Orientation="Horizontal">
+                <TextBox x:Name="txtRechercher" Width="200" Height="34" Margin="5,0" TextChanged="txtRechercher_TextChanged"/>
+                <ComboBox x:Name="cboCategories" Width="150" Margin="5,0"/>
+                <Button x:Name="btnRechercherProduit" BorderThickness="0" Background="White" Click="btnRechercherProduit_Click">
+                    <Image Source="/Resources/Images/ImagesIcons/search.png" Width="25" Margin="5"/>
+                </Button>
+            </StackPanel>
+
+            --><!-- Produits --><!--
+            <ScrollViewer VerticalScrollBarVisibility="Auto" Height="625" Margin="2">
+                <WrapPanel x:Name="wpProduits" Orientation="Horizontal"/>
+            </ScrollViewer>
+        </StackPanel>
+
+        --><!-- Panier --><!--
+        <StackPanel Grid.Column="1" Background="#FFF4F4F4" Margin="10,0,-56,0" VerticalAlignment="Stretch">
+            <TextBlock Text="🛒 Mon Panier" FontSize="18" FontWeight="Bold" Margin="0 0 0 10"/>
+
+            <Border Height="390" BorderBrush="LightGray" BorderThickness="1" CornerRadius="6" Margin="10">
+                <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="2">
+                    <WrapPanel x:Name="wpProduitPanier" Orientation="Horizontal"/>
+                </ScrollViewer>
+            </Border>
+
+            --><!-- Totaux --><!--
+            <StackPanel Margin="5">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                    <Label Content="Sous-Total" Margin="0,0,5,0"/>
+                    <TextBlock x:Name="lblSousTotal" Width="100" TextAlignment="Right"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                    <Label Content="TPS" Margin="0,0,5,0"/>
+                    <TextBlock x:Name="lblTPS" Width="100" TextAlignment="Right"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                    <Label Content="TVQ" Margin="0,0,5,0"/>
+                    <TextBlock x:Name="lblTVQ" Width="100" TextAlignment="Right"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                    <Label Content="Total" Margin="0,0,5,0"/>
+                    <TextBlock x:Name="lblTotal" Width="100" TextAlignment="Right"/>
+                </StackPanel>
+            </StackPanel>
+
+            --><!-- Boutons --><!--
+            <DockPanel>
+                <Button x:Name="btnNouvelleFacture" Background="White" BorderThickness="0" DockPanel.Dock="Left" Click="btnNouvelleFacture_Click_1">
+                    <Image Source="/Resources/Images/ImagesIcons/new.png" Width="25" Margin="5"/>
+                </Button>
+                <Button x:Name="btnPayer" Content="Payer" Width="106" Background="#FF4CAF50" Foreground="White" Margin="5" Click="btnPayer_Click" Height="33"/>
+            </DockPanel>
+        </StackPanel>
+    </Grid>-->
+
+    <Grid Margin="10,-49,10,10">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <!-- Liste des produits -->
+            <ColumnDefinition Width="350"/>
+            <!-- Panier -->
+        </Grid.ColumnDefinitions>
+
+        <!-- Liste des produits -->
+        <StackPanel Grid.Column="0" Margin="-129,-63,100,-88">
+
+            <!-- Barre de recherche -->
+            <StackPanel Margin="0,10,0,3" x:Name="spAjouterProduit" Orientation="Horizontal">
+                <TextBox x:Name="txtRechercher" Width="200" Height="34" Margin="5,0" TextChanged="txtRechercher_TextChanged"/>
+                <ComboBox x:Name="cboCategories" Width="150" Margin="5,0"/>
+                <Button x:Name="btnRechercherProduit" BorderThickness="0" Background="White" Click="btnRechercherProduit_Click">
+                    <Image Source="/Resources/Images/ImagesIcons/search.png" Width="25" Margin="5"/>
+                </Button>
+            </StackPanel>
+
+            <!-- Produits -->
+            <ScrollViewer VerticalScrollBarVisibility="Auto" Height="707" Margin="2" Width="619">
+                <WrapPanel x:Name="wpProduits" Orientation="Horizontal"/>
+            </ScrollViewer>
+        </StackPanel>
+
+        <!-- Panier -->
+        <StackPanel Grid.Column="1" Background="#FFF4F4F4" Margin="10,-63,-142,-88">
+            <TextBlock Text="🛒 Mon Panier" FontSize="18" FontWeight="Bold" Margin="0 0 0 10"/>
+
+            <Border Height="390" BorderBrush="LightGray" BorderThickness="1" CornerRadius="6" Margin="10">
+                <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="2">
+                    <WrapPanel x:Name="wpProduitPanier" Orientation="Horizontal"/>
+                </ScrollViewer>
+            </Border>
+
+            <!-- Totaux -->
+            <StackPanel Margin="5">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                    <Label Content="Sous-Total" Margin="0,0,5,0"/>
+                    <TextBlock x:Name="lblSousTotal" Width="100" TextAlignment="Right"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                    <Label Content="TPS" Margin="0,0,5,0"/>
+                    <TextBlock x:Name="lblTPS" Width="100" TextAlignment="Right"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                    <Label Content="TVQ" Margin="0,0,5,0"/>
+                    <TextBlock x:Name="lblTVQ" Width="100" TextAlignment="Right"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                    <Label Content="Total" Margin="0,0,5,0"/>
+                    <TextBlock x:Name="lblTotal" Width="100" TextAlignment="Right"/>
+                </StackPanel>
+            </StackPanel>
+
+            <!-- Boutons -->
+            <DockPanel>
+                <Button x:Name="btnNouvelleFacture" Background="White" BorderThickness="0" DockPanel.Dock="Left" Click="btnNouvelleFacture_Click_1">
+                    <Image Source="/Resources/Images/ImagesIcons/new.png" Width="25" Margin="5"/>
+                </Button>
+                <Button x:Name="btnPayer" Content="Payer" Width="106" Background="#FF4CAF50" Foreground="White" Margin="5" Click="btnPayer_Click" Height="33"/>
+            </DockPanel>
+        </StackPanel>
     </Grid>
+
 </UserControl>

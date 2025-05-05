@@ -6,7 +6,40 @@
              xmlns:local="clr-namespace:ApplicationGestionProduitCosmetique.Views"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
-            
+    <Grid Grid.Column="1" Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Titre -->
+        <TextBlock Text="Historique des articles commandés" 
+                FontSize="22"
+                FontWeight="Bold"
+                Foreground="#2E2E2E"
+                Margin="0,0,0,15"/>
+
+        <!-- Tableau des articles-->
+        <ListBox x:Name="lstFactures" Grid.Row="1" Margin="0,0,0,40"
+              Background="Transparent" BorderThickness="0"
+              ItemsSource="{Binding ListeArticles}">
+
+            <!-- Template des articles -->
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Border BorderBrush="LightGray" BorderThickness="1" CornerRadius="8" Padding="10" Margin="5" Background="White">
+                        <StackPanel Orientation="Vertical">
+                            <TextBlock FontWeight="Bold" FontSize="16" Text="{Binding NumeroFacture}" Foreground="DarkSlateBlue"/>
+                            <TextBlock Text="{Binding DateFacture, StringFormat='Date : {0:dd/MM/yyyy}'}" FontSize="12" Foreground="Gray"/>
+                            <TextBlock Text="{Binding NomClient}" FontSize="13" Foreground="Black"/>
+                            <TextBlock Text="{Binding MontantTotalFixe, StringFormat='Total : {0:C2}'}" FontSize="13" Foreground="DarkGreen"/>
+                        </StackPanel>
+                    </Border>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+
+
     </Grid>
 </UserControl>

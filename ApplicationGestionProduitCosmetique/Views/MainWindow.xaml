@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:ApplicationGestionProduitCosmetique"
         mc:Ignorable="d"
 
-        Title="Accueil" Height="700" Width="900" Background="Pink" Loaded="Window_Loaded" Effect="{Binding WindowState, ElementName=window}" WindowState="Maximized">
+        Title="Cosmetic Shop" Height="700" Width="900" Background="Pink" Loaded="Window_Loaded" Effect="{Binding WindowState, ElementName=window}" WindowState="Maximized">
 
     <Grid>
         <Grid.ColumnDefinitions>

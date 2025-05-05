@@ -1,4 +1,6 @@
-﻿using System;
+﻿using ApplicationGestionProduitCosmetique.Classes;
+using ApplicationGestionProduitCosmetique.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,9 +22,26 @@ namespace ApplicationGestionProduitCosmetique.Views
     /// </summary>
     public partial class ArticleCommandes : UserControl
     {
-        public ArticleCommandes()
+        public ArticleCommandes(Facture nouvelleFacture)
         {
             InitializeComponent();
+            this.DataContext = this;
+            ChargerFacturesDepuisBD();
+        }
+
+
+
+        private void ChargerFacturesDepuisBD()
+        {
+            try
+            {
+                List<Facture> factures = GestionCompteUtilisateur.ObtenirToutesLesFactures(); // ← méthode DAL à créer
+                lstFactures.ItemsSource = factures;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Erreur lors du chargement des factures : " + ex.Message);
+            }
         }
     }
 }

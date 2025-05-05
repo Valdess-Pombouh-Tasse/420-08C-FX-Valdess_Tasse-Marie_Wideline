@@ -27,11 +27,11 @@ namespace ApplicationGestionProduitCosmetique.Views
             InitializeComponent();
         }
 
-        public void LoadUserControl(UserControl control)
-        {
-            MainGrid.Children.Clear();
-            MainGrid.Children.Add(control);
-        }
+        //public void LoadUserControl(UserControl control)
+        //{
+        //    MainGrid.Children.Clear();
+        //    MainGrid.Children.Add(control);
+        //}
         private bool ValidationFormulaire()
         {
             bool valide = true;

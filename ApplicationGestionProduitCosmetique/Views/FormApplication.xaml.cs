@@ -15,17 +15,16 @@ using System.Windows.Media;
 using System.Windows.Media.Effects;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
-using Microsoft.Extensions.Configuration;
-using static System.Runtime.InteropServices.JavaScript.JSType;
-using System.Text.RegularExpressions;
 using Orientation = System.Windows.Controls.Orientation;
-using static ApplicationGestionProduitCosmetique.Views.FormPanier;
-using System.Windows.Interop;
-using Syncfusion.Pdf.Graphics;
-using System.Diagnostics;
-using Syncfusion.Pdf;
-using System;
+using Button = System.Windows.Controls.Button;
+using MessageBox = System.Windows.MessageBox;
+using TextBox = System.Windows.Controls.TextBox;
+using PdfSharp.Drawing;
+using System.Media;
 using UserControl = System.Windows.Controls.UserControl;
+using PdfSharp.Drawing;
+using Syncfusion.Pdf;
+using Syncfusion.Pdf.Graphics;
 
 namespace ApplicationGestionProduitCosmetique.Views
 {
@@ -34,85 +33,45 @@ namespace ApplicationGestionProduitCosmetique.Views
     /// </summary>
     public partial class FormApplication : UserControl
     {
-        public Utilisateur Utilisateur { get; private set; }
+        /// <summary>
+        /// Liste de produits
+        /// </summary>
         List<Produit> _produits;
-        public ListePanier listePanier = new ListePanier();
-        public List<Produit> panierProduits = new List<Produit>();
 
+        /// <summary>
+        /// Liste de produits dans le panier
+        /// </summary>
         public List<Produit> Produits
         {
             get { return _produits; }
             set { _produits = value; }
         }
 
-        public static class accueill
+        public FormApplication()
         {
-            public static Utilisateur utilisateur { get; set; }
-        }
-       
-        public FormApplication(Utilisateur utilisateur)
-        {
-            
-            RetournerListePanier();
-            AfficherListeProduit();
+            InitializeComponent();
 
+            AfficherListeProduit();
             List<Categorie> listCategories = GestionCompteUtilisateur.ObtenirListeCategories();
             listCategories.Add(new Categorie(0, "Toutes"));
             cboCategories.ItemsSource = listCategories;
             cboCategories.SelectedIndex = listCategories.Count - 1;
-
-            txtUtilisateurClient.Text = utilisateur.NomUtilisateur;
-            this.Utilisateur = utilisateur;
-            accueill.utilisateur = utilisateur;
-            this.MaxHeight = SystemParameters.MaximizedPrimaryScreenHeight;
-
-        }
-
-        public FormApplication()
-        {
-            InitializeComponent();
-            AfficherListeProduit();
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             AfficherListeProduit();
-
-        }
-        
-        public Utilisateur ObtenirUtilisateur()
-        {
-            return Utilisateur;
         }
 
-        public static class SharedResources
-        {
-            public static ListePanier MaListe { get; set; }
-        }
-
-        public ListePanier RetournerListePanier()
-        {
-            return listePanier;
-        }
-
-        
         private void AfficherListeProduit(List<Produit> produits = null)
         {
-            HashSet<int> idsProduitsAjoutes = new HashSet<int>(); // Stocker les IDs déjà affichés
-            List<Produit> listeProduits = produits ?? GestionCompteUtilisateur.ObtenirListeProduits();
-            
-            wpProduit.Children.Clear();
+            if (produits == null)
+                produits = GestionCompteUtilisateur.ObtenirListeProduits();
 
-            foreach (Produit produit in listeProduits)
+            wpProduits.Children.Clear();
+
+            foreach (Produit produit in produits)
             {
-                // Vérifier si l'ID du produit a déjà été ajouté
-                if (idsProduitsAjoutes.Contains((int)produit.Id))
-                {
-                    continue;
-                }
-
-                // Ajouter l'ID du produit à la liste des produits affichés
-                idsProduitsAjoutes.Add((int)produit.Id);
 
                 Border border = new Border
                 {
@@ -138,16 +97,18 @@ namespace ApplicationGestionProduitCosmetique.Views
                     Source = biProduit,
                     Margin = new Thickness(2),
                     HorizontalAlignment = System.Windows.HorizontalAlignment.Center,
-                    VerticalAlignment = VerticalAlignment.Top,
+                    VerticalAlignment = VerticalAlignment.Center,
                     Width = 125,
                     Height = 125,
                     Tag = produit
                 };
                 imgProduit.MouseLeftButtonDown += ImageProduit_MouseLeftButtonUp;
+                Separator separator1 = new Separator();
+                string nom = produit.Nom;
 
                 TextBlock descriptionProduit = new TextBlock
                 {
-                    Text = produit.Nom,
+                    Text = produit.Description,
                     FontSize = 12,
                     HorizontalAlignment = System.Windows.HorizontalAlignment.Center,
                     TextWrapping = TextWrapping.Wrap,
@@ -165,30 +126,18 @@ namespace ApplicationGestionProduitCosmetique.Views
                     MaxWidth = 80,
                     Margin = new Thickness(4)
                 };
-
-
-
-                StackPanel stackPanel = new StackPanel
-                {
-                    Orientation = Orientation.Vertical,
-                    HorizontalAlignment = System.Windows.HorizontalAlignment.Center,
-                    VerticalAlignment = VerticalAlignment.Top
-                };
-
-                stackPanel.Children.Add(imgProduit);
-                stackPanel.Children.Add(descriptionProduit);
-                stackPanel.Children.Add(prixProduit);
+                Separator separator2 = new Separator();
 
                 BitmapImage bibtn = new BitmapImage();
                 bibtn.BeginInit();
-                bibtn.UriSource = new Uri("/Resources/Images/ImagesIcons/plus.png", UriKind.Relative);
+                bibtn.UriSource = new Uri(produit.Image, UriKind.Relative);
                 bibtn.CacheOption = BitmapCacheOption.OnLoad;
                 bibtn.CreateOptions = BitmapCreateOptions.IgnoreImageCache;
-
+                bibtn.EndInit();
 
                 Image btnImageAjout = new Image
                 {
-                    Source = bibtn,
+                    Source = new BitmapImage(new Uri("/Resources/Images/ImagesIcons/plus.png", UriKind.Relative)),
                     HorizontalAlignment = System.Windows.HorizontalAlignment.Center,
                     VerticalAlignment = VerticalAlignment.Center,
                     Width = 20,
@@ -197,51 +146,23 @@ namespace ApplicationGestionProduitCosmetique.Views
                 };
                 btnImageAjout.MouseLeftButtonDown += ImageAjout_MouseLeftButtonDown;
 
+
+                StackPanel stackPanel = new StackPanel();
+
+                stackPanel.Children.Add(imgProduit);
+                stackPanel.Children.Add(separator1);
+                stackPanel.Children.Add(descriptionProduit);
+                stackPanel.Children.Add(prixProduit);
+                stackPanel.Children.Add(separator2);
                 stackPanel.Children.Add(btnImageAjout);
 
                 border.Child = stackPanel;
-                wpProduit.Children.Add(border);
+                wpProduits.Children.Add(border);
             }
         }
 
-
-
         private void ImageProduit_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-            List<Produit> prod = new List<Produit>();
-            uint quantite = 1;
-            Image imageProduit = sender as Image;
-
-            if (imageProduit != null)
-            {
-                Produit produit = imageProduit.Tag as Produit;
-                if (produit != null)
-                {
-                    //Items items = new Items();
-                    //items.LstProduit = produit;
-                    //items.NbItem = 1;
-                    //items.NomItem = System.Configuration.ConfigurationManager.AppSettings["images"] + produit.Nom;
-                    //bool articleExiste = false;
-                    //for (int i = 0; i < listePanier.Items.Count; i++)
-                    //{
-                    //    if (listePanier.Items[i].LstProduit == items.LstProduit)
-                    //    {
-                    //        listePanier.Items[i].NbItem++;
-                    //        articleExiste = true;
-                    //    }
-                    //}
-                    //if (!articleExiste)
-                    //{
-                    //    listePanier.AjouterArticle(items);
-                    //    SharedResources.MaListe = listePanier;
-                    //}
-                    panierProduits.Add(produit);
-                    // List<Produit> p =  panierProduits.Add(produit);
-                    FenetreErreur.Afficher("Produit ajouté au panier");
-
-                }
-            }
-            prod = panierProduits;
 
         }
 
@@ -250,50 +171,267 @@ namespace ApplicationGestionProduitCosmetique.Views
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
+        private Facture nouvelleFacture = null;
         private void ImageAjout_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            Image btnImageAjout = sender as Image;
-            if (btnImageAjout != null)
+            uint quantite = 1;
+            Image imgProduit = (Image)sender;
+            Produit produit = (Produit)imgProduit.Tag;
+
+            if (nouvelleFacture == null)
             {
-                Produit pArticle = btnImageAjout.Tag as Produit;
-                if (pArticle != null)
+                nouvelleFacture = new Facture(1, DateTime.Now);
+
+                wpProduitPanier.IsEnabled = true;
+                btnPayer.IsEnabled = true;
+
+            }
+
+            ProduitFacture produitExist = null;
+            foreach (var prodF in nouvelleFacture.ProduitsFacture)
+            {
+                if (prodF.Produit.Equals(produit))
                 {
-                    // Vérifier si listePanier est bien initialisée
-                    if (listePanier == null)
-                    {
-                        listePanier = new ListePanier();
-                    }
-
-                    Items items = new Items();
-                    items.LstProduit = pArticle;
-                    items.NbItem = 1;
-                    items.NomItem = System.Configuration.ConfigurationManager.AppSettings["images"] + pArticle.Nom;
-                    bool articleExiste = false;
-
-                    for (int i = 0; i < listePanier.Items.Count; i++)
-                    {
-                        if (listePanier.Items[i].LstProduit == items.LstProduit)
-                        {
-                            listePanier.Items[i].NbItem++;
-
-                            articleExiste = true;
-                            break; // Sortie de la boucle dès qu'on trouve l'article
-                        }
-                    }
-
-                    if (!articleExiste)
-                    {
-                        listePanier.AjouterArticle(items);
-                        SharedResources.MaListe = listePanier;
-
-                    }
+                    produitExist = prodF;
                 }
             }
+
+            if (produitExist != null)
+            {
+                produitExist.Quantite++;
+                quantite = produitExist.Quantite;
+            }
+            else
+            {
+                nouvelleFacture.AjouterProduit(produit, produit.Prix, quantite);
+            }
+
+            AfficherProduitDansFacture(nouvelleFacture);
+        }
+
+
+        private void RadioButton_Checked_1(object sender, RoutedEventArgs e)
+        {
+            //Factures facture = new Factures();
+            //facture.Show();
+
+        }
+
+        private void btnRechercherProduit_Click(object sender, RoutedEventArgs e)
+        {
+            List<Produit> produits = new List<Produit>();
+            string recherche = txtRechercher.Text;
+            Categorie categorie = (Categorie)cboCategories.SelectedItem;
+
+            if (!string.IsNullOrWhiteSpace(recherche) && (categorie == null || categorie.Nom == "Toutes"))
+            {
+                produits = GestionCompteUtilisateur.ObtenirListeProduits(recherche);
+
+            }
+            else if ((categorie != null && categorie.Nom != "Toutes") && string.IsNullOrWhiteSpace(recherche))
+            {
+                produits = GestionCompteUtilisateur.ObtenirListeProduits("", categorie);
+            }
+            else if (!string.IsNullOrWhiteSpace(recherche) && categorie != null && categorie.Nom != "Toutes")
+            {
+                produits = GestionCompteUtilisateur.ObtenirListeProduits(recherche, categorie);
+            }
+            else
+            {
+                produits = GestionCompteUtilisateur.ObtenirListeProduits();
+            }
+            AfficherListeProduit(produits);
+        }
+
+        private void txtRechercher_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            string motCle = txtRechercher.Text;
+            List<Produit> produits = GestionCompteUtilisateur.ObtenirListeProduits(motCle);
+
+            if (produits.Count != 0)
+            {
+                AfficherListeProduit(produits);
+            }
+            else
+            {
+                AfficherListeProduit();
+            }
+        }
+
+        public void AfficherProduitDansFacture(Facture facture)
+        {
+
+            wpProduitPanier.Children.Clear();
+
+            foreach (ProduitFacture prodF in facture.ProduitsFacture)
+            {
+                TextBlock descriptionProduit = new TextBlock();
+                descriptionProduit.Text = prodF.Produit.Nom;
+                descriptionProduit.FontSize = 15;
+                descriptionProduit.HorizontalAlignment = System.Windows.HorizontalAlignment.Left;
+                descriptionProduit.TextWrapping = TextWrapping.Wrap;
+                descriptionProduit.Margin = new Thickness(5, 0, 5, 0);
+
+                TextBlock codeProduit = new TextBlock();
+                codeProduit.Text = prodF.Produit.Code;
+                codeProduit.FontSize = 10;
+                codeProduit.HorizontalAlignment = System.Windows.HorizontalAlignment.Left;
+                codeProduit.Margin = new Thickness(5, 0, 5, 0);
+
+                StackPanel stackPanelCodeDescrip = new StackPanel();
+                stackPanelCodeDescrip.Orientation = Orientation.Vertical;
+                stackPanelCodeDescrip.HorizontalAlignment = System.Windows.HorizontalAlignment.Left;
+                stackPanelCodeDescrip.VerticalAlignment = VerticalAlignment.Center;
+                stackPanelCodeDescrip.Width = 180;
+                stackPanelCodeDescrip.Children.Add(descriptionProduit);
+                stackPanelCodeDescrip.Children.Add(codeProduit);
+
+                TextBox qteProduit = new TextBox();
+                qteProduit.Text = prodF.Quantite.ToString();
+                qteProduit.FontSize = 10;
+                qteProduit.Width = 40;
+                qteProduit.Height = 20;
+                qteProduit.TextAlignment = System.Windows.TextAlignment.Center;
+                qteProduit.HorizontalAlignment = System.Windows.HorizontalAlignment.Center;
+                qteProduit.VerticalAlignment = VerticalAlignment.Center;
+
+                Button btnReduction = new Button();
+                btnReduction.Width = 15;
+                btnReduction.Height = 15;
+                btnReduction.Margin = new Thickness(5);
+                btnReduction.ToolTip = "Retirer 1";
+                btnReduction.Background = new SolidColorBrush(Colors.Blue);
+                btnReduction.BorderBrush = new SolidColorBrush(Colors.White);
+                btnReduction.BorderThickness = new Thickness(1);
+                btnReduction.HorizontalAlignment = System.Windows.HorizontalAlignment.Center;
+                btnReduction.VerticalAlignment = VerticalAlignment.Center;
+                btnReduction.Click += new RoutedEventHandler(btnDimunuerQteProduit_Click);
+
+                Image imgBtnReduire = new Image();
+                imgBtnReduire.Source = new BitmapImage(new Uri("/Resources/minus.png", UriKind.Relative));
+                imgBtnReduire.Width = 15;
+                imgBtnReduire.Height = 15;
+                imgBtnReduire.HorizontalAlignment = System.Windows.HorizontalAlignment.Center;
+                imgBtnReduire.VerticalAlignment = VerticalAlignment.Center;
+                btnReduction.Content = imgBtnReduire;
+                btnReduction.Tag = prodF.Produit;
+
+                Button btnAjouter = new Button();
+                btnAjouter.Width = 15;
+                btnAjouter.Height = 15;
+                btnAjouter.Margin = new Thickness(5);
+                btnAjouter.ToolTip = "Ajouter 1";
+                btnAjouter.Background = new SolidColorBrush(Colors.Blue);
+                btnAjouter.BorderBrush = new SolidColorBrush(Colors.White);
+                btnAjouter.BorderThickness = new Thickness(1);
+                btnAjouter.HorizontalAlignment = System.Windows.HorizontalAlignment.Center;
+                btnAjouter.VerticalAlignment = VerticalAlignment.Center;
+                btnAjouter.Click += new RoutedEventHandler(btnAugmenterQteProduit_Click);
+
+                Image imgBtnAjout = new Image();
+                imgBtnAjout.Source = new BitmapImage(new Uri("/Resources/plus.png", UriKind.Relative));
+                imgBtnAjout.Width = 15;
+                imgBtnAjout.Height = 15;
+                imgBtnAjout.HorizontalAlignment = System.Windows.HorizontalAlignment.Center;
+                imgBtnAjout.VerticalAlignment = VerticalAlignment.Center;
+                btnAjouter.Content = imgBtnAjout;
+                btnAjouter.Tag = prodF.Produit;
+
+                TextBlock prixProduit = new TextBlock();
+                prixProduit.Text = prodF.Produit.Prix.ToString("c");
+                prixProduit.FontSize = 13;
+                prixProduit.FontWeight = FontWeights.Bold;
+                prixProduit.HorizontalAlignment = System.Windows.HorizontalAlignment.Right;
+                prixProduit.Margin = new Thickness(4);
+
+                StackPanel stackPanel = new StackPanel();
+                stackPanel.Orientation = Orientation.Horizontal;
+                stackPanel.HorizontalAlignment = System.Windows.HorizontalAlignment.Left;
+                stackPanel.VerticalAlignment = VerticalAlignment.Center;
+
+                Border borderLigne = new Border();
+                borderLigne.Width = 380;
+                borderLigne.Margin = new Thickness(4);
+                borderLigne.BorderBrush = new SolidColorBrush(Colors.Gray);
+                borderLigne.BorderThickness = new Thickness(1);
+                borderLigne.Background = new SolidColorBrush(Color.FromArgb(128, 0, 255, 0));
+                borderLigne.CornerRadius = new CornerRadius(3);
+                borderLigne.HorizontalAlignment = System.Windows.HorizontalAlignment.Center;
+                borderLigne.VerticalAlignment = VerticalAlignment.Center;
+
+                stackPanel.Children.Add(stackPanelCodeDescrip);
+                stackPanel.Children.Add(btnReduction);
+                stackPanel.Children.Add(qteProduit);
+                stackPanel.Children.Add(btnAjouter);
+                stackPanel.Children.Add(prixProduit);
+
+                borderLigne.Child = stackPanel;
+
+                wpProduitPanier.Children.Add(borderLigne);
+            }
+
+            lblSousTotal.Text = facture.MontantSousTotal.ToString("c");
+            lblTPS.Text = facture.MontantTPS.ToString("c");
+            lblTVQ.Text = facture.MontantTVQ.ToString("c");
+            lblTotal.Text = facture.MontantTotal.ToString("c");
+
+            if (facture.ProduitsFacture.Count == 0)
+            {
+                lblSousTotal.Text = 0.ToString("c");
+                lblTPS.Text = 0.ToString("c");
+                lblTVQ.Text = 0.ToString("c");
+                lblTotal.Text = 0.ToString("c");
+            }
+        }
+
+        private void btnAugmenterQteProduit_Click(object sender, RoutedEventArgs e)
+        {
+            Button button = (Button)sender;
+            Produit produit = (Produit)button.Tag;
+
+            ProduitFacture produitExist = null;
+            foreach (var prodF in nouvelleFacture.ProduitsFacture)
+            {
+                if (prodF.Produit.Equals(produit))
+                {
+                    produitExist = prodF;
+                }
+            }
+
+
+            if (produitExist != null)
+            {
+                produitExist.Quantite++;
+            }
+            AfficherProduitDansFacture(nouvelleFacture);
+        }
+
+        private void btnDimunuerQteProduit_Click(object sender, RoutedEventArgs e)
+        {
+            Button button = (Button)sender;
+            Produit produit = (Produit)button.Tag;
+
+            bool produitExist = false;
+            foreach (var prodF in nouvelleFacture.ProduitsFacture)
+            {
+                if (prodF.Produit.Equals(produit))
+                {
+                    produitExist = true;
+                }
+            }
+
+            if (produitExist)
+                nouvelleFacture.RetirerProduit(produit);
+
+            AfficherProduitDansFacture(nouvelleFacture);
         }
 
 
         private void btnPayer_Click(object sender, RoutedEventArgs e)
         {
+
+            SoundPlayer player = new SoundPlayer("Resources/sons/son.wav");
+            player.Play();
             if (nouvelleFacture == null || nouvelleFacture.ProduitsFacture.Count == 0)
             {
                 MessageBox.Show("Aucune facture à envoyer. Veuillez ajouter des articles au panier.",
@@ -301,15 +439,13 @@ namespace ApplicationGestionProduitCosmetique.Views
                 return;
             }
 
-        private void RadioButton_Checked(object sender, RoutedEventArgs e)
-        {
-            FormPanier formPanier = new FormPanier(panierProduits);
-        }
-
             try
             {
                 // Enregistrer la facture dans la base de données
                 GestionCompteUtilisateur.EnregistrerFacture(nouvelleFacture);
+
+                // Fixer le montant total (avec taxes) une fois pour toute
+                nouvelleFacture.MontantTotalFixe = nouvelleFacture.MontantTotal;
 
                 // Générer le fichier PDF de la facture
                 string dossierFactures = System.IO.Path.Combine(
@@ -339,36 +475,27 @@ namespace ApplicationGestionProduitCosmetique.Views
 
                     gfx.DrawString("Produits achetés :", fontCorps, XBrushes.Black, 40, y);
                     y += 25;
-        private void RadioButton_Checked_1(object sender, RoutedEventArgs e)
-        {
-            // Créer un document PDF
-            using (Syncfusion.Pdf.PdfDocument document = new Syncfusion.Pdf.PdfDocument())
-            {
-                // Ajouter une page au document
-                PdfPage page = document.Pages.Add();
 
-                // Créer des graphiques pour la page
-                PdfGraphics graphics = page.Graphics;
+                    for (int i = 0; i < nouvelleFacture.ProduitsFacture.Count; i++)
+                    {
+                        ProduitFacture item = nouvelleFacture.ProduitsFacture[i];
+                        string ligne = $"{item.Produit.Nom} - Qté: {item.Quantite} - Prix: {item.Produit.Prix * item.Quantite}$";
+                        gfx.DrawString(ligne, fontCorps, XBrushes.Black, 40, y);
+                        y += 20;
+                    }
 
                     y += 30;
-                    gfx.DrawString($"Total: {nouvelleFacture.MontantTotal} $", fontTitre, XBrushes.DarkBlue, 40, y);
-                // Définir une police pour le titre
-                PdfFont titleFont = new PdfStandardFont(PdfFontFamily.Helvetica, 24, PdfFontStyle.Bold);
+                    gfx.DrawString($"Total: {nouvelleFacture.MontantTotalFixe} $", fontTitre, XBrushes.DarkBlue, 40, y);
 
-                // Définir le titre de l'application
-                string titreApplication = "Cometic Shop";
+                    document.Save(cheminComplet);
+                }
 
                 // ✅ Paiement confirmé
                 FenetreErreur.Afficher("Paiement effectué avec succès !");
-                // Mesurer la largeur du texte pour le centrer
-                System.Drawing.SizeF textSize = titleFont.MeasureString(titreApplication);
-                float xPosition = (page.GetClientSize().Width - textSize.Width) / 2;
 
-                // ✅ Ouvre la fenêtre des factures avec les produits de la facture
                 Factures fenetreFactures = new Factures(nouvelleFacture);
-                fenetreFactures.ShowDialog();
-                // Dessiner le titre centré en haut de la page
-                graphics.DrawString(titreApplication, titleFont, PdfBrushes.Black, new System.Drawing.PointF(xPosition, 20));
+                //fenetreFactures.ShowDialog();
+
 
                 // ✅ Désactive les contrôles après paiement
                 wpProduitPanier.IsEnabled = false;
@@ -393,14 +520,20 @@ namespace ApplicationGestionProduitCosmetique.Views
             nouvelleFacture = null;
             wpProduitPanier.IsEnabled = true;
             btnPayer.IsEnabled = true;
-                // Enregistrer le document
-                string filePath = "MesFactures.pdf";
-                document.Save(filePath);
-
-                // Ouvrir le PDF généré
-                Process.Start(new ProcessStartInfo(filePath) { UseShellExecute = true });
-            }
         }
 
+        private void RadioButton_Checked(object sender, RoutedEventArgs e)
+        {
+            ArticleCommandes fenetreArticleCommandes = new ArticleCommandes(nouvelleFacture);
+            //fenetreArticleCommandes.ShowDialog();
+
+        }
+
+        private void RadioButton_Checked_2(object sender, RoutedEventArgs e)
+        {
+            Factures fenetreFactures = new Factures(nouvelleFacture);
+            //fenetreFactures.ShowDialog();
+        }
     }
+
 }

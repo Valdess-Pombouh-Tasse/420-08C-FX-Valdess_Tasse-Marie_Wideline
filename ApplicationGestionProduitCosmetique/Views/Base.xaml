@@ -1,7 +1,7 @@
 ﻿<Window x:Class="ApplicationGestionProduitCosmetique.Views.Base"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Cosmetic Shop" Height="500" Width="900">
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
+        Title="Cosmetic Shop" Height="500" Width="1000">
 
     <Window.Resources>
         <Style x:Key="NoCircleRadioButton" TargetType="RadioButton">
@@ -20,14 +20,77 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
-        <DockPanel Background="AliceBlue" Grid.Column="0" LastChildFill="False">
-            <!-- Menu principal en haut -->
-            <StackPanel DockPanel.Dock="Top">
+        <Border Background="AliceBlue" Grid.Column="0" CornerRadius="10,0,0,10" Padding="10">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
                 <!-- Titre -->
+                <StackPanel Orientation="Horizontal" Margin="10" Grid.Row="0">
+                    <TextBlock FontWeight="Bold" Foreground="Indigo" FontSize="24" FontFamily="Cooper Black">
+                <Run Text="Cosmetic"/><Run Text=" Shop"/>
+                    </TextBlock>
+                </StackPanel>
+
+                <!-- Menu -->
+                <StackPanel Grid.Row="1" Margin="0,20,0,0">
+                    <RadioButton Style="{StaticResource menuButton}" Tag="{StaticResource Color1}" Command="{Binding ShowAccueilViewModel}" Checked="RadioButton_Checked">
+                        <StackPanel Orientation="Horizontal">
+                            <fa:IconImage Icon="Home" Style="{StaticResource menuButtonIcon}" />
+                            <TextBlock Text="Catalogue" Style="{StaticResource menuButtonText}" Foreground="Black"/>
+                        </StackPanel>
+                    </RadioButton>
+
+                    <!--<RadioButton Style="{StaticResource menuButton}" Tag="{StaticResource Color2}" Command="{Binding ShowArticleChoisirViewModel}">
+                <StackPanel Orientation="Horizontal">
+                    <fa:IconImage Icon="ShoppingCart" Style="{StaticResource }"/>
+                    <TextBlock Text="Articles Choisis" Style="{StaticResource menuButtonText}" Foreground="Black"/>
+                </StackPanel>
+            </RadioButton>-->
+
+                    <RadioButton Style="{StaticResource menuButton}" Tag="{StaticResource Color7}" Command="{Binding ShowArticleCommandesViewModel}" Checked="RadioButton_Checked_2">
+                        <StackPanel Orientation="Horizontal">
+                            <fa:IconImage Icon="ClipboardList" Style="{StaticResource menuButtonIcon}"/>
+                            <TextBlock Text="Articles Commandés" Style="{StaticResource menuButtonText}" Foreground="Black"/>
+                        </StackPanel>
+                    </RadioButton>
+
+                    <RadioButton Style="{StaticResource menuButton}" Tag="{StaticResource Color8}" Command="{Binding ShowFactureViewModel}" Checked="RadioButton_Checked_3">
+                        <StackPanel Orientation="Horizontal">
+                            <fa:IconImage Icon="FileInvoice" Style="{StaticResource menuButtonIcon}"/>
+                            <TextBlock Text="Mes factures" Style="{StaticResource menuButtonText}" Foreground="Black"/>
+                        </StackPanel>
+                    </RadioButton>
+                </StackPanel>
+
+                <!-- Déconnexion -->
+                <RadioButton Grid.Row="2" Style="{StaticResource menuButton}" Tag="black" Background="AliceBlue" Margin="15,10,20,10" Checked="RadioButton_Checked_4">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Déconnexion" Style="{StaticResource menuButtonText}" Foreground="Black"/>
+                        <fa:IconImage Icon="SignOut" Style="{StaticResource menuButtonIcon}"/>
+                    </StackPanel>
+                </RadioButton>
+            </Grid>
+        </Border>
+
+
+        <!--<DockPanel Background="AliceBlue" Grid.Column="0" LastChildFill="False">
+            -->
+        <!-- Menu principal en haut -->
+        <!--
+            <StackPanel DockPanel.Dock="Top">
+                -->
+        <!-- Titre -->
+        <!--
                 <TextBlock Text="Cosmetic Shop" FontSize="24" FontWeight="Bold" 
                            Foreground="Purple" Margin="20" FontFamily="Cooper Black"/>
 
-                <!-- Catalogue -->
+                -->
+        <!-- Catalogue -->
+        <!--
                 <RadioButton Margin="15" Checked="RadioButton_Checked_1" Style="{StaticResource NoCircleRadioButton}">
                     <StackPanel Orientation="Horizontal">
                         <Image Source="/Resources/Images/ImagesIcons/catalogue.png" Width="24" Height="24" Margin="0,0,10,0"/>
@@ -35,7 +98,9 @@
                     </StackPanel>
                 </RadioButton>
 
-                <!-- Articles choisis -->
+                -->
+        <!-- Articles choisis -->
+        <!--
                 <RadioButton Margin="15" Checked="ArticlesChoisis_Checked" Style="{StaticResource NoCircleRadioButton}">
                     <StackPanel Orientation="Horizontal">
                         <Image Source="/Resources/Images/ImagesIcons/panier.png" Width="24" Height="24" Margin="0,0,10,0"/>
@@ -43,7 +108,9 @@
                     </StackPanel>
                 </RadioButton>
 
-                <!-- Articles commandés -->
+                -->
+        <!-- Articles commandés -->
+        <!--
                 <RadioButton Margin="15" Checked="ArticlesCommandes_Checked" Style="{StaticResource NoCircleRadioButton}">
                     <StackPanel Orientation="Horizontal">
                         <Image Source="/Resources/Images/ImagesIcons/panier2.png" Width="24" Height="24" Margin="0,0,10,0"/>
@@ -51,7 +118,9 @@
                     </StackPanel>
                 </RadioButton>
 
-                <!-- Mes factures -->
+                -->
+        <!-- Mes factures -->
+        <!--
                 <RadioButton Margin="15" Checked="Factures_Checked" Style="{StaticResource NoCircleRadioButton}">
                     <StackPanel Orientation="Horizontal">
                         <Image Source="/Resources/Images/ImagesIcons/facture.png" Width="24" Height="24" Margin="0,0,10,0"/>
@@ -61,19 +130,22 @@
 
             </StackPanel>
 
-            <!-- Déconnexion en bas -->
+            -->
+        <!-- Déconnexion en bas -->
+        <!--
             <Button Background="LightGray" Margin="15" DockPanel.Dock="Bottom" Click="Deconnexion_Click">
                 <StackPanel Orientation="Horizontal">
                     <Image Source="/Resources/Images/ImagesIcons/sortie.png" Width="24" Height="24" Margin="0,0,10,0"/>
                     <TextBlock Text="Déconnexion" VerticalAlignment="Center"/>
                 </StackPanel>
             </Button>
-        </DockPanel>
+        </DockPanel>-->
+
 
         <!-- Zone centrale d'affichage -->
-        <Grid Grid.Column="1" Margin="10" x:Name="MainContentGrid">
+        <Grid Grid.Column="1" x:Name="MainContentGrid" Margin="20">
             <!-- Le UserControl sélectionné s'affichera ici -->
-            
+
         </Grid>
     </Grid>
 </Window>

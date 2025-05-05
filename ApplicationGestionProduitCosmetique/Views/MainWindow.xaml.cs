@@ -1,6 +1,4 @@
-﻿using ApplicationGestionProduitCosmetique.Classes;
-using ApplicationGestionProduitCosmetique.Models;
-using ApplicationGestionProduitCosmetique.Views;
+﻿using ApplicationGestionProduitCosmetique.Views;
 using System.Text;
 using System.Windows;
 using System.Windows.Media;
@@ -35,8 +33,6 @@ namespace ApplicationGestionProduitCosmetique
         private void btnCreation_Click(object sender, RoutedEventArgs e)
         {
             monContentControl.Content = new FormCreationcompte();
-
-            Close();
             txtCreerCompte.Text = "Vous n'avez pas de Compte";
             btnCreation.Visibility = Visibility.Visible;
             btnCreation.Width = 100;

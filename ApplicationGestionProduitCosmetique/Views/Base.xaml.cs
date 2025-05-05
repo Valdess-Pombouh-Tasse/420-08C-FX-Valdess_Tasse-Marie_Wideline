@@ -28,6 +28,14 @@ namespace ApplicationGestionProduitCosmetique.Views
             get { return produits; }
             set { produits = value; }
         }
+
+        private Facture factureActuelle;
+
+        public Facture FactureActuelle
+        {
+            get { return factureActuelle; }
+            set { factureActuelle = value; }
+        }
         public Base()
         {
             InitializeComponent();
@@ -39,28 +47,23 @@ namespace ApplicationGestionProduitCosmetique.Views
             MainContentGrid.Children.Clear();
             MainContentGrid.Children.Add(control);
         }
-        
-        private void RadioButton_Checked_1(object sender, RoutedEventArgs e)
+             
+        private void RadioButton_Checked(object sender, RoutedEventArgs e)
         {
             AfficherUserControl(new FormApplication());
         }
 
-        private void Factures_Checked(object sender, RoutedEventArgs e)
+        private void RadioButton_Checked_2(object sender, RoutedEventArgs e)
         {
-            AfficherUserControl(new FormPanier(Produits));
+            AfficherUserControl(new ArticleCommandes(FactureActuelle));
         }
 
-        private void ArticlesChoisis_Checked(object sender, RoutedEventArgs e)
+        private void RadioButton_Checked_3(object sender, RoutedEventArgs e)
         {
-            AfficherUserControl(new ArticleCommandes());
+            AfficherUserControl(new Factures());
         }
 
-        private void ArticlesCommandes_Checked(object sender, RoutedEventArgs e)
-        {
-            AfficherUserControl(new ArticleCommandes());
-        }
-
-        private void Deconnexion_Click(object sender, RoutedEventArgs e)
+        private void RadioButton_Checked_4(object sender, RoutedEventArgs e)
         {
             AfficherUserControl(new FormConnexion());
         }

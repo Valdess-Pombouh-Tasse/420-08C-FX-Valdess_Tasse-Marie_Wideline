@@ -1,9 +1,13 @@
-﻿using ApplicationGestionProduitCosmetique.Models;
+﻿using ApplicationGestionProduitCosmetique.Classes;
+using ApplicationGestionProduitCosmetique.Models;
+using PdfSharp.Pdf;
+using Syncfusion.Pdf.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -14,6 +18,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using static ApplicationGestionProduitCosmetique.Views.FormApplication;
+using PdfSharp.Drawing;
 
 namespace ApplicationGestionProduitCosmetique.Views
 {
@@ -248,9 +253,66 @@ namespace ApplicationGestionProduitCosmetique.Views
             
         }
 
+        private Facture nouvelleFacture = null;
+        //private void RadioButton_Checked_1(object sender, RoutedEventArgs e)
+        //{
+        //    // Créer un document PDF
+        //    using (Syncfusion.Pdf.PdfDocument document = new Syncfusion.Pdf.PdfDocument())
+        //    {
+        //        // Ajouter une page au document
+        //        PdfPage page = document.Pages.Add();
 
+        //        // Créer des graphiques pour la page
+        //        PdfGraphics graphics = page.Graphics;
 
+        //        y += 30;
+        //        gfx.DrawString($"Total: {nouvelleFacture.MontantTotal} $", fontTitre, XBrushes.DarkBlue, 40, y);
+        //        // Définir une police pour le titre
+        //        PdfFont titleFont = new PdfStandardFont(PdfFontFamily.Helvetica, 24, PdfFontStyle.Bold);
 
+        //        // Définir le titre de l'application
+        //        string titreApplication = "Cometic Shop";
+
+        //        // ✅ Paiement confirmé
+        //        FenetreErreur.Afficher("Paiement effectué avec succès !");
+        //        // Mesurer la largeur du texte pour le centrer
+        //        System.Drawing.SizeF textSize = titleFont.MeasureString(titreApplication);
+        //        float xPosition = (page.GetClientSize().Width - textSize.Width) / 2;
+
+        //        // ✅ Ouvre la fenêtre des factures avec les produits de la facture
+        //        Factures fenetreFactures = new Factures(nouvelleFacture);
+        //        //fenetreFactures.ShowDialog();
+        //        // Dessiner le titre centré en haut de la page
+        //        graphics.DrawString(titreApplication, titleFont, PdfBrushes.Black, new System.Drawing.PointF(xPosition, 20));
+
+        //        // ✅ Désactive les contrôles après paiement
+        //        wpProduitPanier.IsEnabled = false;
+        //        btnPayer.IsEnabled = false;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        FenetreErreur.Afficher($"Erreur lors du paiement.\nDétails : {ex.Message}");
+        //    }
+        //}
+
+        //private void btnNouvelleFacture_Click_1(object sender, RoutedEventArgs e)
+        //{
+        //    wpProduitPanier.Children.Clear();
+        //    lblSousTotal.Text = 0.ToString("c");
+        //    lblTPS.Text = 0.ToString("c");
+        //    lblTVQ.Text = 0.ToString("c");
+        //    lblTotal.Text = 0.ToString("c");
+        //    nouvelleFacture = null;
+        //    wpProduitPanier.IsEnabled = true;
+        //    btnPayer.IsEnabled = true;
+        //    // Enregistrer le document
+        //    string filePath = "MesFactures.pdf";
+        //    document.Save(filePath);
+
+        //    // Ouvrir le PDF généré
+        //    Process.Start(new ProcessStartInfo(filePath) { UseShellExecute = true });
+
+        //}
         /// <summary>
         /// permet d'initialiser la liste des articles choisir
         /// </summary>

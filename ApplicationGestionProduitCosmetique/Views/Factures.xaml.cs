@@ -1,5 +1,6 @@
 ﻿using ApplicationGestionProduitCosmetique.Classes;
 using ApplicationGestionProduitCosmetique.Models;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -15,6 +16,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Path = System.IO.Path;
 
 namespace ApplicationGestionProduitCosmetique.Views
 {
@@ -115,12 +117,12 @@ namespace ApplicationGestionProduitCosmetique.Views
             try
             {
                 string numeroUnique = $"CS-{DateTime.Now:yyyyMMdd}-{factureActuelle.Id:D4}";
-
+                string cheminPDF;
                 string cheminSource = Path.Combine(
-                string cheminPDF = System.IO.Path.Combine(
+                cheminPDF = Path.Combine(
                     Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
                     "FacturesCosmetiques",
-                    $"Facture_{factureActuelle.Id}.pdf");
+                    $"Facture_{factureActuelle.Id}.pdf"));
 
                 if (!File.Exists(cheminSource))
                 {
