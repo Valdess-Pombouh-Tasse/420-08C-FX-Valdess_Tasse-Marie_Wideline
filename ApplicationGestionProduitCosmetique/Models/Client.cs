@@ -15,17 +15,5 @@ namespace ApplicationGestionProduitCosmetique.Models
         {
         }
 
-        //public static bool EstMotDePasseValide(string motDePasse)
-        //{
-        //    if (motDePasse.Length < PASSWORD_MIN_LENGTH)
-        //        return false;
-
-        //    bool contientMajuscule = motDePasse.Any(char.IsUpper);
-        //    bool contientSpecial = motDePasse.Any(c => !char.IsLetterOrDigit(c));
-
-        //    return contientMajuscule && contientSpecial;
-        //}
-
-
     }
 }

@@ -1,9 +1,11 @@
 ﻿using ApplicationGestionProduitCosmetique.Classes;
 using ApplicationGestionProduitCosmetique.enums;
+using Google.Protobuf.WellKnownTypes;
 using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using Enum = System.Enum;
 
 namespace ApplicationGestionProduitCosmetique.Views
 {
@@ -16,23 +18,35 @@ namespace ApplicationGestionProduitCosmetique.Views
 
         private void btnCreerCompte_Click(object sender, RoutedEventArgs e)
         {
+            MainWindow? mainWindow = Window.GetWindow(this) as MainWindow;
+
+            if (mainWindow != null)
+            {
+                mainWindow.monContentControl.Content = new FormConnexion();
+                mainWindow.txtCreerCompte.Text = "Vous avez déjà un compte ?";
+                mainWindow.btnCreation.Visibility = Visibility.Hidden;
+                mainWindow.btnCreation.Width = 0;
+                mainWindow.btnConnexion.Visibility = Visibility.Visible;
+            }
+
             try
             {
-                if (!ValidationFormulaire()) return;
+                if (!ValiderFormulaire()) return;
 
                 string nom = txtNom.Text.Trim();
                 string motDePasse = txtPassword.Password.Trim();
                 string code = txtCode.Text.Trim();
-                string typeUtilisateur = (cmbTypeUtilisateur.SelectedItem as ComboBoxItem)?.Content.ToString();
+                string? typeUtilisateur = (cmbTypeUtilisateur.SelectedItem as ComboBoxItem)?.Content.ToString();
 
                 RoleUtilisateur role = (RoleUtilisateur)Enum.Parse(typeof(RoleUtilisateur), typeUtilisateur);
 
-                if (GestionCompteUtilisateur.CreerCompte(nom, motDePasse, code, role, out string messageErreur))
+                if (GestionCompteUtilisateur.CreerCompte(nom, motDePasse, role, code, out string messageErreur))
                 {
                     lblMessage.Text = "Compte créé avec succès !";
                     lblMessage.Foreground = Brushes.Green;
                     lblMessage.Visibility = Visibility.Visible;
                     Reinitialiser();
+                    
                 }
                 else
                 {
@@ -40,6 +54,8 @@ namespace ApplicationGestionProduitCosmetique.Views
                     lblMessage.Foreground = Brushes.Red;
                     lblMessage.Visibility = Visibility.Visible;
                 }
+
+
             }
             catch (Exception ex)
             {
@@ -49,14 +65,52 @@ namespace ApplicationGestionProduitCosmetique.Views
             }
         }
 
-        private bool ValidationFormulaire()
+        private bool ValiderFormulaire()
         {
             bool valide = true;
+            string message = "";
             ReinitialiserErreurs();
 
             if (string.IsNullOrWhiteSpace(txtNom.Text))
+                message = "- Nom d'utilisateur vide\n";
+                valide = false;
+
+            if (string.IsNullOrWhiteSpace(txtPassword.Password))
+                message = "- Mot de passe vide\n";
+                valide = false ;
+
+            if(cmbTypeUtilisateur.SelectedItem == null)
+                message = "- Type d'utilisateur non sélectionné\n";
+            string? roleSelectionne = (cmbTypeUtilisateur.SelectedItem as ComboBoxItem)?.Content.ToString();
+            if ((roleSelectionne == "Vendeur" || roleSelectionne == "Manager") && string.IsNullOrWhiteSpace(txtCode.Text))
             {
-                AfficherErreur(lblErreurNom, "Le nom est requis.");
+                AfficherErreur(txtCode, lblErreurCode, "Le code est requis.");
+                valide = false;
+            }
+
+            if (message != "")
+            {
+                MessageBox.Show("Des informations sont manquantes: \n" + message);
+                return false;
+            }
+            return true;
+        }
+
+        private void AfficherErreur(Control control, TextBlock lblErreur, string message)
+        {
+            control.BorderBrush = Brushes.Red;
+            control.BorderThickness = new Thickness(2);
+            lblErreur.Text = message;
+            lblErreur.Visibility = Visibility.Visible;
+        }
+        private bool ValidationFormulaire()
+        {
+            bool valide = true;
+            Reinitialiser();
+
+            if (string.IsNullOrWhiteSpace(txtNom.Text))
+            {
+                AfficherErreur(lblErreurNom, "Nom d'utilisateur requis.");
                 valide = false;
             }
 
@@ -64,15 +118,9 @@ namespace ApplicationGestionProduitCosmetique.Views
             {
                 AfficherErreur(lblErreurPassword, "Le mot de passe est requis.");
                 valide = false;
-            }
+            }        
 
-            if (txtPassword.Password != txtConfirmPassword.Password)
-            {
-                AfficherErreur(lblErreurConfirmPassword, "Les mots de passe ne correspondent pas.");
-                valide = false;
-            }
-
-            string roleSelectionne = (cmbTypeUtilisateur.SelectedItem as ComboBoxItem)?.Content.ToString();
+            string? roleSelectionne = (cmbTypeUtilisateur.SelectedItem as ComboBoxItem)?.Content.ToString();
             if ((roleSelectionne == "Vendeur" || roleSelectionne == "Manager") && string.IsNullOrWhiteSpace(txtCode.Text))
             {
                 AfficherErreur(lblErreurCode, "Le code est requis pour ce type d'utilisateur.");
@@ -104,6 +152,18 @@ namespace ApplicationGestionProduitCosmetique.Views
             txtConfirmPassword.Password = "";
             txtCode.Text = "";
             cmbTypeUtilisateur.SelectedIndex = 0;
+        }
+
+        private void cmbTypeUtilisateur_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (cmbTypeUtilisateur.SelectedItem is ComboBoxItem selectedItem)
+            {
+                bool isClient = selectedItem.Content.ToString() == "Client";
+
+                if (txtCode != null) txtCode.Visibility = isClient ? Visibility.Collapsed : Visibility.Visible;
+                if (txtCode != null) txtCode.Visibility = isClient ? Visibility.Collapsed : Visibility.Visible;
+                if (lblErreurCode != null) lblErreurCode.Visibility = Visibility.Collapsed;
+            }
         }
     }
 }

@@ -77,69 +77,7 @@
         </Border>
 
 
-        <!--<DockPanel Background="AliceBlue" Grid.Column="0" LastChildFill="False">
-            -->
-        <!-- Menu principal en haut -->
-        <!--
-            <StackPanel DockPanel.Dock="Top">
-                -->
-        <!-- Titre -->
-        <!--
-                <TextBlock Text="Cosmetic Shop" FontSize="24" FontWeight="Bold" 
-                           Foreground="Purple" Margin="20" FontFamily="Cooper Black"/>
-
-                -->
-        <!-- Catalogue -->
-        <!--
-                <RadioButton Margin="15" Checked="RadioButton_Checked_1" Style="{StaticResource NoCircleRadioButton}">
-                    <StackPanel Orientation="Horizontal">
-                        <Image Source="/Resources/Images/ImagesIcons/catalogue.png" Width="24" Height="24" Margin="0,0,10,0"/>
-                        <TextBlock Text="Catalogue" VerticalAlignment="Center"/>
-                    </StackPanel>
-                </RadioButton>
-
-                -->
-        <!-- Articles choisis -->
-        <!--
-                <RadioButton Margin="15" Checked="ArticlesChoisis_Checked" Style="{StaticResource NoCircleRadioButton}">
-                    <StackPanel Orientation="Horizontal">
-                        <Image Source="/Resources/Images/ImagesIcons/panier.png" Width="24" Height="24" Margin="0,0,10,0"/>
-                        <TextBlock Text="Articles choisis" VerticalAlignment="Center"/>
-                    </StackPanel>
-                </RadioButton>
-
-                -->
-        <!-- Articles commandés -->
-        <!--
-                <RadioButton Margin="15" Checked="ArticlesCommandes_Checked" Style="{StaticResource NoCircleRadioButton}">
-                    <StackPanel Orientation="Horizontal">
-                        <Image Source="/Resources/Images/ImagesIcons/panier2.png" Width="24" Height="24" Margin="0,0,10,0"/>
-                        <TextBlock Text="Articles commandés" VerticalAlignment="Center"/>
-                    </StackPanel>
-                </RadioButton>
-
-                -->
-        <!-- Mes factures -->
-        <!--
-                <RadioButton Margin="15" Checked="Factures_Checked" Style="{StaticResource NoCircleRadioButton}">
-                    <StackPanel Orientation="Horizontal">
-                        <Image Source="/Resources/Images/ImagesIcons/facture.png" Width="24" Height="24" Margin="0,0,10,0"/>
-                        <TextBlock Text="Mes factures" VerticalAlignment="Center"/>
-                    </StackPanel>
-                </RadioButton>
-
-            </StackPanel>
-
-            -->
-        <!-- Déconnexion en bas -->
-        <!--
-            <Button Background="LightGray" Margin="15" DockPanel.Dock="Bottom" Click="Deconnexion_Click">
-                <StackPanel Orientation="Horizontal">
-                    <Image Source="/Resources/Images/ImagesIcons/sortie.png" Width="24" Height="24" Margin="0,0,10,0"/>
-                    <TextBlock Text="Déconnexion" VerticalAlignment="Center"/>
-                </StackPanel>
-            </Button>
-        </DockPanel>-->
+       
 
 
         <!-- Zone centrale d'affichage -->

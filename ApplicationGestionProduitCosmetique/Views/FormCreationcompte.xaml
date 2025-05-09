@@ -31,10 +31,10 @@
                 <TextBlock x:Name="lblErreurConfirmPassword" Foreground="Red" Visibility="Collapsed" />
 
                 <Label Content="Type d'utilisateur :" Margin="0,10,0,0" />
-                <ComboBox x:Name="cmbTypeUtilisateur" Height="30">
-                    <ComboBoxItem Content="Client" IsSelected="True"/>
+                <ComboBox x:Name="cmbTypeUtilisateur" Height="30" SelectionChanged="cmbTypeUtilisateur_SelectionChanged">
+                    <ComboBoxItem Content="Sélectionner un type utilisateur" IsSelected="True" />
+                    <ComboBoxItem Content="Client" />
                     <ComboBoxItem Content="Vendeur"/>
-                    <ComboBoxItem Content="Manager"/>
                 </ComboBox>
 
                 <Label Content="Code (Vendeur/Manager) :" Margin="0,10,0,0" />
@@ -42,7 +42,8 @@
                 <TextBlock x:Name="lblErreurCode" Foreground="Red" Visibility="Collapsed" />
 
                 <Button Content="Créer le compte" Width="150" Height="40" Background="Green" Foreground="White" Margin="0,20,0,0" HorizontalAlignment="Center" Click="btnCreerCompte_Click"/>
-
+               
+               
                 <TextBlock x:Name="lblMessage" Foreground="Red" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,10,0,0" Visibility="Collapsed"/>
             </StackPanel>
         </Border>

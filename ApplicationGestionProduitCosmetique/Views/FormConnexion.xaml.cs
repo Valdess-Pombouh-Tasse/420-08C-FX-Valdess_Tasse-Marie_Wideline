@@ -27,11 +27,11 @@ namespace ApplicationGestionProduitCosmetique.Views
             InitializeComponent();
         }
 
-        //public void LoadUserControl(UserControl control)
-        //{
-        //    MainGrid.Children.Clear();
-        //    MainGrid.Children.Add(control);
-        //}
+        /// <summary>
+        /// Valide le formulaire de connexion.
+        /// </summary>
+        /// <returns></returns>
+        /// * @author Marie
         private bool ValidationFormulaire()
         {
             bool valide = true;
@@ -50,18 +50,25 @@ namespace ApplicationGestionProduitCosmetique.Views
                 valide = false;
             }
 
-            string roleSelectionne = (cmbTypeUtilisateur.SelectedItem as ComboBoxItem)?.Content.ToString();
+            string? roleSelectionne = (cmbTypeUtilisateur.SelectedItem as ComboBoxItem)?.Content.ToString();
             if ((roleSelectionne == "Vendeur" || roleSelectionne == "Manager") && string.IsNullOrWhiteSpace(txtCode.Text))
             {
                 AfficherErreur(txtCode, lblErreurCode, "Le code est requis.");
                 valide = false;
             }
+
+
             return valide;
         }
 
 
 
-
+        /// <summary>
+        /// Gère l'événement de clic sur le bouton de connexion.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        /// * @author Marie
         private void btnConnecter_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -71,7 +78,7 @@ namespace ApplicationGestionProduitCosmetique.Views
                 string nom = txtNom.Text.Trim();
                 string motDePasse = txtPassword.Password.Trim();
                 string codeUtilisateur = txtCode.Text.Trim();
-                string roleSelectionne = (cmbTypeUtilisateur.SelectedItem as ComboBoxItem)?.Content.ToString();
+                string? roleSelectionne = (cmbTypeUtilisateur.SelectedItem as ComboBoxItem)?.Content.ToString();
 
                 if (GestionCompteUtilisateur.ConnexionUtilisateur(nom, motDePasse, codeUtilisateur, out RoleUtilisateur role, out string messageErreur))
                 {
@@ -102,7 +109,7 @@ namespace ApplicationGestionProduitCosmetique.Views
                     if(control != null)
                     {
                         var containerWindow = new MainWindow();
-                        containerWindow.monContentControl.Content = control; // MainContent est un ContentControl
+                        containerWindow.monContentControl.Content = control; 
                         containerWindow.WindowState = WindowState.Maximized;
                         containerWindow.Show();
                         Window.GetWindow(this)?.Close();
@@ -141,7 +148,12 @@ namespace ApplicationGestionProduitCosmetique.Views
         }
 
 
-
+        /// <summary>
+        /// Affiche un message d'erreur sur le champ de saisie et le label associé.
+        /// </summary>
+        /// <param name="control"></param>
+        /// <param name="lblErreur"></param>
+        /// <param name="message"></param>
         private void AfficherErreur(Control control, TextBlock lblErreur, string message)
         {
             control.BorderBrush = Brushes.Red;
@@ -150,6 +162,9 @@ namespace ApplicationGestionProduitCosmetique.Views
             lblErreur.Visibility = Visibility.Visible;
         }
 
+        /// <summary>
+        /// Réinitialise les champs de saisie et masque les messages d'erreur.
+        /// </summary>
         private void Reinitialiser()
         {
             ReinitialiserChamp(txtNom, lblErreurNom);
@@ -158,6 +173,11 @@ namespace ApplicationGestionProduitCosmetique.Views
             lblMessageErreur.Visibility = Visibility.Collapsed;
         }
 
+        /// <summary>
+        /// Réinitialise le champ de saisie et masque le message d'erreur associé.
+        /// </summary>
+        /// <param name="control"></param>
+        /// <param name="lblErreur"></param>
         private void ReinitialiserChamp(Control control, TextBlock lblErreur)
         {
             control.BorderBrush = Brushes.Gray;
@@ -165,6 +185,12 @@ namespace ApplicationGestionProduitCosmetique.Views
             lblErreur.Visibility = Visibility.Collapsed;
         }
 
+
+        /// <summary>
+        /// Gère le changement de sélection dans le ComboBox des types d'utilisateur.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void cmbTypeUtilisateur_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (cmbTypeUtilisateur.SelectedItem is ComboBoxItem selectedItem)

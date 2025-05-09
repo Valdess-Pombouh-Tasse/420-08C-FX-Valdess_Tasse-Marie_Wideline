@@ -37,7 +37,7 @@ namespace ApplicationGestionProduitCosmetique.Models
         /// * @author Marie
         public static MySqlConnection CreerConnection()
         {
-            string connectionString = _config.GetConnectionString(CONNECTION_STRING);
+            string? connectionString = _config.GetConnectionString(CONNECTION_STRING);
             return new MySqlConnection(connectionString);
         }
 
@@ -64,7 +64,7 @@ namespace ApplicationGestionProduitCosmetique.Models
         /// * @author Valdess
         public static Produit ObtenirProduit(string code)
         {
-            Produit produit = null;
+            Produit? produit = null;
 
             MySqlConnection cn = CreerConnection();
 
@@ -86,7 +86,6 @@ namespace ApplicationGestionProduitCosmetique.Models
                     uint idProduit = dr.GetUInt32(0);
                     string codeProduit = dr.GetString(1);
                     string nomProduit = dr.GetString(2);
-                    //decimal prix = dr.GetDecimal(3);
                     uint idCategorie = dr.GetUInt32(3);
                     int prixInt = dr.GetInt32(4);
                     decimal prix = (decimal)prixInt;
@@ -256,7 +255,11 @@ namespace ApplicationGestionProduitCosmetique.Models
             return produit;
         }
 
-        
+        /// <summary>
+        /// Autohor Valdess
+        /// </summary>
+        /// <param name="idVendeur"></param>
+        /// <returns></returns>
         public static List<Produit> ObtenirProduitsVendeur(int idVendeur)
         {
            
@@ -317,6 +320,11 @@ namespace ApplicationGestionProduitCosmetique.Models
         }
 
 
+        /// <summary>
+        /// Autohor Marie
+        /// </summary>
+        /// <param name="codeUtilisateur"></param>
+        /// <returns></returns>
         public static int ObtenirIdVendeurParCode(string codeUtilisateur)
         {
             MySqlConnection cn = CreerConnection();
@@ -329,7 +337,7 @@ namespace ApplicationGestionProduitCosmetique.Models
                 MySqlCommand cmd = new MySqlCommand(requete, cn);
                 cmd.Parameters.AddWithValue("@CodeUtilisateur", codeUtilisateur);
 
-                object result = cmd.ExecuteScalar();
+                object? result = cmd.ExecuteScalar();
                 if (result != null)
                 {
                     idVendeur = Convert.ToInt32(result);
@@ -348,12 +356,12 @@ namespace ApplicationGestionProduitCosmetique.Models
         }      
 
         /// <summary>
-        /// Autohor Amadou
+        /// Autohor Marie
         /// Permet d'ajouter une facture dans la base de données
         /// </summary>
         /// <param name="facture">facture à ajouter</param>
-        /// <exception cref="System.ArgumentNullException">Lancée si la facture est nulle.</exception>
-        /// <exception cref="System.ArgumentNullException">Lancée si la liste des produitsFacture est nulle ou vide.</exception>
+        /// <exception cref="ArgumentNullException">Lancée si la facture est nulle.</exception>
+        /// <exception cref="ArgumentNullException">Lancée si la liste des produitsFacture est nulle ou vide.</exception>
         public static void AjouterFacture(Facture facture)
         {
             if (facture == null)

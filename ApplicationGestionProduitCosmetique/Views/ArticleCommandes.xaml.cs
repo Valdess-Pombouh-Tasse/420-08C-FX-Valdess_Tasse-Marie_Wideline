@@ -35,7 +35,7 @@ namespace ApplicationGestionProduitCosmetique.Views
         {
             try
             {
-                List<Facture> factures = GestionCompteUtilisateur.ObtenirToutesLesFactures(); // ← méthode DAL à créer
+                List<Facture> factures = GestionCompteUtilisateur.ObtenirToutesLesFactures(); 
                 lstFactures.ItemsSource = factures;
             }
             catch (Exception ex)

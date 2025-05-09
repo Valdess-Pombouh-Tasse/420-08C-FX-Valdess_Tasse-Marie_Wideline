@@ -4,8 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace ApplicationGestionProduitCosmetique.Models
 {
@@ -15,7 +14,7 @@ namespace ApplicationGestionProduitCosmetique.Models
         {
             string cheminFichier = Path.Combine(dossierDestination, $"{facture.NumeroFacture}.pdf");
 
-            PdfSharp.Pdf.PdfDocument document = new PdfSharp.Pdf.PdfDocument();
+            PdfDocument document = new PdfDocument();
             document.Info.Title = "Facture Cosmetic Shop";
 
             PdfPage page = document.AddPage();

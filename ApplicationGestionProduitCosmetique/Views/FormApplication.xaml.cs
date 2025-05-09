@@ -22,9 +22,7 @@ using TextBox = System.Windows.Controls.TextBox;
 using PdfSharp.Drawing;
 using System.Media;
 using UserControl = System.Windows.Controls.UserControl;
-using PdfSharp.Drawing;
-using Syncfusion.Pdf;
-using Syncfusion.Pdf.Graphics;
+
 
 namespace ApplicationGestionProduitCosmetique.Views
 {
@@ -79,8 +77,8 @@ namespace ApplicationGestionProduitCosmetique.Views
                     BorderThickness = new Thickness(2),
                     CornerRadius = new CornerRadius(10),
                     Margin = new Thickness(5),
-                    Padding = new Thickness(1),
-                    Width = 200,
+                    Padding = new Thickness(5),
+                    Width = 100,
                     Height = 280,
                     Background = new SolidColorBrush(Colors.AliceBlue)
                 };
@@ -98,8 +96,8 @@ namespace ApplicationGestionProduitCosmetique.Views
                     Margin = new Thickness(2),
                     HorizontalAlignment = System.Windows.HorizontalAlignment.Center,
                     VerticalAlignment = VerticalAlignment.Center,
-                    Width = 125,
-                    Height = 125,
+                    Width = 90,
+                    Height = 100,
                     Tag = produit
                 };
                 imgProduit.MouseLeftButtonDown += ImageProduit_MouseLeftButtonUp;
@@ -118,12 +116,12 @@ namespace ApplicationGestionProduitCosmetique.Views
                 TextBlock prixProduit = new TextBlock
                 {
                     Text = produit.Prix.ToString("c"),
-                    FontSize = 13,
+                    FontSize = 12,
                     Foreground = new SolidColorBrush(Colors.Green),
                     FontWeight = FontWeights.Bold,
                     HorizontalAlignment = System.Windows.HorizontalAlignment.Right,
                     VerticalAlignment = VerticalAlignment.Bottom,
-                    MaxWidth = 80,
+                    MaxWidth = 85,
                     Margin = new Thickness(4)
                 };
                 Separator separator2 = new Separator();

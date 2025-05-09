@@ -239,7 +239,7 @@ namespace ApplicationGestionProduitCosmetique.Models
             if (obj is null || obj is not Produit)
                 return false;
 
-            Produit produit = obj as Produit;
+            Produit? produit = obj as Produit;
 
             if (string.Compare(this.Code, produit.Code, CultureInfo.InvariantCulture, CompareOptions.IgnoreCase | CompareOptions.IgnoreNonSpace) == 0)
                 return true;
@@ -278,6 +278,11 @@ namespace ApplicationGestionProduitCosmetique.Models
         public static bool operator !=(Produit a, Produit b)
         {
             return !(a == b);
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(_id, _code, _nom, _categorie, _prix, _image, _description, _quantite);
         }
     }
 }

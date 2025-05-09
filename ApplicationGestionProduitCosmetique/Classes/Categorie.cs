@@ -116,5 +116,10 @@ namespace ApplicationGestionProduitCosmetique.Classes
         {
             return !(a == b);
         }
+
+        public override int GetHashCode()
+        {
+            return Nom.GetHashCode();
+        }
     }
 }

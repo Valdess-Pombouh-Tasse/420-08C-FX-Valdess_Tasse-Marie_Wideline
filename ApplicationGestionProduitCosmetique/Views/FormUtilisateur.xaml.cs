@@ -5,16 +5,8 @@ using ApplicationGestionProduitCosmetique.Views;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace ApplicationGestionProduitCosmetique
 {
@@ -39,6 +31,8 @@ namespace ApplicationGestionProduitCosmetique
             set { _etat = value; }
         }
 
+        public RoleUtilisateur TypeUtilisateur { get; set; }
+
         public FormUtilisateur(EtatFormulaire etat = EtatFormulaire.Ajouter)
         {
             InitializeComponent();
@@ -55,9 +49,10 @@ namespace ApplicationGestionProduitCosmetique
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Erreur lors du chargement des factures : " + ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
+                FenetreErreur.Afficher("Erreur lors du chargement des factures : " + ex.Message);
             }
         }
+
         public void AfficherUtilisateur()
         {
             Utilisateurs = GestionCompteUtilisateur.ChargerUtilisateurs();
@@ -79,8 +74,8 @@ namespace ApplicationGestionProduitCosmetique
                 FormAjoutModifSupp formAjout = new FormAjoutModifSupp
                 {
                     Etat = EtatFormulaire.Ajouter,
-                    //TypeUtilisateur = RoleUtilisateur.Vendeur
                 };
+                formAjout.tbTitre.Text = $"{Etat} un {TypeUtilisateur}";
 
                 bool? resultat = formAjout.ShowDialog();
 
@@ -90,64 +85,63 @@ namespace ApplicationGestionProduitCosmetique
 
                     if (Utilisateurs.Any(u => u.CodeUtilisateur == nouvelUtilisateur.CodeUtilisateur))
                     {
-                        MessageBox.Show("Un utilisateur avec ce code existe déjà.", "Erreur", MessageBoxButton.OK, MessageBoxImage.Warning);
+                        BoxCosmetic.Afficher("Un utilisateur avec ce code existe déjà.", "Erreur");
                         return;
                     }
 
                     GestionCompteUtilisateur.AjouterUtilisateur(nouvelUtilisateur);
                     AfficherUtilisateur();
 
-                    MessageBox.Show("L'utilisateur a été ajouté avec succès !", "Confirmation", MessageBoxButton.OK, MessageBoxImage.Information);
+                    BoxCosmetic.Afficher("L'utilisateur a été ajouté avec succès !", "Confirmation");
                 }
             }
             catch (InvalidOperationException ie)
             {
-                MessageBox.Show(ie.Message, "Ajout d'un utilisateur", MessageBoxButton.OK, MessageBoxImage.Warning);
+                BoxCosmetic.Afficher(ie.Message, "Ajout d'un utilisateur");
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Une erreur est survenue : " + ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
+                BoxCosmetic.Afficher("Une erreur est survenue : " + ex.Message, "Erreur");
             }
         }
 
         private void btnModifier_Click(object sender, RoutedEventArgs e)
         {
-
             if (dgUtilisateurs.SelectedItem is Utilisateur utilisateurSelect)
             {
-                FormAjoutModifSupp formModif = new FormAjoutModifSupp();
-                formModif.tbTitre.Text = $"Modifier un utilisateur";
-                formModif.Utilisateur = utilisateurSelect;
-                formModif.txtNom.Text = utilisateurSelect.NomUtilisateur;
-                formModif.txtCode.Text = utilisateurSelect.CodeUtilisateur;
-                formModif.txtPassword.Password = utilisateurSelect.MotDePasse;
-                formModif.cboRole.SelectedItem = utilisateurSelect.Role;
+                FormAjoutModifSupp formModif = new FormAjoutModifSupp
+                {
+                    tbTitre = { Text = "Modifier un client" },
+                    Utilisateur = utilisateurSelect,
+                    txtNom = { Text = utilisateurSelect.NomUtilisateur },
+                    txtCode = { Text = utilisateurSelect.CodeUtilisateur },
+                    txtPassword = { Password = utilisateurSelect.MotDePasse },
+                    cboRole = { SelectedItem = utilisateurSelect.Role }
+                };
 
                 bool? resultat = formModif.ShowDialog();
 
                 if (resultat == true)
                 {
-                    Utilisateur utilisateurModifie = formModif.Utilisateur;
-
                     try
                     {
-                        GestionCompteUtilisateur.ModifierUtilisateur(utilisateurModifie);
+                        GestionCompteUtilisateur.ModifierUtilisateur(formModif.Utilisateur);
                         AfficherUtilisateur();
 
-                        MessageBox.Show("L'utilisateur a été modifié avec succès !", "Modification réussie", MessageBoxButton.OK, MessageBoxImage.Information);
+                        BoxCosmetic.Afficher("L'utilisateur a été modifié avec succès !", "Modification réussie");
                     }
                     catch (Exception ex)
                     {
-                        MessageBox.Show("Erreur lors de la modification : " + ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
+                        BoxCosmetic.Afficher("Erreur lors de la modification : " + ex.Message, "Erreur");
                     }
                 }
             }
             else
             {
-                MessageBox.Show("Veuillez sélectionner un utilisateur à modifier.", "Aucune sélection", MessageBoxButton.OK, MessageBoxImage.Warning);
+                BoxCosmetic.Afficher("Veuillez sélectionner un utilisateur à modifier.", "Aucune sélection");
             }
-
         }
+
         private void btnSupprimer_Click(object sender, RoutedEventArgs e)
         {
             if (dgUtilisateurs.SelectedItem is Utilisateur utilisateurSelectionne)
@@ -165,17 +159,17 @@ namespace ApplicationGestionProduitCosmetique
                         GestionCompteUtilisateur.SupprimerUtilisateur(utilisateurSelectionne.CodeUtilisateur);
                         AfficherUtilisateur();
 
-                        MessageBox.Show("L'utilisateur a été supprimé avec succès.", "Succès", MessageBoxButton.OK, MessageBoxImage.Information);
+                        BoxCosmetic.Afficher("L'utilisateur a été supprimé avec succès.", "Succès");
                     }
                     catch (Exception ex)
                     {
-                        MessageBox.Show($"Erreur lors de la suppression : {ex.Message}", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
+                        BoxCosmetic.Afficher($"Erreur lors de la suppression : {ex.Message}", "Erreur");
                     }
                 }
             }
             else
             {
-                MessageBox.Show("Veuillez sélectionner un utilisateur à supprimer.", "Information", MessageBoxButton.OK, MessageBoxImage.Warning);
+                BoxCosmetic.Afficher("Veuillez sélectionner un utilisateur à supprimer.", "Information");
             }
         }
     }

@@ -6,9 +6,9 @@
         WindowStartupLocation="CenterScreen"
         Loaded="Window_Loaded">
 
-    <!--<Window.Background>
+    <Window.Background>
         <ImageBrush ImageSource="/Resources/Images/img9.jpg" Stretch="UniformToFill" />
-    </Window.Background>-->
+    </Window.Background>
 
     <Grid Margin="20">
         <Grid.RowDefinitions>
@@ -32,63 +32,82 @@
 
         <!-- Liste des Utilisateurs -->
         <Border Background="#AAFFFFFF" Padding="15" CornerRadius="10" Grid.Row="1" Grid.Column="0" Margin="5">
-            <StackPanel>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
                 <TextBlock Text="Liste des Utilisateurs"
-                           FontSize="16"
-                           FontWeight="Bold"
-                           Margin="0,0,0,10"/>
+                   FontSize="16"
+                   FontWeight="Bold"
+                   Margin="0,0,0,10" />
+
                 <DataGrid x:Name="dgUtilisateurs"
-                          Height="340"
-                          AutoGenerateColumns="False"
-                          HeadersVisibility="Column"
-                          CanUserAddRows="False"
-                          IsReadOnly="True"
-                          SelectionMode="Single"
-                          Background="#F5F5F5">
+                  Grid.Row="1"
+                  AutoGenerateColumns="False"
+                  HeadersVisibility="Column"
+                  CanUserAddRows="False"
+                  IsReadOnly="True"
+                  SelectionMode="Single"
+                  Background="#FFF"
+                  AlternatingRowBackground="#F0F8FF"
+                  GridLinesVisibility="Horizontal"
+                  BorderBrush="#B0C4DE"
+                  BorderThickness="1">
                     <DataGrid.Columns>
-                        <DataGridTextColumn Header="Nom"  Binding="{Binding NomUtilisateur}" Width="*"/>
-                        <DataGridTextColumn Header="Code" Binding="{Binding CodeUtilisateur}" Width="*"/>
-                        <DataGridTextColumn Header="Rôle" Binding="{Binding Role}" Width="*"/>
+                        <DataGridTextColumn Header="Nom" Binding="{Binding NomUtilisateur}" Width="*" />
+                        <DataGridTextColumn Header="Code" Binding="{Binding CodeUtilisateur}" Width="*" />
+                        <DataGridTextColumn Header="Rôle" Binding="{Binding Role}" Width="*" />
                     </DataGrid.Columns>
                 </DataGrid>
-            </StackPanel>
+
+                <!-- Boutons -->
+                <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,15,0,0">
+                    <Button x:Name="btnAjouter" Content="Ajouter" Width="100" Height="35" Margin="5"
+                    Click="btnAjouter_Click" />
+                    <Button x:Name="btnModifier" Content="Modifier" Width="100" Height="35" Margin="5"
+                    Click="btnModifier_Click"/>
+                    <Button x:Name="btnSupprimer" Content="Supprimer" Width="100" Height="35" Margin="5"
+                    Click="btnSupprimer_Click"/>
+                </StackPanel>
+            </Grid>
         </Border>
 
         <!-- Liste des Factures -->
         <Border Background="#AAFFFFFF" Padding="15" CornerRadius="10" Grid.Row="1" Grid.Column="1" Margin="5">
-            <StackPanel>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
                 <TextBlock Text="Historique des Factures"
-                           FontSize="16"
-                           FontWeight="Bold"
-                           Margin="0,0,0,10"/>
+                   FontSize="16"
+                   FontWeight="Bold"
+                   Margin="0,0,0,10"/>
+
                 <DataGrid x:Name="dgFactures"
-                          Height="340"
-                          AutoGenerateColumns="False"
-                          HeadersVisibility="Column"
-                          CanUserAddRows="False"
-                          IsReadOnly="True"
-                          SelectionMode="Single"
-                          Background="#FFF0F5"
-                          AlternatingRowBackground="#FFE4E1"
-                          GridLinesVisibility="Horizontal"
-                          BorderBrush="#FF69B4"
-                          BorderThickness="1">
+                  Grid.Row="1"
+                  AutoGenerateColumns="False"
+                  HeadersVisibility="Column"
+                  CanUserAddRows="False"
+                  IsReadOnly="True"
+                  SelectionMode="Single"
+                  Background="#FFF0F5"
+                  AlternatingRowBackground="#F0F8FF"
+                  GridLinesVisibility="Horizontal"
+                  BorderBrush="#B0C4DE"
+                  BorderThickness="1">
                     <DataGrid.Columns>
-                        <DataGridTextColumn Header="Montant Total" Binding="{Binding MontantTotalFixe, StringFormat={}{0:C}}" Width="*"/>
-                        <DataGridTextColumn Header="Date de Facture" Binding="{Binding DateCreation, StringFormat='{}{0:dd/MM/yyyy}'}" Width="*"/>
+                        <DataGridTextColumn Header="Nom Utilisateur" Binding="{Binding NomClient}" Width="*" />
+                        <DataGridTextColumn Header="Montant Total" Binding="{Binding MontantTotalFixe, StringFormat={}{0:C}}" Width="*" />
+                        <DataGridTextColumn Header="Date de Facture" Binding="{Binding DateCreation, StringFormat='{}{0:dd/MM/yyyy}'}" Width="*" />
                     </DataGrid.Columns>
                 </DataGrid>
-            </StackPanel>
+            </Grid>
         </Border>
 
-        <!-- Boutons -->
-        <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.ColumnSpan="2" HorizontalAlignment="Center" Margin="0,20">
-            <Button x:Name="btnAjouter" Content="Ajouter" Width="100" Height="35" Margin="5"
-                    Click="btnAjouter_Click" />
-            <Button x:Name="btnModifier" Content="Modifier" Width="100" Height="35" Margin="5"
-                    Click="btnModifier_Click"/>
-            <Button x:Name="btnSupprimer" Content="Supprimer" Width="100" Height="35" Margin="5"
-                    Click="btnSupprimer_Click"/>
-        </StackPanel>
     </Grid>
 </Window>

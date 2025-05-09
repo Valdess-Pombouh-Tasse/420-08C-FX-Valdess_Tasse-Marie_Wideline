@@ -65,7 +65,9 @@ namespace ApplicationGestionProduitCosmetique.Views
 
         private void RadioButton_Checked_4(object sender, RoutedEventArgs e)
         {
-            AfficherUserControl(new FormConnexion());
+            
+            MainContentGrid.Children.Clear();
+            MainContentGrid.Children.Add(new FormConnexion());
         }
     }
 }

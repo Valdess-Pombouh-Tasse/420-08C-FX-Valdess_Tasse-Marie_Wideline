@@ -25,7 +25,7 @@ namespace ApplicationGestionProduitCosmetique.Classes
             string description;
             DescriptionAttribute da;
 
-            FieldInfo fi = currentEnum.GetType().GetField(currentEnum.ToString());
+            FieldInfo? fi = currentEnum.GetType().GetField(currentEnum.ToString());
             da = (DescriptionAttribute)Attribute.GetCustomAttribute(fi, typeof(DescriptionAttribute));
             if (da != null)
                 description = da.Description;

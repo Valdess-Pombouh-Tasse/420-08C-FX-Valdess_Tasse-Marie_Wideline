@@ -1,11 +1,6 @@
 ﻿using ApplicationGestionProduitCosmetique.enums;
 using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Net.Mail;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace ApplicationGestionProduitCosmetique.Models
 {
@@ -47,7 +42,9 @@ namespace ApplicationGestionProduitCosmetique.Models
             }                                         
         }
 
-        //public int Id { get; set; }
+        /// <summary>
+        /// Code de l'utilisateur
+        /// </summary>
         public string CodeUtilisateur
         {
             get { return _codeUtilisateur; }
@@ -67,11 +64,7 @@ namespace ApplicationGestionProduitCosmetique.Models
         {
             get { return _motDePasse; }
             set
-            {
-                //if (string.IsNullOrWhiteSpace(value))
-                //    throw new ArgumentException(nameof(MotDePasse), "Le mot de passe ne peut pas être vide");
-                //if (!EstMotDePasseValide(value))
-                    //    throw new ArgumentException(nameof(MotDePasse), $"Le mot de passe doit contenir au moins {PASSWORD_MIN_LENGTH} caractères, une majuscule et un caractère spécial");
+            {               
                     _motDePasse = value.Trim();
             }
         }
@@ -84,31 +77,6 @@ namespace ApplicationGestionProduitCosmetique.Models
             Role = role;
         }
 
-
-
-        ///// <summary>
-        ///// Vérifie si le mot de passe est valide
-        ///// </summary>
-        ///// <param name="motDePasse"></param>
-        ///// <returns></returns>
-        //public static bool EstMotDePasseValide(string motDePasse)
-        //{
-        //    if (motDePasse.Length < PASSWORD_MIN_LENGTH)
-        //        return false;
-
-        //    bool contientMajuscule = false;
-        //    bool contientSpecial = false;
-
-        //    foreach (char c in motDePasse)
-        //    {
-        //        if (char.IsUpper(c))
-        //            contientMajuscule = true;
-        //        if (!char.IsLetterOrDigit(c))
-        //            contientSpecial = true;
-        //    }
-
-        //    return contientMajuscule && contientSpecial;
-        //}
 
         public override string ToString()
         {

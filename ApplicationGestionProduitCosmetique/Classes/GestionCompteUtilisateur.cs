@@ -1,5 +1,6 @@
 ﻿using ApplicationGestionProduitCosmetique.enums;
 using ApplicationGestionProduitCosmetique.Models;
+using Konscious.Security.Cryptography;
 using Microsoft.Extensions.Configuration;
 using MySqlConnector;
 using System;
@@ -40,7 +41,7 @@ namespace ApplicationGestionProduitCosmetique.Classes
         /// * @author Valdess
         private static void FermerConnexion(MySqlConnection cn)
         {
-            if (cn.State == System.Data.ConnectionState.Open)
+            if (cn.State == ConnectionState.Open)
             {
                 cn.Close();
             }
@@ -287,7 +288,7 @@ namespace ApplicationGestionProduitCosmetique.Classes
                 {
                     connection.Open();
 
-                    string requeteConnection = "SELECT Role FROM Utilisateurs WHERE NomUtilisateur = @Nom AND MotDePasse = @MotDePasse";
+                    string requeteConnection = "SELECT MotDePasse, Salt, Role FROM Utilisateurs WHERE NomUtilisateur = @Nom";
 
                     if (!string.IsNullOrEmpty(codeUtilisateur))
                     {
@@ -297,7 +298,7 @@ namespace ApplicationGestionProduitCosmetique.Classes
                     using (MySqlCommand command = new MySqlCommand(requeteConnection, connection))
                     {
                         command.Parameters.AddWithValue("@Nom", nom);
-                        command.Parameters.AddWithValue("@MotDePasse", motDePasse);
+                      
 
                         if (!string.IsNullOrEmpty(codeUtilisateur))
                         {
@@ -336,7 +337,142 @@ namespace ApplicationGestionProduitCosmetique.Classes
             }
         }
 
-    
+       
+
+
+        /// <summary>
+        /// Permet de créer un compte utilisateur
+        /// </summary>
+        /// <param name="nomUtilisateur">nom utilisateur</param>
+        /// <param name="motDePasse">mot de passe</param>
+        /// <param name="role"> role utilisateur</param>
+        /// <param name="codeUtilisateur">code utilisateur</param>
+        /// <param name="messageErreur"></param>
+        /// <returns></returns>
+        /// * @author Valdess
+        public static bool CreerCompte(string nomUtilisateur, string motDePasse, RoleUtilisateur role, string codeUtilisateur, out string messageErreur)
+        {
+
+            messageErreur = "";
+
+            try
+            {
+                using (MySqlConnection connection = CreerConnection())
+                {
+                    connection.Open();
+
+                    if (UtilisateurExisteDeja(nomUtilisateur, connection))
+                    {
+                        messageErreur = "Ce nom d'utilisateur existe déjà.";
+                        return false;
+                    }
+
+                    byte[] salt = CreerSALT();
+                    byte[] motDePasseHache = HacherMotDePasse(motDePasse, salt);
+
+                    string insertQuery = @"INSERT INTO Utilisateurs (NomUtilisateur, MotDePasse, Role, CodeUtilisateur, Salt)
+                                   VALUES (@Nom, @MotDePasse, @Role, @Code, @Salt)";
+
+                    using (MySqlCommand insertCmd = new MySqlCommand(insertQuery, connection))
+                    {
+                        insertCmd.Parameters.AddWithValue("@Nom", nomUtilisateur);
+                        insertCmd.Parameters.AddWithValue("@MotDePasse", motDePasseHache);
+                        insertCmd.Parameters.AddWithValue("@Role", role.ToString());
+                        insertCmd.Parameters.AddWithValue("@Code", string.IsNullOrEmpty(codeUtilisateur) ? DBNull.Value : (object)codeUtilisateur);
+                        insertCmd.Parameters.AddWithValue("@Salt", salt);
+
+                        int lignesAjoutees = insertCmd.ExecuteNonQuery();
+
+                        if (lignesAjoutees > 0)
+                            return true;
+                        else
+                        {
+                            messageErreur = "L'utilisateur n'a pas pu être créé.";
+                            return false;
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                messageErreur = "Erreur lors de la création de compte : " + ex.Message;
+                return false;
+            }
+        }
+
+
+
+        /// <summary>
+        /// Permet de créer un SALT
+        /// </summary>
+        /// <returns></returns>
+        /// * @author Valdess
+        public static byte[] CreerSALT()
+        {
+            byte[] salt = new byte[16];
+            RandomNumberGenerator saltGenere = RandomNumberGenerator.Create();
+            saltGenere.GetBytes(salt);
+            return salt;
+        }
+
+        /// <summary>
+        /// Permet de hacher un mot de passe
+        /// </summary>
+        /// <param name="pChaine"></param>
+        /// <param name="pSalt"></param>
+        /// <returns></returns>
+        /// * @author Valdess
+        public static byte[] HacherMotDePasse(string pChaine, byte[] pSalt)
+        {
+            using (var argon2 = new Argon2id(Encoding.UTF8.GetBytes(pChaine)))
+            {
+                argon2.Salt = pSalt;
+                argon2.DegreeOfParallelism = 4;
+                argon2.MemorySize = 65536;
+                argon2.Iterations = 3;
+
+                return argon2.GetBytes(32);
+            }
+        }
+
+        /// <summary>
+        /// Permet de vérifier si le mot de passe correspond à celui de l'utilisateur
+        /// </summary>
+        /// <param name="pChaine"></param>
+        /// <param name="pSalt"></param>
+        /// <param name="pMotDePasseDicoUtilisateur"></param>
+        /// <returns></returns>
+        public static bool EstMotDePasseCorrespond(string pChaine, byte[] pSalt, byte[] pMotDePasseDicoUtilisateur)
+        {
+            return pMotDePasseDicoUtilisateur.SequenceEqual(HacherMotDePasse(pChaine, pSalt));
+        }
+
+        /// <summary>
+        /// Permet de vérifier si l'utilisateur existe déjà dans la base de données
+        /// </summary>
+        /// <param name="nomUtilisateur"></param>
+        /// <returns></returns>
+        public static bool UtilisateurExisteDeja(string nomUtilisateur, MySqlConnection connection)
+        {
+            try
+            {
+                string requete = "SELECT COUNT(*) FROM Utilisateurs WHERE NomUtilisateur = @Nom";
+                using (MySqlCommand command = new MySqlCommand(requete, connection))
+                {
+                    command.Parameters.AddWithValue("@Nom", nomUtilisateur);
+                    long nb = (long)command.ExecuteScalar();
+                    return nb > 0;
+                }
+            }
+            catch (Exception ex)
+            {
+                // En cas d’erreur, on suppose que l’utilisateur n’existe pas, mais tu peux aussi logger cette erreur
+                Console.WriteLine("Erreur dans UtilisateurExisteDeja: " + ex.Message);
+                return false;
+            }
+        }
+
+
         /// <summary>
         /// Permet d'obtenir liste des catégories provenant de la base de données triée par nom croissant
         /// </summary>
@@ -383,7 +519,7 @@ namespace ApplicationGestionProduitCosmetique.Classes
         /// * @author Valdess
         public static Produit ObtenirProduit(string code)
         {
-            Produit produit = null;
+            Produit? produit = null;
 
             MySqlConnection cn = CreerConnection();
 
@@ -754,86 +890,7 @@ namespace ApplicationGestionProduitCosmetique.Classes
             return factures;
         }
 
-        public static bool CreerCompte(string nom, string motDePasse, string code, RoleUtilisateur role, out string messageErreur)
-        {
-            MySqlConnection cn = CreerConnection();
-            try
-            {
-                cn.Open();
-
- 
-                // Vérifier si le compte existe déjà
-                if (CompteExiste(nom))
-                {
-                    messageErreur = "Un compte avec ce nom existe déjà.";
-                    return false;
-                }
-
-                // Si Vendeur/Manager → vérifier le code spécial
-                if ((role == RoleUtilisateur.Vendeur || role == RoleUtilisateur.Manager) && code != "SECRET123")
-                {
-                    messageErreur = $"Code invalide pour la création d'un compte {role.ToString().ToLower()}.";
-                    return false;
-                }
-
-                // Hachage du mot de passe
-                string motDePasseHache = HacherMotDePasse(motDePasse);
-
-                // Insertion dans la base de données SQLite
-                using (MySqlConnection connection = CreerConnection())
-                {
-                    connection.Open();
-                    MySqlCommand cmd = new MySqlCommand("INSERT INTO utilisateurs (nom, mot_de_passe, role, code) VALUES (@nom, @motDePasse, @role, @code)", connection);
-                    cmd.Parameters.AddWithValue("@nom", nom);
-                    cmd.Parameters.AddWithValue("@motDePasse", motDePasseHache);
-                    cmd.Parameters.AddWithValue("@role", role.ToString());
-                    cmd.Parameters.AddWithValue("@code", (role == RoleUtilisateur.Vendeur || role == RoleUtilisateur.Manager) ? code : DBNull.Value);
-                    cmd.ExecuteNonQuery();
-                }
-
-                messageErreur = null;
-                return true;
-            }
-            catch (Exception ex)
-            {
-                messageErreur = $"Erreur lors de la création du compte : {ex.Message}";
-                Console.WriteLine(ex);
-                return false;
-            }
-        }
-
-        private static bool CompteExiste(string nom)
-        {
-            using (MySqlConnection connection = CreerConnection())
-            {
-                connection.Open();
-                MySqlCommand cmd = new MySqlCommand("SELECT COUNT(*) FROM utilisateurs WHERE nom = @nom", connection);
-                cmd.Parameters.AddWithValue("@nom", nom);
-                long compteExistant = (long)cmd.ExecuteScalar();
-                return compteExistant > 0;
-            }
-        }
-        private static string HacherMotDePasse(string motDePasse)
-        {
-            using (var sha256 = SHA256.Create())
-            {
-                var bytes = Encoding.UTF8.GetBytes(motDePasse);
-                var hash = sha256.ComputeHash(bytes);
-                return Convert.ToBase64String(hash);
-            }
-        }
-
-        ///// <summary>
-        ///// Hashage sécurisé du mot de passe.
-        ///// </summary>
-        //private static string HasherMotDePasse(string motDePasse)
-        //{
-        //    using (var sha256 = System.Security.Cryptography.SHA256.Create())
-        //    {
-        //        byte[] bytes = sha256.ComputeHash(System.Text.Encoding.UTF8.GetBytes(motDePasse));
-        //        return Convert.ToBase64String(bytes);
-        //    }
-        //}
+        
     }
 }
 
