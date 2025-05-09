@@ -466,7 +466,7 @@ namespace ApplicationGestionProduitCosmetique.Classes
             }
             catch (Exception ex)
             {
-                // En cas d’erreur, on suppose que l’utilisateur n’existe pas, mais tu peux aussi logger cette erreur
+               
                 Console.WriteLine("Erreur dans UtilisateurExisteDeja: " + ex.Message);
                 return false;
             }
@@ -546,7 +546,6 @@ namespace ApplicationGestionProduitCosmetique.Classes
                     uint idProduit = dr.GetUInt32(0);
                     string codeProduit = dr.GetString(1);
                     string nomProduit = dr.GetString(2);
-                    //decimal prix = dr.GetDecimal(3);
                     uint idCategorie = dr.GetUInt32(3);
                     int prixInt = dr.GetInt32(4);
                     decimal prix = (decimal)prixInt;
@@ -867,10 +866,10 @@ namespace ApplicationGestionProduitCosmetique.Classes
         {
             List<Facture> factures = new List<Facture>();
 
-            using (MySqlConnection cn = CreerConnection()) // <--- cn et non connexion
+            using (MySqlConnection cn = CreerConnection()) 
             {
                 string requete = "SELECT Id, DateCreation, MontantTotal FROM Factures ORDER BY DateCreation DESC";
-                MySqlCommand commande = new MySqlCommand(requete, cn); // <--- cn ici aussi
+                MySqlCommand commande = new MySqlCommand(requete, cn); 
                 cn.Open();
                 MySqlDataReader lecteur = commande.ExecuteReader();
 

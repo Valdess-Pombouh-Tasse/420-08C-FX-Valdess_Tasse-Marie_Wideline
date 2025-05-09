@@ -44,6 +44,7 @@
     <None Remove="Resources\Videos\video1.mp4" />
     <None Remove="Resources\Videos\video2.png" />
     <None Remove="Resources\Videos\video3.mp4" />
+    <None Remove="Resources\Videos\VideoFianleprojet.mp4" />
   </ItemGroup>
 
   <ItemGroup>
@@ -104,10 +105,10 @@
     <Content Include="Resources\sons\son.wav">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Resources\Videos\video1.mp4">
+    <Content Include="Resources\Videos\video3.mp4">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Resources\Videos\video3.mp4">
+    <Content Include="Resources\Videos\VideoFianleprojet.mp4">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

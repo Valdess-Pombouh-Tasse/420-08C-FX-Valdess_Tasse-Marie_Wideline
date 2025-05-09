@@ -58,19 +58,7 @@ namespace ApplicationGestionProduitCosmetique.Views
             }
         }
 
-        //public Factures(Facture facture)
-        //{
-        //    InitializeComponent();
-        //    factureActuelle = facture;
-        //    AfficherFacture();
-        //}
-
-        //private void AfficherFacture()
-        //{
-        //    List<Facture> liste = new List<Facture>();
-        //    liste.Add(factureActuelle);
-        //    lstFactures.ItemsSource = liste;
-        //}
+       
 
         private void BtnEnvoyerEmail_Click(object sender, RoutedEventArgs e)
         {
@@ -81,11 +69,11 @@ namespace ApplicationGestionProduitCosmetique.Views
             }
 
             string email = Microsoft.VisualBasic.Interaction.InputBox(
-                "Entrez votre adresse email pour recevoir la facture :", "Envoi de la facture");
+                "Entrez votre courriel pour recevoir la facture :", "Envoi de la facture");
 
             if (string.IsNullOrWhiteSpace(email))
             {
-                MessageBox.Show("Adresse email invalide.", "Cosmetic Shop", MessageBoxButton.OK, MessageBoxImage.Warning);
+                MessageBox.Show("courriel invalide.", "Cosmetic Shop", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
 

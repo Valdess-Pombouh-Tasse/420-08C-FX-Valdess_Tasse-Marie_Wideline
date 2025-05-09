@@ -45,20 +45,36 @@
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                     <StackPanel Width="350">
                         <TextBlock FontSize="24" FontWeight="Bold" Text="Bienvenue sur Cosmetic Shop"
-                                   Margin="0,0,0,15" Foreground="#333"/>
+                   Margin="0,0,0,15" Foreground="#333"/>
                         <TextBlock TextWrapping="Wrap"
-                                   Text="Votre boutique dédiée aux produits cosmétiques adaptés à chaque type de peau. Découvrez nos gammes variées et prenez soin de vous avec des produits de qualité."
-                                   Foreground="#666"/>
+                   Text="Votre boutique dédiée aux produits cosmétiques adaptés à chaque type de peau. Découvrez nos gammes variées et prenez soin de vous avec des produits de qualité."
+                   Foreground="#666"/>
                     </StackPanel>
 
+                    <!-- Première vidéo -->
                     <MediaElement Name="videoPlayer" Width="400" Height="300" Source="pack://siteoforigin:,,,/Resources/Videos/video3.mp4"
-                                  LoadedBehavior="Play" UnloadedBehavior="Stop" Stretch="UniformToFill" Margin="20,0,0,0" Opacity="0">
+                  LoadedBehavior="Play" UnloadedBehavior="Stop" Stretch="UniformToFill" Margin="15,0,0,0" Opacity="0">
                         <MediaElement.Triggers>
                             <EventTrigger RoutedEvent="MediaElement.Loaded">
                                 <BeginStoryboard>
                                     <Storyboard>
                                         <DoubleAnimation Storyboard.TargetProperty="Opacity"
-                                                         From="0" To="1" Duration="0:0:1"/>
+                                         From="0" To="1" Duration="0:0:1"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </EventTrigger>
+                        </MediaElement.Triggers>
+                    </MediaElement>
+
+                    <!-- Deuxième vidéo -->
+                    <MediaElement Name="videoPlayer2" Width="400" Height="300" Source="pack://siteoforigin:,,,/Resources/Videos/VideoFianleprojet.mp4"
+                  LoadedBehavior="Play" UnloadedBehavior="Stop" Stretch="UniformToFill" Margin="15,0,0,0" Opacity="1" MediaFailed="videoPlayer2_MediaFailed">
+                        <MediaElement.Triggers>
+                            <EventTrigger RoutedEvent="MediaElement.Loaded">
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetProperty="Opacity"
+                                         From="0" To="1" Duration="0:0:1"/>
                                     </Storyboard>
                                 </BeginStoryboard>
                             </EventTrigger>

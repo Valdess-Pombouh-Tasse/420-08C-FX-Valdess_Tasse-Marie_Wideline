@@ -23,7 +23,11 @@ namespace ApplicationGestionProduitCosmetique
             InitializeComponent();
         }
 
-        
+        private void videoPlayer2_MediaFailed(object sender, ExceptionRoutedEventArgs e)
+        {
+            MessageBox.Show("La vidéo n'a pas pu être chargée : " + e.ErrorException.Message);
+        }
+
         private void btnConnexion_Click(object sender, RoutedEventArgs e)
         {
             monContentControl.Content = new FormConnexion();

@@ -34,9 +34,28 @@
                             <TextBlock Text="{Binding DateFacture, StringFormat='Date : {0:dd/MM/yyyy}'}" FontSize="12" Foreground="Gray"/>
                             <TextBlock Text="{Binding NomClient}" FontSize="13" Foreground="Black"/>
                             <TextBlock Text="{Binding MontantTotalFixe, StringFormat='Total : {0:C2}'}" FontSize="13" Foreground="DarkGreen"/>
+
+                            <!-- Liste des produits commandés -->
+                            <ItemsControl ItemsSource="{Binding ProduitsFacture}">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <StackPanel Orientation="Horizontal"/>
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Margin="5" Width="100">
+                                            <Image Source="{Binding Produit.Image}" Width="60" Height="60" />
+                                            <TextBlock Text="{Binding Produit.Nom}" FontSize="10" TextWrapping="Wrap" />
+                                            <TextBlock Text="{Binding Quantite, StringFormat='x{0}'}" FontSize="10" Foreground="Gray" />
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
                         </StackPanel>
                     </Border>
                 </DataTemplate>
+
             </ListBox.ItemTemplate>
         </ListBox>
 
