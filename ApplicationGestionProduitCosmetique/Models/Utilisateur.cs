@@ -30,7 +30,7 @@ namespace ApplicationGestionProduitCosmetique.Models
         /// <summary>
         /// Nom de l'utilisateur
         /// </summary>
-        public string? NomUtilisateur
+        public string NomUtilisateur
         {
             get { return _nomUtilisateur; }
             set

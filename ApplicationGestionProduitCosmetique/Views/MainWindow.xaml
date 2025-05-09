@@ -5,8 +5,39 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ApplicationGestionProduitCosmetique"
         mc:Ignorable="d"
+        Title="Cosmetic Shop" Height="700" Width="900" Background="Pink"
+        Loaded="Window_Loaded" Effect="{Binding WindowState, ElementName=window}" WindowState="Maximized">
 
-        Title="Cosmetic Shop" Height="700" Width="900" Background="Pink" Loaded="Window_Loaded" Effect="{Binding WindowState, ElementName=window}" WindowState="Maximized">
+    <Window.Resources>
+        <Style x:Key="BoutonVideoCosmetique" TargetType="Button">
+            <Setter Property="Background" Value="#FFF5E6F0"/>
+            <Setter Property="Foreground" Value="#80003C"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Padding" Value="10,6"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Width" Value="180"/>
+            <Setter Property="Height" Value="60"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" CornerRadius="30"
+                                Effect="{DynamicResource DropShadowEffect}" Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#FFEBD0E6"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <DropShadowEffect x:Key="DropShadowEffect" BlurRadius="8" ShadowDepth="2" Color="#66000000"/>
+    </Window.Resources>
 
     <Grid>
         <Grid.ColumnDefinitions>
@@ -45,36 +76,21 @@
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                     <StackPanel Width="350">
                         <TextBlock FontSize="24" FontWeight="Bold" Text="Bienvenue sur Cosmetic Shop"
-                   Margin="0,0,0,15" Foreground="#333"/>
+                                   Margin="0,0,0,15" Foreground="#333"/>
                         <TextBlock TextWrapping="Wrap"
-                   Text="Votre boutique dédiée aux produits cosmétiques adaptés à chaque type de peau. Découvrez nos gammes variées et prenez soin de vous avec des produits de qualité."
-                   Foreground="#666"/>
+                                   Text="Votre boutique dédiée aux produits cosmétiques adaptés à chaque type de peau. Découvrez nos gammes variées et prenez soin de vous avec des produits de qualité."
+                                   Foreground="#666"/>
                     </StackPanel>
 
                     <!-- Première vidéo -->
                     <MediaElement Name="videoPlayer" Width="400" Height="300" Source="pack://siteoforigin:,,,/Resources/Videos/video3.mp4"
-                  LoadedBehavior="Play" UnloadedBehavior="Stop" Stretch="UniformToFill" Margin="15,0,0,0" Opacity="0">
+                                  LoadedBehavior="Play" UnloadedBehavior="Stop" Stretch="UniformToFill" Margin="15,0,0,0" Opacity="0">
                         <MediaElement.Triggers>
                             <EventTrigger RoutedEvent="MediaElement.Loaded">
                                 <BeginStoryboard>
                                     <Storyboard>
                                         <DoubleAnimation Storyboard.TargetProperty="Opacity"
-                                         From="0" To="1" Duration="0:0:1"/>
-                                    </Storyboard>
-                                </BeginStoryboard>
-                            </EventTrigger>
-                        </MediaElement.Triggers>
-                    </MediaElement>
-
-                    <!-- Deuxième vidéo -->
-                    <MediaElement Name="videoPlayer2" Width="400" Height="300" Source="pack://siteoforigin:,,,/Resources/Videos/VideoFianleprojet.mp4"
-                  LoadedBehavior="Play" UnloadedBehavior="Stop" Stretch="UniformToFill" Margin="15,0,0,0" Opacity="1" MediaFailed="videoPlayer2_MediaFailed">
-                        <MediaElement.Triggers>
-                            <EventTrigger RoutedEvent="MediaElement.Loaded">
-                                <BeginStoryboard>
-                                    <Storyboard>
-                                        <DoubleAnimation Storyboard.TargetProperty="Opacity"
-                                         From="0" To="1" Duration="0:0:1"/>
+                                                         From="0" To="1" Duration="0:0:1"/>
                                     </Storyboard>
                                 </BeginStoryboard>
                             </EventTrigger>
@@ -137,7 +153,14 @@
             </StackPanel>
         </Grid>
 
-        <!-- Ajout du ContentControl pour afficher les UserControls -->
-        <ContentControl x:Name="monContentControl" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="7" Margin="0"/>
+        <!-- Ajout du ContentControl avec le nouveau bouton stylisé -->
+        <ContentControl x:Name="monContentControl" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="7" Margin="0">
+            <Button Content="🎬 Lancer la Vidéo"
+                    Style="{StaticResource BoutonVideoCosmetique}"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Top"
+                    Margin="125,247,0,0"
+                    Click="Button_Click"/>
+        </ContentControl>
     </Grid>
 </Window>

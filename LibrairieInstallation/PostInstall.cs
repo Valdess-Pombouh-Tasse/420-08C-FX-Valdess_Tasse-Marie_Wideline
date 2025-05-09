@@ -11,7 +11,7 @@ public class PostInstall : Installer
     {
         base.Commit(savedState);
         string targetDir = Context.Parameters["targetdir"];
-        string exePath = Path.Combine(targetDir, "InistalisationBD.exe");
+        string exePath = Path.Combine(targetDir, "InitialisationBD.exe");
         if (File.Exists(exePath))
         {
             System.Diagnostics.Process.Start(exePath);

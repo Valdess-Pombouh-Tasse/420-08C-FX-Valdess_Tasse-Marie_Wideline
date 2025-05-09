@@ -40,7 +40,7 @@
                     <RadioButton Style="{StaticResource menuButton}" Tag="{StaticResource Color1}" Command="{Binding ShowAccueilViewModel}" Checked="RadioButton_Checked">
                         <StackPanel Orientation="Horizontal">
                             <fa:IconImage Icon="Home" Style="{StaticResource menuButtonIcon}" />
-                            <TextBlock Text="Catalogue" Style="{StaticResource menuButtonText}" Foreground="Black"/>
+                            <TextBlock Text="Catalogue" Style="{StaticResource menuButtonText}" Foreground="Blue"/>
                         </StackPanel>
                     </RadioButton>
 
@@ -54,14 +54,14 @@
                     <RadioButton Style="{StaticResource menuButton}" Tag="{StaticResource Color7}" Command="{Binding ShowArticleCommandesViewModel}" Checked="RadioButton_Checked_2">
                         <StackPanel Orientation="Horizontal">
                             <fa:IconImage Icon="ClipboardList" Style="{StaticResource menuButtonIcon}"/>
-                            <TextBlock Text="Articles Commandés" Style="{StaticResource menuButtonText}" Foreground="Black"/>
+                            <TextBlock Text="Articles Commandés" Style="{StaticResource menuButtonText}" Foreground="Blue"/>
                         </StackPanel>
                     </RadioButton>
 
                     <RadioButton Style="{StaticResource menuButton}" Tag="{StaticResource Color8}" Command="{Binding ShowFactureViewModel}" Checked="RadioButton_Checked_3">
                         <StackPanel Orientation="Horizontal">
                             <fa:IconImage Icon="FileInvoice" Style="{StaticResource menuButtonIcon}"/>
-                            <TextBlock Text="Mes factures" Style="{StaticResource menuButtonText}" Foreground="Black"/>
+                            <TextBlock Text="Mes factures" Style="{StaticResource menuButtonText}" Foreground="Blue"/>
                         </StackPanel>
                     </RadioButton>
                 </StackPanel>
@@ -69,7 +69,7 @@
                 <!-- Déconnexion -->
                 <RadioButton Grid.Row="2" Style="{StaticResource menuButton}" Tag="black" Background="AliceBlue" Margin="15,10,20,10" Checked="RadioButton_Checked_4">
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="Déconnexion" Style="{StaticResource menuButtonText}" Foreground="Black"/>
+                        <TextBlock Text="Déconnexion" Style="{StaticResource menuButtonText}" Foreground="Blue"/>
                         <fa:IconImage Icon="SignOut" Style="{StaticResource menuButtonIcon}"/>
                     </StackPanel>
                 </RadioButton>

@@ -33,7 +33,7 @@
         </StackPanel>
 
         <!-- Panier -->
-        <StackPanel Grid.Column="1" Background="#FFF4F4F4" Margin="10,0,-142,-88">
+        <StackPanel Grid.Column="1" Background="#FFF4F4F4" Margin="10,-13,-142,-88">
             <TextBlock Text="🛒 Mon Panier" FontSize="18" FontWeight="Bold" Margin="0 0 0 10"/>
 
             <Border Height="390" BorderBrush="LightGray" BorderThickness="1" CornerRadius="6" Margin="10">

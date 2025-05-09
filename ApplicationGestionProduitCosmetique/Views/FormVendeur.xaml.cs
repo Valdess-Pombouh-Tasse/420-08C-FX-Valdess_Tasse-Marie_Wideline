@@ -28,10 +28,13 @@ namespace ApplicationGestionProduitCosmetique.Views
             get { return _produits; }
             set { _produits = value; }
         }
-        public FormVendeur()
+
+        private int _idVendeur;
+        public FormVendeur(int idVendeur)
         {
             InitializeComponent();
-           
+            _idVendeur = idVendeur;
+
         }
 
 

@@ -50,7 +50,7 @@ namespace ApplicationGestionProduitCosmetique.Views
                 valide = false;
             }
 
-            string? roleSelectionne = (cmbTypeUtilisateur.SelectedItem as ComboBoxItem)?.Content.ToString();
+            string roleSelectionne = (cmbTypeUtilisateur.SelectedItem as ComboBoxItem)?.Content.ToString();
             if ((roleSelectionne == "Vendeur" || roleSelectionne == "Manager") && string.IsNullOrWhiteSpace(txtCode.Text))
             {
                 AfficherErreur(txtCode, lblErreurCode, "Le code est requis.");
@@ -78,9 +78,11 @@ namespace ApplicationGestionProduitCosmetique.Views
                 string nom = txtNom.Text.Trim();
                 string motDePasse = txtPassword.Password.Trim();
                 string codeUtilisateur = txtCode.Text.Trim();
-                string? roleSelectionne = (cmbTypeUtilisateur.SelectedItem as ComboBoxItem)?.Content.ToString();
+                string roleSelectionne = (cmbTypeUtilisateur.SelectedItem as ComboBoxItem)?.Content.ToString();
 
-                if (GestionCompteUtilisateur.ConnexionUtilisateur(nom, motDePasse, codeUtilisateur, out RoleUtilisateur role, out string messageErreur))
+                //if (GestionCompteUtilisateur.ConnexionUtilisateur(nom, motDePasse, codeUtilisateur, out RoleUtilisateur role, out int idUtilisateur, out string messageErreur))
+                //{
+                    if (GestionCompteUtilisateur.ConnexionUtilisateur(nom, motDePasse, codeUtilisateur, out RoleUtilisateur role, out int idUtilisateur, out string messageErreur))
                 {
                     if (role.ToString() != roleSelectionne)
                     {
@@ -99,17 +101,17 @@ namespace ApplicationGestionProduitCosmetique.Views
                     }
                     else if (role == RoleUtilisateur.Vendeur)
                     {
-                        form = new FormVendeur();
+                        form = new FormVendeur(idUtilisateur);
                     }
                     else if (role == RoleUtilisateur.Manager)
                     {
                         form = new FormUtilisateur();
                     }
 
-                    if(control != null)
+                    if (control != null)
                     {
                         var containerWindow = new MainWindow();
-                        containerWindow.monContentControl.Content = control; 
+                        containerWindow.monContentControl.Content = control;
                         containerWindow.WindowState = WindowState.Maximized;
                         containerWindow.Show();
                         Window.GetWindow(this)?.Close();

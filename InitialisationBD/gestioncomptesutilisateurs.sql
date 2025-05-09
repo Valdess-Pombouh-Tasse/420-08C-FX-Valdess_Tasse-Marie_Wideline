@@ -2,10 +2,10 @@
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Hôte : 127.0.0.1:3306
--- Généré le : ven. 11 avr. 2025 à 17:10
--- Version du serveur : 8.3.0
--- Version de PHP : 8.2.18
+-- Host: 127.0.0.1:3306
+-- Generation Time: May 09, 2025 at 05:20 PM
+-- Server version: 8.3.0
+-- PHP Version: 8.2.18
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,16 +18,17 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Base de données : `gestioncomptesutilisateurs`
+-- Database: `cosmeticshop`
 --
+CREATE DATABASE IF NOT EXISTS `cosmeticshop` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
+USE `cosmeticshop`;
 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `categories`
+-- Table structure for table `categories`
 --
 
-DROP TABLE IF EXISTS `categories`;
 CREATE TABLE IF NOT EXISTS `categories` (
   `IDCategorie` int NOT NULL AUTO_INCREMENT,
   `NomCategorie` varchar(100) NOT NULL,
@@ -35,7 +36,7 @@ CREATE TABLE IF NOT EXISTS `categories` (
 ) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
--- Déchargement des données de la table `categories`
+-- Dumping data for table `categories`
 --
 
 INSERT INTO `categories` (`IDCategorie`, `NomCategorie`) VALUES
@@ -45,10 +46,9 @@ INSERT INTO `categories` (`IDCategorie`, `NomCategorie`) VALUES
 -- --------------------------------------------------------
 
 --
--- Structure de la table `commandes`
+-- Table structure for table `commandes`
 --
 
-DROP TABLE IF EXISTS `commandes`;
 CREATE TABLE IF NOT EXISTS `commandes` (
   `CommandeID` int NOT NULL AUTO_INCREMENT,
   `ProduitID` int DEFAULT NULL,
@@ -63,10 +63,9 @@ CREATE TABLE IF NOT EXISTS `commandes` (
 -- --------------------------------------------------------
 
 --
--- Structure de la table `factures`
+-- Table structure for table `factures`
 --
 
-DROP TABLE IF EXISTS `factures`;
 CREATE TABLE IF NOT EXISTS `factures` (
   `Id` int NOT NULL AUTO_INCREMENT,
   `MontantSousTotal` decimal(10,2) DEFAULT NULL,
@@ -75,10 +74,10 @@ CREATE TABLE IF NOT EXISTS `factures` (
   `MontantTotal` decimal(10,2) DEFAULT NULL,
   `DateCreation` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`Id`)
-) ENGINE=MyISAM AUTO_INCREMENT=18 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=32 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
--- Déchargement des données de la table `factures`
+-- Dumping data for table `factures`
 --
 
 INSERT INTO `factures` (`Id`, `MontantSousTotal`, `MontantTPS`, `MontantTVQ`, `MontantTotal`, `DateCreation`) VALUES
@@ -98,15 +97,28 @@ INSERT INTO `factures` (`Id`, `MontantSousTotal`, `MontantTPS`, `MontantTVQ`, `M
 (14, 38.00, 1.90, 3.79, 43.69, '2025-04-11 03:43:45'),
 (15, 9.00, 0.45, 0.90, 10.35, '2025-04-11 03:43:45'),
 (16, 24.00, 1.20, 2.39, 27.59, '2025-04-11 03:43:45'),
-(17, 96.00, 4.80, 9.58, 110.38, '2025-04-11 10:19:52');
+(17, 96.00, 4.80, 9.58, 110.38, '2025-04-11 10:19:52'),
+(18, 38.00, 1.90, 3.79, 43.69, '2025-04-11 15:09:57'),
+(19, 38.00, 1.90, 3.79, 43.69, '2025-04-11 15:10:28'),
+(20, 38.00, 1.90, 3.79, 43.69, '2025-04-11 15:12:56'),
+(21, 38.00, 1.90, 3.79, 43.69, '2025-04-11 15:20:32'),
+(22, 38.00, 1.90, 3.79, 43.69, '2025-04-11 15:23:22'),
+(23, 38.00, 1.90, 3.79, 43.69, '2025-04-11 15:40:05'),
+(24, 24.00, 1.20, 2.39, 27.59, '2025-04-11 15:40:18'),
+(25, 62.00, 3.10, 6.18, 71.28, '2025-04-30 19:54:14'),
+(26, 24.00, 1.20, 2.39, 27.59, '2025-04-30 20:06:16'),
+(27, 62.00, 3.10, 6.18, 71.28, '2025-05-02 15:27:48'),
+(28, 43.00, 2.15, 4.29, 49.44, '2025-05-08 22:37:37'),
+(29, 137.00, 6.85, 13.67, 157.52, '2025-05-08 23:08:41'),
+(30, 39.00, 1.95, 3.89, 44.84, '2025-05-09 10:34:56'),
+(31, 28.00, 1.40, 2.79, 32.19, '2025-05-09 10:35:37');
 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `paiement`
+-- Table structure for table `paiement`
 --
 
-DROP TABLE IF EXISTS `paiement`;
 CREATE TABLE IF NOT EXISTS `paiement` (
   `IdPaiement` int NOT NULL AUTO_INCREMENT,
   `IdVendeur` int NOT NULL,
@@ -119,18 +131,17 @@ CREATE TABLE IF NOT EXISTS `paiement` (
 -- --------------------------------------------------------
 
 --
--- Structure de la table `produit`
+-- Table structure for table `produit`
 --
 
-DROP TABLE IF EXISTS `produit`;
 CREATE TABLE IF NOT EXISTS `produit` (
   `IdProduit` int NOT NULL AUTO_INCREMENT,
-  `Code` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `Nom` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `Code` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `Nom` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `Prix` decimal(10,2) NOT NULL,
-  `Image` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `Image` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `IdCategorie` int NOT NULL,
-  `Description` text COLLATE utf8mb4_unicode_ci,
+  `Description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
   `Quantite` int NOT NULL DEFAULT '0',
   `IdVendeur` int DEFAULT NULL,
   PRIMARY KEY (`IdProduit`),
@@ -138,10 +149,10 @@ CREATE TABLE IF NOT EXISTS `produit` (
   UNIQUE KEY `Code_UNIQUE` (`Code`),
   KEY `idx_IdCategorie` (`IdCategorie`),
   KEY `fk_vendeur` (`IdVendeur`)
-) ;
+) ENGINE=MyISAM AUTO_INCREMENT=20 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
--- Déchargement des données de la table `produit`
+-- Dumping data for table `produit`
 --
 
 INSERT INTO `produit` (`IdProduit`, `Code`, `Nom`, `Prix`, `Image`, `IdCategorie`, `Description`, `Quantite`, `IdVendeur`) VALUES
@@ -168,10 +179,9 @@ INSERT INTO `produit` (`IdProduit`, `Code`, `Nom`, `Prix`, `Image`, `IdCategorie
 -- --------------------------------------------------------
 
 --
--- Structure de la table `produitsfactures`
+-- Table structure for table `produitsfactures`
 --
 
-DROP TABLE IF EXISTS `produitsfactures`;
 CREATE TABLE IF NOT EXISTS `produitsfactures` (
   `Id` int NOT NULL AUTO_INCREMENT,
   `IdFacture` int DEFAULT NULL,
@@ -181,10 +191,10 @@ CREATE TABLE IF NOT EXISTS `produitsfactures` (
   PRIMARY KEY (`Id`),
   KEY `IdFacture` (`IdFacture`),
   KEY `IdProduit` (`IdProduit`)
-) ENGINE=MyISAM AUTO_INCREMENT=41 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=71 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
--- Déchargement des données de la table `produitsfactures`
+-- Dumping data for table `produitsfactures`
 --
 
 INSERT INTO `produitsfactures` (`Id`, `IdFacture`, `IdProduit`, `PrixUnitaire`, `Quantite`) VALUES
@@ -227,15 +237,44 @@ INSERT INTO `produitsfactures` (`Id`, `IdFacture`, `IdProduit`, `PrixUnitaire`, 
 (37, 16, 7, 24.00, 1),
 (38, 17, 7, 24.00, 2),
 (39, 17, 3, 14.00, 1),
-(40, 17, 14, 34.00, 1);
+(40, 17, 14, 34.00, 1),
+(41, 18, 3, 14.00, 1),
+(42, 18, 7, 24.00, 1),
+(43, 19, 7, 24.00, 1),
+(44, 19, 3, 14.00, 1),
+(45, 20, 3, 14.00, 1),
+(46, 20, 7, 24.00, 1),
+(47, 21, 3, 14.00, 1),
+(48, 21, 7, 24.00, 1),
+(49, 22, 7, 24.00, 1),
+(50, 22, 3, 14.00, 1),
+(51, 23, 7, 24.00, 1),
+(52, 23, 3, 14.00, 1),
+(53, 24, 7, 24.00, 1),
+(54, 25, 3, 14.00, 1),
+(55, 25, 7, 24.00, 2),
+(56, 26, 7, 24.00, 1),
+(57, 27, 3, 14.00, 1),
+(58, 27, 7, 24.00, 2),
+(59, 28, 7, 24.00, 1),
+(60, 28, 1, 19.00, 1),
+(61, 29, 3, 14.00, 2),
+(62, 29, 7, 24.00, 1),
+(63, 29, 14, 34.00, 1),
+(64, 29, 8, 12.00, 3),
+(65, 29, 11, 15.00, 1),
+(66, 30, 9, 5.00, 1),
+(67, 30, 19, 22.00, 1),
+(68, 30, 8, 12.00, 1),
+(69, 31, 1, 19.00, 1),
+(70, 31, 5, 9.00, 1);
 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `teint`
+-- Table structure for table `teint`
 --
 
-DROP TABLE IF EXISTS `teint`;
 CREATE TABLE IF NOT EXISTS `teint` (
   `TeintID` int NOT NULL,
   `Code` varchar(10) NOT NULL,
@@ -246,7 +285,7 @@ CREATE TABLE IF NOT EXISTS `teint` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
--- Déchargement des données de la table `teint`
+-- Dumping data for table `teint`
 --
 
 INSERT INTO `teint` (`TeintID`, `Code`, `TypePeau`) VALUES
@@ -257,47 +296,53 @@ INSERT INTO `teint` (`TeintID`, `Code`, `TypePeau`) VALUES
 -- --------------------------------------------------------
 
 --
--- Structure de la table `utilisateurs`
+-- Table structure for table `utilisateurs`
 --
 
-DROP TABLE IF EXISTS `utilisateurs`;
 CREATE TABLE IF NOT EXISTS `utilisateurs` (
   `ID` int NOT NULL AUTO_INCREMENT,
   `CodeUtilisateur` varchar(10) DEFAULT NULL,
   `NomUtilisateur` varchar(50) DEFAULT NULL,
   `MotDePasse` varchar(50) DEFAULT NULL,
   `Role` enum('Client','Vendeur','Manager') DEFAULT NULL,
+  `Salt` blob,
   PRIMARY KEY (`ID`),
   UNIQUE KEY `CodeUtilisateur` (`CodeUtilisateur`),
   UNIQUE KEY `NomUtilisateur` (`NomUtilisateur`)
-) ENGINE=MyISAM AUTO_INCREMENT=22 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=28 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
--- Déchargement des données de la table `utilisateurs`
+-- Dumping data for table `utilisateurs`
 --
 
-INSERT INTO `utilisateurs` (`ID`, `CodeUtilisateur`, `NomUtilisateur`, `MotDePasse`, `Role`) VALUES
-(1, 'CLI001', 'AliceDupont', 'client1', 'Client'),
-(2, 'CLI002', 'JeanMartin', 'client2', 'Client'),
-(3, 'CLI003', 'SophieDurand', 'client3', 'Client'),
-(4, 'CLI004', 'MarcBernard', 'client4', 'Client'),
-(5, 'CLI005', 'EmmaMoreau', 'client5', 'Client'),
-(6, 'CLI006', 'LucasFournier', 'client6', 'Client'),
-(7, 'CLI007', 'ChloeGirard', 'client7', 'Client'),
-(8, 'CLI008', 'NoahLemoine', 'client8', 'Client'),
-(9, 'CLI009', 'LeaRousseau', 'client9', 'Client'),
-(10, 'CLI010', 'HugoBlanc', 'client10', 'Client'),
-(11, 'MAN001', 'SuperManager', 'admin123', 'Manager'),
-(12, 'VEN001', 'PaulDurand', 'vendeur1', 'Vendeur'),
-(13, 'VEN002', 'NadiaLeroy', 'vendeur2', 'Vendeur'),
-(14, 'VEN003', 'KarimBenoit', 'vendeur3', 'Vendeur'),
-(15, 'VEN004', 'SoniaMarchand', 'vendeur4', 'Vendeur'),
-(16, 'VEN005', 'JulienPerrot', 'vendeur5', 'Vendeur'),
-(17, 'VEN006', 'LauraDubois', 'vendeur6', 'Vendeur'),
-(18, 'VEN007', 'MehdiRoche', 'vendeur7', 'Vendeur'),
-(19, 'VEN008', 'CelineLemoine', 'vendeur8', 'Vendeur'),
-(20, 'VEN009', 'AntoineGiraud', 'vendeur9', 'Vendeur'),
-(21, 'VEN010', 'SarahBarbier', 'vendeur10', 'Vendeur');
+INSERT INTO `utilisateurs` (`ID`, `CodeUtilisateur`, `NomUtilisateur`, `MotDePasse`, `Role`, `Salt`) VALUES
+(1, 'CLI001', 'AliceDupont', 'client1', 'Client', NULL),
+(2, 'CLI002', 'JeanMartin', 'client2', 'Client', NULL),
+(3, 'CLI003', 'SophieDurand', 'client3', 'Client', NULL),
+(4, 'CLI004', 'MarcBernard', 'client4', 'Client', NULL),
+(5, 'CLI005', 'EmmaMoreau', 'client5', 'Client', NULL),
+(6, 'CLI006', 'LucasFournier', 'client6', 'Client', NULL),
+(7, 'CLI007', 'ChloeGirard', 'client7', 'Client', NULL),
+(8, 'CLI008', 'NoahLemoine', 'client8', 'Client', NULL),
+(9, 'CLI009', 'LeaRousseau', 'client9', 'Client', NULL),
+(10, 'CLI010', 'HugoBlanc', 'client10', 'Client', NULL),
+(11, 'MAN001', 'SuperManager', 'admin123', 'Manager', NULL),
+(12, 'VEN001', 'PaulDurand', 'vendeur1', 'Vendeur', NULL),
+(13, 'VEN002', 'NadiaLeroy', 'vendeur2', 'Vendeur', NULL),
+(14, 'VEN003', 'KarimBenoit', 'vendeur3', 'Vendeur', NULL),
+(15, 'VEN004', 'SoniaMarchand', 'vendeur4', 'Vendeur', NULL),
+(16, 'VEN005', 'JulienPerrot', 'vendeur5', 'Vendeur', NULL),
+(17, 'VEN006', 'LauraDubois', 'vendeur6', 'Vendeur', NULL),
+(18, 'VEN007', 'MehdiRoche', 'vendeur7', 'Vendeur', NULL),
+(19, 'VEN008', 'CelineLemoine', 'vendeur8', 'Vendeur', NULL),
+(20, 'VEN009', 'AntoineGiraud', 'vendeur9', 'Vendeur', NULL),
+(21, 'VEN010', 'SarahBarbier', 'vendeur10', 'Vendeur', NULL),
+(22, NULL, 'Mariano', 'A?&nEq', 'Client', 0x778469a44b15be79da7a663ea84c819b),
+(23, NULL, 'leslie', 'Dӝ', 'Client', 0xe4ce49a2e131cc4494920c9bde2d244c),
+(24, NULL, 'valdess', '1', 'Client', 0x00000000000000000000000000000000),
+(25, NULL, 'audrey', ')', 'Client', 0x5c271209934ba0cc9b7e884b6a51c43e),
+(26, NULL, 'loveline', '', 'Client', 0x5402b0c56366f9274c800de647ab5dfe),
+(27, 'MARIE12', 'marie', '<', 'Vendeur', 0xdb78d1c01687cb31db32b8ebdae67a71);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

@@ -47,6 +47,15 @@ namespace ApplicationGestionProduitCosmetique
         {
 
         }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+
+            FormVideo formVideo = new FormVideo();
+            formVideo.ShowDialog();
+
+
+        }
     }
 }
        

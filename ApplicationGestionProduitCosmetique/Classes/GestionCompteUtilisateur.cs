@@ -269,6 +269,7 @@ namespace ApplicationGestionProduitCosmetique.Classes
                 FermerConnexion(cn);
             }
         }
+
         /// <summary>
         /// Méthode de connexion d'un utilisateur (client, vendeur ou manager).
         /// </summary>
@@ -277,10 +278,11 @@ namespace ApplicationGestionProduitCosmetique.Classes
         /// <param name="role"></param>
         /// <param name="messageErreur"></param>
         /// <returns></returns>
-        public static bool ConnexionUtilisateur(string nom, string motDePasse, string? codeUtilisateur, out RoleUtilisateur role, out string messageErreur)
+        public static bool ConnexionUtilisateur(string nom, string motDePasse, string? codeUtilisateur, out RoleUtilisateur role, out int idUtilisateur, out string messageErreur)
         {
             messageErreur = "";
             role = RoleUtilisateur.Client;
+            idUtilisateur = -1;
 
             try
             {
@@ -289,6 +291,7 @@ namespace ApplicationGestionProduitCosmetique.Classes
                     connection.Open();
 
                     string requeteConnection = "SELECT MotDePasse, Salt, Role FROM Utilisateurs WHERE NomUtilisateur = @Nom";
+                    //string requeteConnection = "SELECT ID, Role FROM Utilisateurs WHERE NomUtilisateur = @Nom AND MotDePasse = @MotDePasse";
 
                     if (!string.IsNullOrEmpty(codeUtilisateur))
                     {
@@ -298,34 +301,40 @@ namespace ApplicationGestionProduitCosmetique.Classes
                     using (MySqlCommand command = new MySqlCommand(requeteConnection, connection))
                     {
                         command.Parameters.AddWithValue("@Nom", nom);
-                      
+
 
                         if (!string.IsNullOrEmpty(codeUtilisateur))
                         {
                             command.Parameters.AddWithValue("@Code", codeUtilisateur);
                         }
 
-                        string result = command.ExecuteScalar() as string;
-                        if (result != null)
+                        using (MySqlDataReader reader = command.ExecuteReader())
                         {
-                            switch (result)
+                            if (reader.Read())
                             {
-                                case "Vendeur":
-                                    role = RoleUtilisateur.Vendeur;
-                                    break;
-                                case "Manager":
-                                    role = RoleUtilisateur.Manager;
-                                    break;
-                                default:
-                                    role = RoleUtilisateur.Client;
-                                    break;
+                                idUtilisateur = reader.GetInt32("ID");
+                                string roleStr = reader.GetString("Role");
+
+                                switch (roleStr)
+                                {
+                                    case "Vendeur":
+                                        role = RoleUtilisateur.Vendeur;
+                                        break;
+                                    case "Manager":
+                                        role = RoleUtilisateur.Manager;
+                                        break;
+                                    default:
+                                        role = RoleUtilisateur.Client;
+                                        break;
+                                }
+
+                                return true;
                             }
-                            return true;
-                        }
-                        else
-                        {
-                            messageErreur = "Nom ou mot de passe incorrect.";
-                            return false;
+                            else
+                            {
+                                messageErreur = "Nom ou mot de passe incorrect.";
+                                return false;
+                            }
                         }
                     }
                 }
@@ -337,7 +346,8 @@ namespace ApplicationGestionProduitCosmetique.Classes
             }
         }
 
-       
+
+
 
 
         /// <summary>
@@ -366,9 +376,7 @@ namespace ApplicationGestionProduitCosmetique.Classes
                         messageErreur = "Ce nom d'utilisateur existe déjà.";
                         return false;
                     }
-
-                    byte[] salt = CreerSALT();
-                    byte[] motDePasseHache = HacherMotDePasse(motDePasse, salt);
+                 
 
                     string insertQuery = @"INSERT INTO Utilisateurs (NomUtilisateur, MotDePasse, Role, CodeUtilisateur, Salt)
                                    VALUES (@Nom, @MotDePasse, @Role, @Code, @Salt)";
@@ -376,10 +384,10 @@ namespace ApplicationGestionProduitCosmetique.Classes
                     using (MySqlCommand insertCmd = new MySqlCommand(insertQuery, connection))
                     {
                         insertCmd.Parameters.AddWithValue("@Nom", nomUtilisateur);
-                        insertCmd.Parameters.AddWithValue("@MotDePasse", motDePasseHache);
+                        insertCmd.Parameters.AddWithValue("@MotDePasse", motDePasse);
                         insertCmd.Parameters.AddWithValue("@Role", role.ToString());
                         insertCmd.Parameters.AddWithValue("@Code", string.IsNullOrEmpty(codeUtilisateur) ? DBNull.Value : (object)codeUtilisateur);
-                        insertCmd.Parameters.AddWithValue("@Salt", salt);
+
 
                         int lignesAjoutees = insertCmd.ExecuteNonQuery();
 
@@ -400,52 +408,6 @@ namespace ApplicationGestionProduitCosmetique.Classes
             }
         }
 
-
-
-        /// <summary>
-        /// Permet de créer un SALT
-        /// </summary>
-        /// <returns></returns>
-        /// * @author Valdess
-        public static byte[] CreerSALT()
-        {
-            byte[] salt = new byte[16];
-            RandomNumberGenerator saltGenere = RandomNumberGenerator.Create();
-            saltGenere.GetBytes(salt);
-            return salt;
-        }
-
-        /// <summary>
-        /// Permet de hacher un mot de passe
-        /// </summary>
-        /// <param name="pChaine"></param>
-        /// <param name="pSalt"></param>
-        /// <returns></returns>
-        /// * @author Valdess
-        public static byte[] HacherMotDePasse(string pChaine, byte[] pSalt)
-        {
-            using (var argon2 = new Argon2id(Encoding.UTF8.GetBytes(pChaine)))
-            {
-                argon2.Salt = pSalt;
-                argon2.DegreeOfParallelism = 4;
-                argon2.MemorySize = 65536;
-                argon2.Iterations = 3;
-
-                return argon2.GetBytes(32);
-            }
-        }
-
-        /// <summary>
-        /// Permet de vérifier si le mot de passe correspond à celui de l'utilisateur
-        /// </summary>
-        /// <param name="pChaine"></param>
-        /// <param name="pSalt"></param>
-        /// <param name="pMotDePasseDicoUtilisateur"></param>
-        /// <returns></returns>
-        public static bool EstMotDePasseCorrespond(string pChaine, byte[] pSalt, byte[] pMotDePasseDicoUtilisateur)
-        {
-            return pMotDePasseDicoUtilisateur.SequenceEqual(HacherMotDePasse(pChaine, pSalt));
-        }
 
         /// <summary>
         /// Permet de vérifier si l'utilisateur existe déjà dans la base de données

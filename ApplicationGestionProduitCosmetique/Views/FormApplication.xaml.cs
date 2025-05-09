@@ -45,6 +45,9 @@ namespace ApplicationGestionProduitCosmetique.Views
             set { _produits = value; }
         }
 
+        /// <summary>
+        /// Constructeur de la classe FormApplication
+        /// </summary>
         public FormApplication()
         {
             InitializeComponent();
@@ -56,11 +59,20 @@ namespace ApplicationGestionProduitCosmetique.Views
             cboCategories.SelectedIndex = listCategories.Count - 1;
         }
 
+        /// <summary>
+        /// Méthode de chargement de la fenêtre
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             AfficherListeProduit();
         }
 
+        /// <summary>
+        /// Méthode pour afficher la liste des produits
+        /// </summary>
+        /// <param name="produits"></param>
         private void AfficherListeProduit(List<Produit> produits = null)
         {
             if (produits == null)
@@ -159,6 +171,11 @@ namespace ApplicationGestionProduitCosmetique.Views
             }
         }
 
+        /// <summary>
+        /// Méthode pour afficher la liste des produits
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ImageProduit_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
 
@@ -215,6 +232,11 @@ namespace ApplicationGestionProduitCosmetique.Views
 
         }
 
+        /// <summary>
+        /// Méthode pour afficher la liste des produits
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnRechercherProduit_Click(object sender, RoutedEventArgs e)
         {
             List<Produit> produits = new List<Produit>();
@@ -256,6 +278,10 @@ namespace ApplicationGestionProduitCosmetique.Views
             }
         }
 
+        /// <summary>
+        /// Méthode pour afficher les produits dans la facture
+        /// </summary>
+        /// <param name="facture"></param>
         public void AfficherProduitDansFacture(Facture facture)
         {
 
@@ -382,6 +408,11 @@ namespace ApplicationGestionProduitCosmetique.Views
             }
         }
 
+        /// <summary>
+        /// Méthode pour augmenter la quantité d'un produit
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnAugmenterQteProduit_Click(object sender, RoutedEventArgs e)
         {
             Button button = (Button)sender;
@@ -404,6 +435,11 @@ namespace ApplicationGestionProduitCosmetique.Views
             AfficherProduitDansFacture(nouvelleFacture);
         }
 
+        /// <summary>
+        /// Méthode pour diminuer la quantité d'un produit
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnDimunuerQteProduit_Click(object sender, RoutedEventArgs e)
         {
             Button button = (Button)sender;
@@ -424,7 +460,11 @@ namespace ApplicationGestionProduitCosmetique.Views
             AfficherProduitDansFacture(nouvelleFacture);
         }
 
-
+        /// <summary>
+        /// Méthode pour payer la facture
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnPayer_Click(object sender, RoutedEventArgs e)
         {
 
@@ -507,7 +547,11 @@ namespace ApplicationGestionProduitCosmetique.Views
 
 
 
-
+        /// <summary>
+        /// Méthode pour réinitialiser la facture
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnNouvelleFacture_Click_1(object sender, RoutedEventArgs e)
         {
             wpProduitPanier.Children.Clear();
@@ -520,6 +564,11 @@ namespace ApplicationGestionProduitCosmetique.Views
             btnPayer.IsEnabled = true;
         }
 
+        /// <summary>
+        /// Méthode pour afficher la liste des produits
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void RadioButton_Checked(object sender, RoutedEventArgs e)
         {
             ArticleCommandes fenetreArticleCommandes = new ArticleCommandes(nouvelleFacture);
@@ -527,6 +576,11 @@ namespace ApplicationGestionProduitCosmetique.Views
 
         }
 
+        /// <summary>
+        /// Méthode pour afficher la liste des produits
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void RadioButton_Checked_2(object sender, RoutedEventArgs e)
         {
             Factures fenetreFactures = new Factures(nouvelleFacture);
