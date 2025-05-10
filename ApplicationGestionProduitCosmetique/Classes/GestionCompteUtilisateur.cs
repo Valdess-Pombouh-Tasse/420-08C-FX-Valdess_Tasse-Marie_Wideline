@@ -290,8 +290,8 @@ namespace ApplicationGestionProduitCosmetique.Classes
                 {
                     connection.Open();
 
-                    string requeteConnection = "SELECT MotDePasse, Salt, Role FROM Utilisateurs WHERE NomUtilisateur = @Nom";
-                    //string requeteConnection = "SELECT ID, Role FROM Utilisateurs WHERE NomUtilisateur = @Nom AND MotDePasse = @MotDePasse";
+                    //string requeteConnection = "SELECT MotDePasse, Role FROM Utilisateurs WHERE NomUtilisateur = @Nom";
+                    string requeteConnection = "SELECT ID, Role FROM Utilisateurs WHERE NomUtilisateur = @Nom AND MotDePasse = @MotDePasse";
 
                     if (!string.IsNullOrEmpty(codeUtilisateur))
                     {
@@ -301,6 +301,7 @@ namespace ApplicationGestionProduitCosmetique.Classes
                     using (MySqlCommand command = new MySqlCommand(requeteConnection, connection))
                     {
                         command.Parameters.AddWithValue("@Nom", nom);
+                        command.Parameters.AddWithValue("@MotDePasse", motDePasse);
 
 
                         if (!string.IsNullOrEmpty(codeUtilisateur))

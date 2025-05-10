@@ -9,12 +9,13 @@ using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows;
 using static ApplicationGestionProduitCosmetique.Views.FormApplication;
+using System.IO;
 
 namespace ApplicationGestionProduitCosmetique.Models
 {
     public static class GestionProduits
     {
-        
+
         public const string APPSETTINGS_FILE = "appsettings.json";
         public static string CONNECTION_STRING = "DefaultConnection";
         public const string IMAGE_PATH = "images:path";
@@ -53,68 +54,6 @@ namespace ApplicationGestionProduitCosmetique.Models
             }
         }
 
-    
-    
-
-        /// <summary>
-        /// Permet d'obtenir un produit à partir de son code
-        /// </summary>
-        /// <param name="code">Code unique du produit</param>
-        /// <returns>Le produit trouvé. Si non null.</returns>
-        /// * @author Valdess
-        public static Produit ObtenirProduit(string code)
-        {
-            Produit? produit = null;
-
-            MySqlConnection cn = CreerConnection();
-
-            try
-            {
-                cn.Open();
-
-                string requete = "SELECT produit.IdProduit,produit.Code,produit.Nom,produit.IdCategorie,produit.Prix,produit.Image, categories.NomCategorie FROM produit INNER JOIN categories ON produit.IdCategorie = categories.IDCategorie WHERE produit.Code = @code";
-
-                MySqlCommand cmd = new MySqlCommand(requete, cn);
-                cmd.Parameters.AddWithValue("@code", code);
-
-                MySqlDataReader dr = cmd.ExecuteReader();
-
-                if (dr.HasRows)
-                {
-                    dr.Read();
-
-                    uint idProduit = dr.GetUInt32(0);
-                    string codeProduit = dr.GetString(1);
-                    string nomProduit = dr.GetString(2);
-                    uint idCategorie = dr.GetUInt32(3);
-                    int prixInt = dr.GetInt32(4);
-                    decimal prix = (decimal)prixInt;
-                    string image = dr.GetString(5);
-                    string NomCategorie = dr.GetString(6);
-                    string description = dr.GetString(7);
-                    int quantite = dr.GetInt32(8);
-
-
-                    Categorie categorie = new Categorie(idCategorie, NomCategorie);
-
-                    if (categorie != null)
-                    {
-                        produit = new Produit(idProduit, codeProduit, nomProduit, prix, _config[IMAGE_PATH] + image, categorie, description, quantite);
-                    }
-                }
-                dr.Close();
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-            finally
-            {
-                FermerConnexion(cn);
-            }
-
-            return produit;
-        }
 
         /// <summary>
         /// Permet d'obtenir la liste des produits dans la base de données selon certains critères de recherche.
@@ -262,7 +201,7 @@ namespace ApplicationGestionProduitCosmetique.Models
         /// <returns></returns>
         public static List<Produit> ObtenirProduitsVendeur(int idVendeur)
         {
-           
+
             MySqlConnection cn = CreerConnection();
             List<Produit> produitsVendeur = new List<Produit>();
 
@@ -271,12 +210,12 @@ namespace ApplicationGestionProduitCosmetique.Models
                 cn.Open();
 
                 string requete = @"
-        SELECT p.IdProduit, p.Code, p.Nom, p.IdCategorie, p.Prix, p.Image, 
-               c.NomCategorie, p.Description, p.Quantite
-        FROM produit p
-        INNER JOIN categories c ON p.IdCategorie = c.IDCategorie
-        INNER JOIN utilisateurs u ON p.IdVendeur = u.ID
-        WHERE u.ID = @idVendeur";
+    SELECT p.IdProduit, p.Code, p.Nom, p.IdCategorie, p.Prix, p.Image, 
+           c.NomCategorie, p.Description, p.Quantite
+    FROM produit p
+    INNER JOIN categories c ON p.IdCategorie = c.IDCategorie
+    INNER JOIN utilisateurs u ON p.IdVendeur = u.ID
+    WHERE u.ID = @idVendeur";
 
                 MySqlCommand cmd = new MySqlCommand(requete, cn);
                 cmd.Parameters.AddWithValue("@idVendeur", idVendeur);
@@ -319,42 +258,6 @@ namespace ApplicationGestionProduitCosmetique.Models
             return produitsVendeur;
         }
 
-
-        /// <summary>
-        /// Autohor Marie
-        /// </summary>
-        /// <param name="codeUtilisateur"></param>
-        /// <returns></returns>
-        public static int ObtenirIdVendeurParCode(string codeUtilisateur)
-        {
-            MySqlConnection cn = CreerConnection();
-            int idVendeur = -1;
-
-            try
-            {
-                cn.Open();
-                string requete = "SELECT ID FROM utilisateurs WHERE Code = @CodeUtilisateur AND Role = 'Vendeur'";
-                MySqlCommand cmd = new MySqlCommand(requete, cn);
-                cmd.Parameters.AddWithValue("@CodeUtilisateur", codeUtilisateur);
-
-                object? result = cmd.ExecuteScalar();
-                if (result != null)
-                {
-                    idVendeur = Convert.ToInt32(result);
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Erreur : " + ex.Message, "Erreur SQL", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-            finally
-            {
-                FermerConnexion(cn);
-            }
-
-            return idVendeur;
-        }      
-
         /// <summary>
         /// Autohor Marie
         /// Permet d'ajouter une facture dans la base de données
@@ -376,10 +279,10 @@ namespace ApplicationGestionProduitCosmetique.Models
             {
                 cn.Open();
                 string requeteAddFacture = @"INSERT INTO factures 
-                       (Id,Date,MontantSousTotal,MontantTPS,MontantTVQ,MontantTotal)
-                            VALUES (null,@date,@montantSousTotal,@montantTPS,@montantTVQ,@montantTotal)";
+                   (Id,Date,MontantSousTotal,MontantTPS,MontantTVQ,MontantTotal)
+                        VALUES (null,@date,@montantSousTotal,@montantTPS,@montantTVQ,@montantTotal)";
 
-                MySqlCommand cmdInsertFacture = new MySqlCommand(requeteAddFacture, cn);;
+                MySqlCommand cmdInsertFacture = new MySqlCommand(requeteAddFacture, cn); ;
                 cmdInsertFacture.Parameters.AddWithValue("@montantSousTotal", facture.MontantSousTotal);
                 cmdInsertFacture.Parameters.AddWithValue("@montantTPS", facture.MontantTPS);
                 cmdInsertFacture.Parameters.AddWithValue("@montantTVQ", facture.MontantTVQ);
@@ -390,8 +293,8 @@ namespace ApplicationGestionProduitCosmetique.Models
                     uint idLastFacture = (uint)cmdInsertFacture.LastInsertedId;
 
                     string requeteAjoutProduits = @"INSERT INTO produitsfactures 
-                                        (IdFacture, IdProduit,PrixUnitaire,Quantite)
-                                            VALUES(@idFacture, @idProduit,@prixUnitaire,@quantite)";
+                                    (IdFacture, IdProduit,PrixUnitaire,Quantite)
+                                        VALUES(@idFacture, @idProduit,@prixUnitaire,@quantite)";
 
                     MySqlCommand cmdAjoutProduits = new MySqlCommand(requeteAjoutProduits, cn);
 
@@ -411,10 +314,8 @@ namespace ApplicationGestionProduitCosmetique.Models
 
                         cmdAjoutProduits.ExecuteNonQuery();
                     }
-
                     facture.Id = idLastFacture;
                 }
-
             }
             catch (Exception)
             {
@@ -424,6 +325,225 @@ namespace ApplicationGestionProduitCosmetique.Models
             {
                 FermerConnexion(cn);
             }
+        }
+        /// <summary>
+        /// Autohor Valdess
+        /// Permet d'obtenir liste des catégories provenant de la base de données triée par nom croissant
+        /// </summary>
+        /// <returns>Liste de Categorie</returns>
+        public static List<Categorie> ObtenirListeCategories()
+        {
+            List<Categorie> lstCategorie = new List<Categorie>();
+
+            MySqlConnection cn = CreerConnection();
+
+            try
+            {
+                cn.Open();
+                string requete = $"SELECT IDCategorie, NomCategorie FROM categories ORDER BY NomCategorie";
+                MySqlCommand cmdCategorie = new MySqlCommand(requete, cn);
+
+                MySqlDataReader rdCategorie = cmdCategorie.ExecuteReader();
+
+                while (rdCategorie.Read())
+                {
+                    Categorie categorie = new Categorie(rdCategorie.GetUInt32(0), rdCategorie.GetString(1));
+                    lstCategorie.Add(categorie);
+                }
+                rdCategorie.Close();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                FermerConnexion(cn);
+
+            }
+            return lstCategorie;
+        }
+
+        public static void AjouterProduit(Produit produit)
+        {
+            if (produit == null)
+                throw new ArgumentNullException(nameof(produit), "Le produit ne doit pas être null.");
+
+            MySqlConnection cn = CreerConnection();
+
+            try
+            {
+                cn.Open();
+
+                // Requête d'insertion dans la table produits
+                string requeteProduit = @"INSERT INTO produit (IdProduit, Code, Nom, Prix, Image, IdCategorie, Description, Quantite)
+                              VALUES (NULL, @code, @nom, @prix, @image, @categorie, @description, @quantite)";
+
+                // Extension de l'image et génération d'un nom unique
+                string extension = System.IO.Path.GetExtension(produit.Image);
+                string nomImage = Guid.NewGuid().ToString() + extension;
+
+                // Commande MySQL
+                MySqlCommand cmdProduit = new MySqlCommand(requeteProduit, cn);
+                cmdProduit.Parameters.AddWithValue("@code", produit.Code);
+                cmdProduit.Parameters.AddWithValue("@nom", produit.Nom);
+                cmdProduit.Parameters.AddWithValue("@prix", produit.Prix);
+                cmdProduit.Parameters.AddWithValue("@image", nomImage);
+                cmdProduit.Parameters.AddWithValue("@categorie", produit.Categorie.Id);
+                cmdProduit.Parameters.AddWithValue("@description", produit.Description);
+                cmdProduit.Parameters.AddWithValue("@quantite", produit.Quantite);
+
+                // Exécution de la commande
+                if (cmdProduit.ExecuteNonQuery() > 0)
+                {
+                    // Copier l'image dans le dossier de stockage
+                    File.Copy(produit.Image, _config[IMAGE_PATH] + nomImage);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                // Gérer les exceptions si nécessaire
+                throw new Exception("Erreur lors de l'ajout du produit.", ex);
+            }
+            finally
+            {
+                // Fermer la connexion à la base de données
+                FermerConnexion(cn);
+            }
+        }
+
+
+        public static void ModifierProduit(Produit produit)
+        {
+            if (produit == null)
+                throw new ArgumentNullException(nameof(produit), "Le produit ne peut pas être null.");
+
+            MySqlConnection cn = CreerConnection();
+
+            try
+            {
+                cn.Open();
+
+                // Recherche du produit actuel par son Id
+                string requeteRech = "SELECT Id, Image FROM produits WHERE Id = @id";
+
+                MySqlCommand cmdRech = new MySqlCommand(requeteRech, cn);
+                cmdRech.Parameters.AddWithValue("@id", produit.Id);
+
+                MySqlDataReader dr = cmdRech.ExecuteReader();
+
+                if (!dr.Read())
+                {
+                    throw new InvalidOperationException("Ce produit n'existe pas dans la base de données.");
+                }
+                else
+                {
+                    string imageActuelle = dr.GetString(1);
+                    dr.Close();
+
+                    // Requête de mise à jour
+                    string requeteUpdate = @"UPDATE produits SET 
+                                 Code = @code,
+                                 Nom = @nom,
+                                 Prix = @prix,
+                                 IdCategorie = @categorieId,
+                                 Description = @description,
+                                 Quantite = @quantite";
+
+                    MySqlCommand cmdUpdate = new MySqlCommand(requeteUpdate, cn);
+                    cmdUpdate.Parameters.AddWithValue("@code", produit.Code);
+                    cmdUpdate.Parameters.AddWithValue("@nom", produit.Nom);
+                    cmdUpdate.Parameters.AddWithValue("@prix", produit.Prix);
+                    cmdUpdate.Parameters.AddWithValue("@categorieId", produit.Categorie.Id);
+                    cmdUpdate.Parameters.AddWithValue("@description", produit.Description);
+                    cmdUpdate.Parameters.AddWithValue("@quantite", produit.Quantite);
+                    cmdUpdate.Parameters.AddWithValue("@id", produit.Id);
+
+                    // Si l'image a changé
+                    if (produit.Image != (_config[IMAGE_PATH] + imageActuelle))
+                    {
+                        requeteUpdate += ", Image = @image WHERE Id = @id";
+
+                        string extension = System.IO.Path.GetExtension(produit.Image);
+                        string nomImage = Guid.NewGuid().ToString() + extension;
+
+                        cmdUpdate.Parameters.AddWithValue("@image", nomImage);
+                        cmdUpdate.CommandText = requeteUpdate;
+
+                        // Exécution de la mise à jour
+                        if (cmdUpdate.ExecuteNonQuery() > 0)
+                        {
+                            // Copier la nouvelle image
+                            File.Copy(produit.Image, _config[IMAGE_PATH] + nomImage);
+                            // Supprimer l'ancienne image
+                            File.Delete(_config[IMAGE_PATH] + imageActuelle);
+                        }
+                    }
+                    else
+                    {
+                        cmdUpdate.CommandText = requeteUpdate + " WHERE Id = @id";
+                        cmdUpdate.ExecuteNonQuery();
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Erreur lors de la modification du produit.", ex);
+            }
+            finally
+            {
+                FermerConnexion(cn);
+            }
+        }
+
+        public static bool SupprimerProduit(Produit produit)
+        {
+            if (produit == null)
+                throw new ArgumentNullException(nameof(produit), "Le produit ne doit pas être null.");
+
+            MySqlConnection cn = CreerConnection();
+
+            try
+            {
+                cn.Open();
+
+                // Vérification si le produit est lié à une facture
+                string reqVerifProd = @"SELECT COUNT(pf.IdProduit) FROM produitsfactures pf
+                             INNER JOIN produit p ON p.IdProduit = pf.IdProduit
+                             WHERE p.IdProduit = @id";
+
+                MySqlCommand cmdVerifProd = new MySqlCommand(reqVerifProd, cn);
+                cmdVerifProd.Parameters.AddWithValue("@id", produit.Id);
+
+                if ((Int64)cmdVerifProd.ExecuteScalar() > 0)
+                    throw new InvalidOperationException("Le produit existe dans au moins une facture.");
+
+                // Requête de suppression du produit
+                string requeteSupression = @"DELETE FROM produit WHERE IdProduit = @id";
+                MySqlCommand cmdSupprProduit = new MySqlCommand(requeteSupression, cn);
+                cmdSupprProduit.Parameters.AddWithValue("@id", produit.Id);
+
+                // Exécution de la suppression
+                if (cmdSupprProduit.ExecuteNonQuery() > 0)
+                {
+                    // Supprimer l'image du produit
+                    File.Delete(produit.Image);
+                    return true;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Erreur lors de la suppression du produit.", ex);
+            }
+            finally
+            {
+                FermerConnexion(cn);
+            }
+
+            return false;
         }
 
     }
